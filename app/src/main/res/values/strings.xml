@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Caller_ID</string>
+    <string name="this_is_item_sample">This is item sample!</string>
+    <string name="your_feedback_is_welcome">Your feedback is welcome.</string>
+    <string name="rate_us">Rate us</string>
+    <string name="may_be_later">May be later</string>
+    <string name="oh_we_re_sorry">Oh, We’re sorry...</string>
+    <string name="please_send_us">Please send us some feedback!</string>
+    <string name="There_is_no_email">There is no email client installed.</string>
+    <string name="much_appreciated">Much appreciated!</string>
+    <string name="your_support_is_our_biggest_motivation">Your support is our biggest motivation!</string>
+    <string name="write_some_feedback">Write some feedback</string>
+    <string name="cancel">Cancel</string>
+    <string name="send">Send</string>
+    <string name="Language">Language</string>
+    <string name="next">Next</string>
+    <string name="start">Start</string>
+    <string name="permission">Permission</string>
+    <string name="allow_library_access">Allow library access</string>
+    <string name="this_app_needs_permissions_below_to_work_properly">This app needs permissions below to work properly</string>
+    <string name="continue2">Continue</string>
+    <string name="this_action_may_contain_advertising">This action can contain ads</string>
+    <string name="desc_warning_permission_dialog">Desc warning permission dialog</string>
+    <string name="header_warning_permission">Header warning permission</string>
+    <string name="go_to_setting">Go to setting</string>
+
+
+
+</resources>
