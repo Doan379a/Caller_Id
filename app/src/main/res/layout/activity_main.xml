@@ -12,19 +12,20 @@
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/_5sdp"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/img_logo"
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
             android:src="@drawable/img_people"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/edt_search"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_edittext"
@@ -33,7 +34,7 @@
             android:layout_marginHorizontal="@dimen/_5sdp"
             android:hint="Search by number"
             android:paddingHorizontal="@dimen/_5sdp"
-            android:paddingVertical="@dimen/_8sdp"
+            android:paddingVertical="@dimen/_10sdp"
             android:textColorHint="#7C7E81"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/img_setting"
@@ -42,8 +43,8 @@
 
         <ImageView
             android:id="@+id/img_setting"
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="@dimen/_35sdp"
             android:src="@drawable/ic_setting"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -56,7 +57,7 @@
             android:src="@drawable/ic_dot_menu"
             android:layout_marginEnd="@dimen/_5sdp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/editText"
+            app:layout_constraintEnd_toEndOf="@+id/edt_search"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

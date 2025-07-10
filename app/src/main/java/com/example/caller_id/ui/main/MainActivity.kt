@@ -30,6 +30,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
 
     override fun initView() {
+        binding.viewPager2.isUserInputEnabled = false
+
         checkSmsPermission()
         binding.viewPager2.adapter = MainAdapter(this)
         binding.viewPager2.registerOnPageChangeCallback(myPageChangeCallback)
