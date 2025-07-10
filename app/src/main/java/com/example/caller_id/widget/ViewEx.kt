@@ -2,6 +2,8 @@ package com.example.caller_id.widget
 
 
 import android.view.View
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 
 
 fun View.tap(action: (view: View?) -> Unit) {
@@ -40,6 +42,20 @@ fun View.gone() {
 
 fun View.invisible() {
     visibility = View.INVISIBLE
+}
+
+fun TextView.setDrawableTopWithTint(drawableRes: Int, colorRes: Int) {
+    val drawable = ContextCompat.getDrawable(context, drawableRes)
+    drawable?.let {
+        val wrappedDrawable = it.mutate()
+        wrappedDrawable.setTint( colorRes)
+        setCompoundDrawablesWithIntrinsicBounds(null, wrappedDrawable, null, null)
+    }
+}
+fun TextView.setDrawableStartWithTint(drawableResId: Int, color: Int) {
+    val drawable = ContextCompat.getDrawable(context, drawableResId)?.mutate()
+    drawable?.setTint(color)
+    setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
 }
 
 
