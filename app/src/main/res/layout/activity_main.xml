@@ -99,14 +99,15 @@
 
             <TextView
                 android:id="@+id/tv_count_message"
-                android:layout_width="@dimen/_12sdp"
-                android:layout_height="@dimen/_12sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_9sdp"
                 android:layout_marginEnd="@dimen/_12sdp"
                 android:background="@drawable/simple_count_badge_bg"
                 android:fontFamily="@font/opensans_semibold_600"
                 android:gravity="center"
                 android:text="0"
+                android:padding="@dimen/_3sdp"
                 android:textColor="@color/white"
                 android:textSize="8dp"
                 app:layout_constraintEnd_toEndOf="@+id/img_message"

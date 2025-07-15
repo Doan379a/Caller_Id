@@ -1,20 +1,24 @@
 package com.example.caller_id.ui.main
 
 import android.Manifest
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.provider.Telephony
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.example.caller_id.R
 import com.example.caller_id.base.BaseActivity
 import com.example.caller_id.databinding.ActivityMainBinding
-import com.example.caller_id.library.magicindicator.buildins.commonnavigator.CommonNavigator
+import com.example.caller_id.service.SmsReceiver
 
 class MainActivity : BaseActivity<ActivityMainBinding>() {
-    private val commonNavigator by lazy { CommonNavigator(this) }
-    private var unreadMessageCount = 0
+
+    private lateinit var smsReceiver: SmsReceiver
     override fun setViewBinding(): ActivityMainBinding {
         return ActivityMainBinding.inflate(layoutInflater)
     }
@@ -33,6 +37,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         binding.viewPager2.isUserInputEnabled = false
 
         checkSmsPermission()
+        if (Telephony.Sms.getDefaultSmsPackage(this) != this.packageName) {
+            val intent = Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT)
+            intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, this.packageName)
+            startActivity(intent)
+        }
+        val isDefault = Telephony.Sms.getDefaultSmsPackage(this) == this.packageName
+        Log.d("CHECK2222222", "Is default SMS app? $isDefault")
+
         binding.viewPager2.adapter = MainAdapter(this)
         binding.viewPager2.registerOnPageChangeCallback(myPageChangeCallback)
     }
@@ -84,25 +96,43 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     }
 
     private fun checkSmsPermission() {
+        val permissionsNeeded = mutableListOf<String>()
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
             != PackageManager.PERMISSION_GRANTED
         ) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_SMS), 1001)
+            permissionsNeeded.add(Manifest.permission.READ_SMS)
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            permissionsNeeded.add(Manifest.permission.SEND_SMS)
+        }
+        if (permissionsNeeded.isNotEmpty()) {
+            ActivityCompat.requestPermissions(this, permissionsNeeded.toTypedArray(), 1001)
         } else {
-            loadUnreadSmsCount()
+            loadUnreadSmsCount() // hoặc init logic SMS của bạn ở đây
         }
     }
+
 
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 1001 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            loadUnreadSmsCount()
+        if (requestCode == 1001) {
+            val allGranted = grantResults.all { it == PackageManager.PERMISSION_GRANTED }
+            if (allGranted) {
+                loadUnreadSmsCount()
+            } else {
+                Toast.makeText(this, "Bạn cần cấp đủ quyền để sử dụng chức năng này", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
-    private fun loadUnreadSmsCount() {
+
+    fun loadUnreadSmsCount() {
         var count = 0
         try {
             val uri = Uri.parse("content://sms/inbox")
@@ -117,8 +147,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        unreadMessageCount = count
-        commonNavigator.adapter?.notifyDataSetChanged() // Cập nhật tab
+        binding.tvCountMessage.text = "$count"
     }
 
+
+    override fun onStart() {
+        super.onStart()
+        smsReceiver = SmsReceiver()
+        val intentFilter = IntentFilter("android.provider.Telephony.SMS_RECEIVED")
+        registerReceiver(smsReceiver, intentFilter)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(smsReceiver)
+    }
 }

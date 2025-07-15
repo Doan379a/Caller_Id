@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_done_send"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <TextView
+        android:id="@+id/itemCreate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_menu"
+        android:padding="8dp"
+        android:text="Create new contact" />
+
+    <TextView
+        android:id="@+id/itemSpam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_back_chat"
+        android:padding="8dp"
+        android:text="Add to spam" />
+    <TextView
+        android:id="@+id/itemBlock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_back_chat"
+        android:padding="8dp"
+        android:text="Add block" />
+    <TextView
+        android:id="@+id/itemDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_back_chat"
+        android:padding="8dp"
+        android:text="delete" />
+
+</LinearLayout>

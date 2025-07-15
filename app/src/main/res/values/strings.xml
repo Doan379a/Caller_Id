@@ -16,14 +16,30 @@
     <string name="next">Next</string>
     <string name="start">Start</string>
     <string name="permission">Permission</string>
-    <string name="allow_library_access">Allow library access</string>
+    <string name="Allow_access_to_send_and_read_SMS">Allow sending and reading SMS</string>
+    <string name="allow_app_to_be_default_SMS">Allow app to be default SMS</string>
+    <string name="allow_reading_of_call_logs">Allow reading of call logs</string>
     <string name="this_app_needs_permissions_below_to_work_properly">This app needs permissions below to work properly</string>
     <string name="continue2">Continue</string>
     <string name="this_action_may_contain_advertising">This action can contain ads</string>
     <string name="desc_warning_permission_dialog">Desc warning permission dialog</string>
     <string name="header_warning_permission">Header warning permission</string>
     <string name="go_to_setting">Go to setting</string>
-
+    <string name="january">January</string>
+    <string name="february">February</string>
+    <string name="march">March</string>
+    <string name="april">April</string>
+    <string name="may">May</string>
+    <string name="june">June</string>
+    <string name="july">July</string>
+    <string name="august">August</string>
+    <string name="september">September</string>
+    <string name="october">October</string>
+    <string name="november">November</string>
+    <string name="december">December</string>
+    <string name="type_a_message">Type a message</string>
+    <string name="yesterday">yesterday</string>
+    <string name="today">Today</string>
 
 
 </resources>
