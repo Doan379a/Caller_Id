@@ -23,7 +23,28 @@
     <string name="desc_warning_permission_dialog">Desc warning permission dialog</string>
     <string name="header_warning_permission">Header warning permission</string>
     <string name="go_to_setting">Go to setting</string>
-
+    <string name="recents">Recents</string>
+    <string name="favorites">Favorites</string>
+    <string name="do_not_disturb">Do not Disturb</string>
+    <string name="caller_id_disabled">Caller ID Disabled</string>
+    <string name="to_enjoy_enhanced_calling_experience_with_advanced_features">To enjoy enhanced calling experience with advanced features Set Caller ID as your default phone app.</string>
+    <string name="set_as_default">Set As Default</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="setting">Setting</string>
+    <string name="spam">Spam</string>
+    <string name="blocked">Blocked</string>
+    <string name="block_top_spammer">Block top Spammer</string>
+    <string name="reported_by_users_as_spam">Reported by users as spam</string>
+    <string name="private_amp_hidden_numbers"><![CDATA[Private & Hidden numbers]]></string>
+    <string name="number_that_is_shown_as_unknown_or_private">Number that is shown as Unknown or Private</string>
+    <string name="numbers_not_in_contacts">Numbers not in contacts</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="country_code">Country Code</string>
+    <string name="numbers_series">Numbers Series</string>
+    <string name="message_sender_name">Message sender name</string>
+    <string name="block_international_calls">Block international calls</string>
+    <string name="only_receive_calls_from_your_country">Only receive Calls from your Country</string>
 
 
 </resources>

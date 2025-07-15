@@ -54,4 +54,5 @@ abstract class BaseAdapter<VB : ViewBinding, M : Any> :
     }
 
 
+
 }

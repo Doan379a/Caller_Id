@@ -1,9 +1,14 @@
 package com.example.caller_id.widget
 
 
+import android.content.Context
+import android.telephony.TelephonyManager
 import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import com.google.i18n.phonenumbers.PhoneNumberUtil
+import com.google.i18n.phonenumbers.Phonenumber
+import java.util.Locale
 
 
 fun View.tap(action: (view: View?) -> Unit) {
@@ -59,5 +64,33 @@ fun TextView.setDrawableStartWithTint(drawableResId: Int, color: Int) {
 }
 
 
+fun isInternationalNumber(context: Context, number: String): Boolean {
+    val phoneUtil = PhoneNumberUtil.getInstance()
+    val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+    val simCountry = telephonyManager.simCountryIso.uppercase(Locale.ROOT)
+
+    return try {
+        val parsedNumber: Phonenumber.PhoneNumber =
+            phoneUtil.parse(number, simCountry)
+
+        parsedNumber.countryCode != phoneUtil.getCountryCodeForRegion(simCountry)
+    } catch (e: Exception) {
+        false
+    }
+
+}
+
+fun normalizeToE164(context: Context, number: String): String {
+    val phoneUtil = PhoneNumberUtil.getInstance()
+    val tm = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+    val simCountry = tm.simCountryIso?.uppercase(Locale.ROOT)
+
+    return try {
+        val parsed = phoneUtil.parse(number, simCountry)
+        phoneUtil.format(parsed, PhoneNumberUtil.PhoneNumberFormat.E164)
+    } catch (e: Exception) {
+        number
+    }
+}
 
 
