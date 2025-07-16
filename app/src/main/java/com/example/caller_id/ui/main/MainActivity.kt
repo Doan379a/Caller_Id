@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.role.RoleManager
 import android.content.Intent
 import android.content.IntentFilter
+import android.app.role.RoleManager
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Telephony
@@ -23,14 +24,19 @@ import com.example.caller_id.widget.showSnackBar
 
 
 import dagger.hilt.android.AndroidEntryPoint
+
+import com.example.caller_id.library.magicindicator.buildins.commonnavigator.CommonNavigator
+import com.example.caller_id.widget.showSnackBar
+
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private lateinit var smsReceiver: SmsReceiver
-    private val commonNavigator by lazy { CommonNavigator(this) }
-    private var unreadMessageCount = 0
     private var REQUEST_CODE_SET_DEFAULT_DIALER = 123
     private val REQUEST_CODE_CALL_SCREENING = 1002
+
+    private val commonNavigator by lazy { CommonNavigator(this) }
+    private var unreadMessageCount = 0
 
     override fun setViewBinding(): ActivityMainBinding {
         return ActivityMainBinding.inflate(layoutInflater)
