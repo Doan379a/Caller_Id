@@ -20,4 +20,5 @@ object DatabaseModule {
         Room.databaseBuilder(ctx, AppDatabase::class.java, "sms_db").build()
     @Provides fun provideNumDao(db: AppDatabase) = db.blockedNumberDao()
     @Provides fun provideSmsDao(db: AppDatabase) = db.blockedSmsDao()
+    @Provides fun provideCalledDao(db: AppDatabase) = db.blockedCalledDao()
 }

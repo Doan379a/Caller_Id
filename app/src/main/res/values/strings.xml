@@ -42,12 +42,10 @@
     <string name="today">Today</string>
     <string name="recents">Recents</string>
     <string name="favorites">Favorites</string>
-    <string name="do_not_disturb">Do not Disturb</string>
     <string name="caller_id_disabled">Caller ID Disabled</string>
     <string name="to_enjoy_enhanced_calling_experience_with_advanced_features">To enjoy enhanced calling experience with advanced features Set Caller ID as your default phone app.</string>
     <string name="set_as_default">Set As Default</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="setting">Setting</string>
     <string name="spam">Spam</string>
     <string name="blocked">Blocked</string>
@@ -69,27 +67,12 @@
     <string name="messages">Messages</string>
     <string name="no_search_results">No search results</string>
     <string name="your_unread_message_appear_here">your unread message appear here</string>
-    <string name="recents">Recents</string>
-    <string name="favorites">Favorites</string>
     <string name="do_not_disturb">Do not Disturb</string>
-    <string name="caller_id_disabled">Caller ID Disabled</string>
-    <string name="to_enjoy_enhanced_calling_experience_with_advanced_features">To enjoy enhanced calling experience with advanced features Set Caller ID as your default phone app.</string>
-    <string name="set_as_default">Set As Default</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="setting">Setting</string>
-    <string name="spam">Spam</string>
-    <string name="blocked">Blocked</string>
-    <string name="block_top_spammer">Block top Spammer</string>
-    <string name="reported_by_users_as_spam">Reported by users as spam</string>
-    <string name="private_amp_hidden_numbers"><![CDATA[Private & Hidden numbers]]></string>
-    <string name="number_that_is_shown_as_unknown_or_private">Number that is shown as Unknown or Private</string>
-    <string name="numbers_not_in_contacts">Numbers not in contacts</string>
-    <string name="phone_number">Phone Number</string>
-    <string name="country_code">Country Code</string>
-    <string name="numbers_series">Numbers Series</string>
-    <string name="message_sender_name">Message sender name</string>
-    <string name="block_international_calls">Block international calls</string>
-    <string name="only_receive_calls_from_your_country">Only receive Calls from your Country</string>
+    <string name="block_a_number">Block a Number</string>
+    <string name="number">Number</string>
+    <string name="enter_a_number_or_a_pattern">Enter a number or a pattern (e.g. *12345*, +1*8888) to block all calls and messages from numbers matching the pattern.</string>
+    <string name="select_a_country_code_you_want_to_block">Select a country Code you want to block</string>
 
 
 </resources>

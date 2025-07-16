@@ -1,8 +1,10 @@
 package com.example.caller_id.database.repository
 
 import android.content.Context
+import com.example.caller_id.database.dao.BlockedCalledDao
 import com.example.caller_id.database.dao.BlockedNumberDao
 import com.example.caller_id.database.dao.BlockedSmsDao
+import com.example.caller_id.database.entity.BlockedCalled
 import com.example.caller_id.database.entity.BlockedNumber
 import com.example.caller_id.database.entity.BlockedSms
 import com.example.caller_id.model.SmsConversation
@@ -13,7 +15,8 @@ import javax.inject.Inject
 
 class BlockRepository @Inject constructor(
   private val blockedNumberDao: BlockedNumberDao,
-  private val blockedSmsDao: BlockedSmsDao
+  private val blockedSmsDao: BlockedSmsDao,
+  private val blockedCalledDao: BlockedCalledDao
 ) {
 
 
@@ -28,4 +31,9 @@ class BlockRepository @Inject constructor(
   fun getSmsByAddressFlow(address: String): Flow<List<BlockedSms>> =
     blockedSmsDao.getSmsByAddress(address)
 
+
+  suspend fun insertCalled(num: String, type: String, isSpam: Boolean) = blockedCalledDao.insert(BlockedCalled(number = num, type = type, isSpam = isSpam))
+  suspend fun deleteCalled(id: Long) = blockedCalledDao.deleteById(id)
+  fun getAllBlockedCalledFlow(): Flow<List<BlockedCalled>> = blockedCalledDao.getAllBlockCalled()
+  fun getAllSpamCalledFlow(): Flow<List<BlockedCalled>> = blockedCalledDao.getAllSpamCalled()
 }

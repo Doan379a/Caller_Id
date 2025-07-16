@@ -47,7 +47,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".utils.BlockCallScreeningService"
+            android:name=".service.BlockCallScreeningService"
             android:exported="true"
             android:permission="android.permission.BIND_SCREENING_SERVICE">
             <intent-filter>

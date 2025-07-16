@@ -15,3 +15,11 @@ data class BlockedSms(
     val isSentByMe: Boolean = false,
     val status: Int = 0  // tương ứng với SmsSendStatus
 )
+
+@Entity(tableName = "blocked_called")
+data class BlockedCalled(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val number: String,
+    val type: String ,
+    val isSpam: Boolean = false
+)

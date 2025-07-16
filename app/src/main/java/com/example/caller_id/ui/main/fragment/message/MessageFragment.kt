@@ -26,7 +26,6 @@ import com.example.caller_id.model.SmsConversation
 import com.example.caller_id.service.RealTimeSmsReceiver
 import com.example.caller_id.service.SmsReceiver
 import com.example.caller_id.ui.main.MainActivity
-import com.example.caller_id.ui.main.fragment.message.block.BlockActivity
 import com.example.caller_id.ui.main.fragment.message.chat.ChatActivity
 import com.example.caller_id.utils.SmsUtils.getGroupedSmsInbox
 import com.example.caller_id.widget.gone

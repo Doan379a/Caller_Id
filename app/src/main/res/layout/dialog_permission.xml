@@ -50,7 +50,7 @@
             android:textColor="@color/white"
             android:textSize="14sp"
             android:background="@drawable/bg_conner_blue"
-            android:backgroundTint="@color/color_FF7756"
+            android:backgroundTint="@color/color_3368EE"
             android:fontFamily="@font/opensans_semibold_600"
             />
 

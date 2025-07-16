@@ -8,6 +8,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
+import com.example.caller_id.database.entity.BlockedCalled
 import com.example.caller_id.database.entity.BlockedSms
 import com.example.caller_id.database.repository.BlockRepository
 import com.example.caller_id.model.SmsConversation
@@ -69,4 +70,13 @@ class BlockViewModel @Inject constructor(
                 )
             }
         }.asLiveData()
+
+    fun insertCallBlock(num: String, type :String, isSpam: Boolean) = viewModelScope.launch { repo.insertCalled(num = num, type = type, isSpam = isSpam) }
+    fun deleteCallById(id: Long) = viewModelScope.launch {
+        repo.deleteCalled(id)
+    }
+    val callBlockedList: LiveData<List<BlockedCalled>> =
+        repo.getAllBlockedCalledFlow().asLiveData()
+    val callSpamList: LiveData<List<BlockedCalled>> =
+        repo.getAllSpamCalledFlow().asLiveData()
 }

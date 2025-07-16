@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.role.RoleManager
 import android.content.Intent
 import android.content.IntentFilter
-import android.app.role.RoleManager
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Telephony
@@ -24,9 +23,6 @@ import com.example.caller_id.widget.showSnackBar
 
 
 import dagger.hilt.android.AndroidEntryPoint
-
-import com.example.caller_id.library.magicindicator.buildins.commonnavigator.CommonNavigator
-import com.example.caller_id.widget.showSnackBar
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {

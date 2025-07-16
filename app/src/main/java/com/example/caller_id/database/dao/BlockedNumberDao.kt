@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.caller_id.database.entity.BlockedCalled
 import com.example.caller_id.database.entity.BlockedNumber
 import com.example.caller_id.database.entity.BlockedSms
 
@@ -37,4 +38,20 @@ interface BlockedSmsDao {
   @Query("SELECT * FROM blocked_sms")
   fun getAllBlockedSms(): Flow<List<BlockedSms>>
 
+}
+
+@Dao
+interface BlockedCalledDao {
+  @Insert(onConflict = OnConflictStrategy.IGNORE)
+  suspend fun insert(blocked: BlockedCalled)
+
+  @Query("DELETE FROM blocked_called WHERE id = :id")
+  suspend fun deleteById(id: Long)
+
+
+  @Query("SELECT * FROM blocked_called WHERE isSpam = 1")
+  fun getAllSpamCalled(): Flow<List<BlockedCalled>>
+
+  @Query("SELECT * FROM blocked_called WHERE isSpam = 0")
+  fun getAllBlockCalled(): Flow<List<BlockedCalled>>
 }

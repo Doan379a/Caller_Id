@@ -10,12 +10,12 @@ import com.example.caller_id.base.BaseFragment
 import com.example.caller_id.databinding.FragmentBlockBinding
 import com.example.caller_id.databinding.FragmentFavoritesBinding
 
-class BlockedFragment : BaseFragment<FragmentBlockBinding>() {
+class BlockedFragment : BaseFragment<FragmentFavoritesBinding>() {
     override fun setViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
-    ): FragmentBlockBinding {
-        return FragmentBlockBinding.inflate(layoutInflater)
+    ): FragmentFavoritesBinding {
+        return FragmentFavoritesBinding.inflate(layoutInflater)
     }
 
     override fun initView() {
