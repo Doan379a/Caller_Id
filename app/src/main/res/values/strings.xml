@@ -62,6 +62,14 @@
     <string name="message_sender_name">Message sender name</string>
     <string name="block_international_calls">Block international calls</string>
     <string name="only_receive_calls_from_your_country">Only receive Calls from your Country</string>
+    <string name="add_to_spam">Add to spam</string>
+    <string name="delete_conversation">Delete conversation</string>
+    <string name="block">Block</string>
+    <string name="all_messages">All messages</string>
+    <string name="spam">Spam</string>
+    <string name="messages">Messages</string>
+    <string name="no_search_results">No search results</string>
+    <string name="your_unread_message_appear_here">your unread message appear here</string>
 
 
 </resources>

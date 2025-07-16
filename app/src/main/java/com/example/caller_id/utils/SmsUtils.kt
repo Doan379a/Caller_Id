@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.provider.BlockedNumberContract
 import android.provider.ContactsContract
 import android.util.Log
 import androidx.core.content.ContextCompat
@@ -106,6 +107,7 @@ object SmsUtils {
         return latestMap.values.sortedByDescending { it.date }.toMutableList()
     }
 
+
     @SuppressLint("Range")
     fun lookupContactName(context: Context, phoneNumber: String): String {
         if (phoneNumber.isBlank()) return ""
@@ -177,6 +179,22 @@ object SmsUtils {
             }
         }
         return null
+    }
+
+    fun getAllBlockedNumbers(context: Context): List<String> {
+        val blocked = mutableListOf<String>()
+        if (!BlockedNumberContract.canCurrentUserBlockNumbers(context)) return blocked
+
+        val uri = BlockedNumberContract.BlockedNumbers.CONTENT_URI
+        val projection = arrayOf(BlockedNumberContract.BlockedNumbers.COLUMN_ORIGINAL_NUMBER)
+
+        context.contentResolver.query(uri, projection, null, null, null)?.use { cursor ->
+            val idx = cursor.getColumnIndex(BlockedNumberContract.BlockedNumbers.COLUMN_ORIGINAL_NUMBER)
+            while (cursor.moveToNext()) {
+                cursor.getString(idx)?.let { blocked.add(it) }
+            }
+        }
+        return blocked
     }
 
 }

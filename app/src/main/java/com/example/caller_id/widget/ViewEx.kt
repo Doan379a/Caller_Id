@@ -48,6 +48,9 @@ fun View.gone() {
 fun View.invisible() {
     visibility = View.INVISIBLE
 }
+fun View.visibleOrGone(show: Boolean) {
+    visibility = if (show) View.VISIBLE else View.GONE
+}
 
 fun TextView.setDrawableTopWithTint(drawableRes: Int, colorRes: Int) {
     val drawable = ContextCompat.getDrawable(context, drawableRes)

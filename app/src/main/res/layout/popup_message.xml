@@ -1,41 +1,43 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/bg_popup"
     android:orientation="vertical"
     android:padding="10dp">
 
     <TextView
-        android:id="@+id/itemSpam"
+        android:id="@+id/itemAllMessages"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_message_menu"
+        android:padding="8dp"
+        android:fontFamily="@font/opensans_semibold_600"
+        android:drawablePadding="@dimen/_10sdp"
+        style="@style/SelectableItemBackground"
+        android:gravity="center_vertical"
+        android:textColor="#505050"
+        android:text="@string/all_messages" />
+    <TextView
+        android:id="@+id/itemSpam"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/ic_spam"
         android:padding="8dp"
-        android:fontFamily="@font/opensans_semibold_600"
-        android:drawablePadding="@dimen/_10sdp"
-        style="@style/SelectableItemBackground"
-        android:gravity="center_vertical"
-        android:textColor="#505050"
-        android:text="@string/add_to_spam" />
-    <TextView
-        android:id="@+id/itemDelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableStart="@drawable/ic_delete"
-        android:padding="8dp"
         style="@style/SelectableItemBackground"
         android:fontFamily="@font/opensans_semibold_600"
         android:drawablePadding="@dimen/_10sdp"
         android:gravity="center_vertical"
         android:textColor="#505050"
-        android:text="@string/delete_conversation" />
+        android:text="@string/spam" />
     <TextView
         android:id="@+id/itemBlock"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/ic_block_menu"
         style="@style/SelectableItemBackground"
         android:padding="8dp"
+        app:drawableTint="#7C7E81"
         android:fontFamily="@font/opensans_semibold_600"
         android:drawablePadding="@dimen/_10sdp"
         android:gravity="center_vertical"

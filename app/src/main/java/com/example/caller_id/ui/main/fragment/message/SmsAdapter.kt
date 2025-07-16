@@ -65,11 +65,11 @@ class SmsAdapter(var conversations: MutableList<SmsConversation>,
     override fun getItemCount() = conversations.size
     fun updateData(newItems: MutableList<SmsConversation>) {
         Log.d("SmsAdapter", "Cập nhật danh sách ${newItems.size} cuộc hội thoại")
-        conversations.clear()
-        conversations.addAll(newItems)
+        conversations=newItems
         notifyDataSetChanged()
     }
-
+    val currentList: List<SmsConversation>
+        get() = conversations
     fun getColorFromAddress(address: String): Int {
         val colors = listOf(
             Color.parseColor("#EF5350"), // Đỏ

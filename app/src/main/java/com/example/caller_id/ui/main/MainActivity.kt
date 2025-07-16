@@ -22,6 +22,8 @@ import com.example.caller_id.library.magicindicator.buildins.commonnavigator.Com
 import com.example.caller_id.widget.showSnackBar
 
 
+import dagger.hilt.android.AndroidEntryPoint
+@AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private lateinit var smsReceiver: SmsReceiver
