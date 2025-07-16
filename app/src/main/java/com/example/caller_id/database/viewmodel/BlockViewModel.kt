@@ -29,12 +29,19 @@ class BlockViewModel @Inject constructor(
 ) : ViewModel() {
     private val _refreshTrigger = MutableLiveData(Unit)
     private val _blockedTrigger = MutableLiveData(Unit)
+    private val blockedNumbersFlow: Flow<Set<String>> = repo.getBlockedNumbersFlow()
+    val blockedNumbers: LiveData<Set<String>> = blockedNumbersFlow.asLiveData()
+
+    private val _listSearch = MutableLiveData<String>()
+    val listSearch: LiveData<String> get() = _listSearch
+
+    fun search(key: String) {
+        _listSearch.value = key
+    }
+
     fun block(num: String) = viewModelScope.launch { repo.block(num) }
     fun unblock(num: String) = viewModelScope.launch { repo.unblock(num) }
 
-
-    private val blockedNumbersFlow: Flow<Set<String>> = repo.getBlockedNumbersFlow()
-    val blockedNumbers: LiveData<Set<String>> = blockedNumbersFlow.asLiveData()
 
     val inboxFiltered: LiveData<List<SmsConversation>> = _refreshTrigger.switchMap {
         blockedNumbers.map { blockedSet ->
@@ -53,6 +60,7 @@ class BlockViewModel @Inject constructor(
                 .filter { it.address in blockedSet }
         }
     }
+
     fun refreshBlocked() {
         _blockedTrigger.value = Unit
     }

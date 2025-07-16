@@ -12,12 +12,13 @@
         android:id="@+id/tvDateHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:fontFamily="@font/opensans_semibold_600"
         android:padding="8dp"
         android:textColor="#AFAFAF"
         android:textSize="@dimen/_12ssp"
         android:visibility="gone"
-        android:layout_centerHorizontal="true"
         tools:text="kkkk" />
 
     <LinearLayout

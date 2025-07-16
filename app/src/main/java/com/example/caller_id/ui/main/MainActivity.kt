@@ -11,28 +11,28 @@ import android.os.Build
 import android.telecom.TelecomManager
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.content.ContextCompat.registerReceiver
 import androidx.viewpager2.widget.ViewPager2
 import com.example.caller_id.R
 import com.example.caller_id.base.BaseActivity
+import com.example.caller_id.database.viewmodel.BlockViewModel
 import com.example.caller_id.databinding.ActivityMainBinding
 import com.example.caller_id.service.SmsReceiver
 import com.example.caller_id.library.magicindicator.buildins.commonnavigator.CommonNavigator
 import com.example.caller_id.widget.showSnackBar
-
-
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {
-
+    private val vm: BlockViewModel by viewModels()
     private lateinit var smsReceiver: SmsReceiver
     private var REQUEST_CODE_SET_DEFAULT_DIALER = 123
     private val REQUEST_CODE_CALL_SCREENING = 1002
-
-    private val commonNavigator by lazy { CommonNavigator(this) }
-    private var unreadMessageCount = 0
 
     override fun setViewBinding(): ActivityMainBinding {
         return ActivityMainBinding.inflate(layoutInflater)
@@ -149,21 +149,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
 
     fun loadUnreadSmsCount() {
-        var count = 0
-        try {
-            val uri = Uri.parse("content://sms/inbox")
-            val projection = arrayOf("_id", "read")
-            val selection = "read = 0"
-            val cursor = contentResolver.query(uri, projection, selection, null, null)
+            val blocked = vm.blockedNumbers.value ?: emptySet()
+            val filterNotIn = if (blocked.isNotEmpty()) {
+                " AND address NOT IN (${blocked.joinToString { "?" }})"
+            } else ""
+            val selection = "read = 0$filterNotIn"
+            val selectionArgs = blocked.toTypedArray()
 
-            if (cursor != null) {
-                count = cursor.count
-                cursor.close()
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        binding.tvCountMessage.text = "$count"
+            val uri = Uri.parse("content://sms/inbox")
+            val projection = arrayOf("_id")
+            val cursor = contentResolver.query(uri, projection, selection, selectionArgs, null)
+            val count = cursor?.use { it.count } ?: 0
+            binding.tvCountMessage.text = "$count"
     }
 
 

@@ -63,6 +63,7 @@
     <string name="add_to_spam">Add to spam</string>
     <string name="delete_conversation">Delete conversation</string>
     <string name="block">Block</string>
+    <string name="unblock">Unblock</string>
     <string name="all_messages">All messages</string>
     <string name="messages">Messages</string>
     <string name="no_search_results">No search results</string>

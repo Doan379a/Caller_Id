@@ -76,7 +76,15 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.main.fragment.message.chat.ChatActivity"
+            android:name=".ui.main.fragment.message.chat.ChatAllActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.fragment.message.chat.ChatBlockActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.fragment.message.chat.ChatSpamActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
 

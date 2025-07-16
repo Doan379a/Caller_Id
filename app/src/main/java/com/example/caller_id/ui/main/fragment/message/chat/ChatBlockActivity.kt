@@ -5,9 +5,6 @@ import android.app.PendingIntent
 import android.content.*
 import android.graphics.Color
 import android.net.Uri
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.provider.BlockedNumberContract
 import android.telephony.SmsManager
 import android.util.Log
@@ -22,7 +19,6 @@ import com.example.caller_id.dialog.ChatMenuPopup
 import com.example.caller_id.model.SmsMessage
 import com.example.caller_id.model.SmsSendStatus
 import com.example.caller_id.service.RealTimeSmsReceiver
-import com.example.caller_id.service.SmsReceiver
 import com.example.caller_id.utils.SmsUtils.getThreadIdForAddress
 import com.example.caller_id.utils.SmsUtils.loadSmsByAddress
 import com.example.caller_id.widget.getTagDebug
@@ -31,7 +27,7 @@ import com.example.caller_id.widget.tap
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ChatActivity : BaseActivity<ActivityChatBinding>() {
+class ChatBlockActivity : BaseActivity<ActivityChatBinding>() {
     private val blockViewModel: BlockViewModel by viewModels()
     private lateinit var address: String
     private var colorAvatar: Int? = null
@@ -128,31 +124,22 @@ class ChatActivity : BaseActivity<ActivityChatBinding>() {
                     )
                     val deletedCount = contentResolver.delete(uri, null, null)
                     showSnackBar("Đã xóa $deletedCount tin nhắn")
-                  finish()
+                    finish()
 
                 },
-                onBlock = {
-                    val canBlock = BlockedNumberContract.canCurrentUserBlockNumbers(this)
-                    if (!canBlock) {
-                        showSnackBar("Thiết bị không hỗ trợ chặn số")
-                        return@ChatMenuPopup
-                    }
+                onBlock = {/* Xử lý */},
+                onUnBlock = {
                     try {
-//                        val values = ContentValues().apply {
-//                            put(BlockedNumberContract.BlockedNumbers.COLUMN_ORIGINAL_NUMBER, address)
-//                        }
-//                        val uri = contentResolver.insert(BlockedNumberContract.BlockedNumbers.CONTENT_URI, values)
-                        blockViewModel.block(address)
-                        showSnackBar("Đã chặn số $address")
-//                        Log.d(getTagDebug("DOAN_2"), "Chặn số thành công: $uri")
-//                        finish()
+                        blockViewModel.unblock(address)
+                        showSnackBar("Đã bỏ chặn số $address")
                     } catch (e: Exception) {
-                        showSnackBar("Không thể chặn số này: ${e.message}")
-                        Log.d(getTagDebug("DOAN_2"), "Chặn số thành công: $e.message")
-
+                        showSnackBar("Không thể bỏ chặn số này: ${e.message}")
+                        Log.d(getTagDebug("DOAN_2"), "Bỏ chặn số thành công: $e.message")
                     }
+                    finish()
                 }
             )
+            popup.setUnBlock(true)
             popup.showAtView(binding.ivMenu)
         }
     }
@@ -196,8 +183,6 @@ class ChatActivity : BaseActivity<ActivityChatBinding>() {
         adapter.notifyItemInserted(smsList.size - 1)
         binding.rcvMessages.scrollToPosition(smsList.size - 1)
     }
-
-
 
 
     override fun onResume() {
