@@ -63,5 +63,24 @@ public class SharePrefUtils {
             pre.edit().putInt("splash_open", currentCount + 1).apply();
         }
     }
+    public static void saveSetting(Context context, String key,Boolean value) {
+        SharedPreferences pre = context.getSharedPreferences("data", Context.MODE_PRIVATE);
+        pre.edit().putBoolean(key, value).apply();
+    }
+
+    public static boolean getSetting(Context context, String key) {
+        SharedPreferences pre = context.getSharedPreferences("data", Context.MODE_PRIVATE);
+        return pre.getBoolean(key, false);
+    }
+
+    public static void saveCountrySelection(Context context, String isoCode) {
+        SharedPreferences pre = context.getSharedPreferences("data", Context.MODE_PRIVATE);
+        pre.edit().putString("selected_country_iso", isoCode).apply();
+    }
+
+    public static String getSavedCountryIso(Context context) {
+        SharedPreferences pre = context.getSharedPreferences("data", Context.MODE_PRIVATE);
+        return pre.getString("selected_country_iso", null);
+    }
 
 }

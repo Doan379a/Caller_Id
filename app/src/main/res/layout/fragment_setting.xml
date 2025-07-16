@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_conner_blue"
+                android:backgroundTint="@color/color_EDEDED"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_block_top_spammer" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_bold_700"
+                        android:includeFontPadding="true"
+                        android:text="@string/block_top_spammer"
+                        android:textColor="@color/color_505050"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regula_400"
+                        android:text="@string/reported_by_users_as_spam"
+                        android:textColor="@color/color_7C7E81"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/cb_Spammer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_conner_blue"
+                android:backgroundTint="@color/color_EDEDED"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_hidden_numbers" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_bold_700"
+                        android:includeFontPadding="true"
+                        android:text="@string/private_amp_hidden_numbers"
+                        android:textColor="@color/color_505050"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regula_400"
+                        android:text="@string/number_that_is_shown_as_unknown_or_private"
+                        android:textColor="@color/color_7C7E81"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/cb_hidden_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_conner_blue"
+                android:backgroundTint="@color/color_EDEDED"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_block_international" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_bold_700"
+                        android:includeFontPadding="true"
+                        android:text="@string/block_international_calls"
+                        android:textColor="@color/color_505050"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regula_400"
+                        android:text="@string/only_receive_calls_from_your_country"
+                        android:textColor="@color/color_7C7E81"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/cb_international_calls"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_conner_blue"
+                android:backgroundTint="@color/color_EDEDED"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_not_in_contacts" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_bold_700"
+                        android:includeFontPadding="true"
+                        android:text="@string/numbers_not_in_contacts"
+                        android:textColor="@color/color_505050"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regula_400"
+                        android:text="Only receive Calls from your Contacts"
+                        android:textColor="@color/color_7C7E81"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+                <androidx.appcompat.widget.AppCompatCheckBox
+                    android:id="@+id/cb_notin_contacts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            <TextView
+                android:layout_marginTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Block Someone Manually"
+                android:fontFamily="@font/opensans_bold_700"
+                android:textSize="14sp"
+                android:textColor="@color/color_7C7E81"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp"
+                >
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/ic_call_select"
+                    android:text="@string/phone_number"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/opensans_bold_700"
+                    android:textColor="@color/color_505050"
+                    android:gravity="center"
+                    android:drawablePadding="15dp"
+                    android:background="@drawable/bg_conner_blue"
+                    android:backgroundTint="@color/color_EDEDED"
+                    android:padding="17dp"
+                    android:layout_marginEnd="10dp"
+                    />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/ic_message_sender_name"
+                    android:text="@string/message_sender_name"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/opensans_bold_700"
+                    android:textColor="@color/color_505050"
+                    android:gravity="center"
+                    android:drawablePadding="15dp"
+                    android:background="@drawable/bg_conner_blue"
+                    android:backgroundTint="@color/color_EDEDED"
+                    android:padding="17dp"
+                    android:layout_marginStart="10dp"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="15dp"
+                >
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/ic_country_code"
+                    android:text="@string/country_code"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/opensans_bold_700"
+                    android:textColor="@color/color_505050"
+                    android:gravity="center"
+                    android:drawablePadding="15dp"
+                    android:background="@drawable/bg_conner_blue"
+                    android:backgroundTint="@color/color_EDEDED"
+                    android:padding="17dp"
+                    android:layout_marginEnd="10dp"
+                    />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:drawableTop="@drawable/ic_numbers_series"
+                    android:text="@string/numbers_series"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/opensans_bold_700"
+                    android:textColor="@color/color_505050"
+                    android:gravity="center"
+                    android:drawablePadding="15dp"
+                    android:background="@drawable/bg_conner_blue"
+                    android:backgroundTint="@color/color_EDEDED"
+                    android:padding="17dp"
+                    android:layout_marginStart="10dp"
+                    />
+            </LinearLayout>
+            <Spinner
+                android:id="@+id/spinnerCountry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

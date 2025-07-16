@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:gravity="center_vertical"
+    android:layout_marginBottom="15dp"
+    >
+    <TextView
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="#61BCC8"
+        />
+    <LinearLayout
+       android:layout_marginHorizontal="10dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1"
+
+        >
+        <TextView
+            android:id="@+id/txt_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_semibold_600"
+            android:textSize="14sp"
+            tools:text="+442079460875"
+            />
+        <TextView
+            android:id="@+id/txt_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_call"
+            tools:text="25 May"
+            android:drawablePadding="10dp"
+            android:fontFamily="@font/opensans_semibold_600"
+            android:textSize="12sp"
+            android:gravity="center_vertical"
+            android:textColor="@color/color_7C7E81"
+            />
+    </LinearLayout>
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_call_messege"
+        />
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_marginStart="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_call_log"
+        />
+</LinearLayout>

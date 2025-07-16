@@ -3,9 +3,12 @@ package com.example.caller_id.ui.main
 import android.Manifest
 import android.content.Intent
 import android.content.IntentFilter
+import android.app.role.RoleManager
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Telephony
+import android.os.Build
+import android.telecom.TelecomManager
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -16,10 +19,17 @@ import com.example.caller_id.base.BaseActivity
 import com.example.caller_id.databinding.ActivityMainBinding
 import com.example.caller_id.service.SmsReceiver
 import dagger.hilt.android.AndroidEntryPoint
+
+import com.example.caller_id.library.magicindicator.buildins.commonnavigator.CommonNavigator
+import com.example.caller_id.widget.showSnackBar
+
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private lateinit var smsReceiver: SmsReceiver
+    private var REQUEST_CODE_SET_DEFAULT_DIALER = 123
+    private val REQUEST_CODE_CALL_SCREENING = 1002
+
     override fun setViewBinding(): ActivityMainBinding {
         return ActivityMainBinding.inflate(layoutInflater)
     }
@@ -35,6 +45,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
 
     override fun initView() {
+        checkPermissionPhone()
         binding.viewPager2.isUserInputEnabled = false
 
         checkSmsPermission()
@@ -157,6 +168,40 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         smsReceiver = SmsReceiver()
         val intentFilter = IntentFilter("android.provider.Telephony.SMS_RECEIVED")
         registerReceiver(smsReceiver, intentFilter)
+    }
+    private fun checkPermissionPhone(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val roleManager = getSystemService(RoleManager::class.java)
+            if (roleManager.isRoleAvailable(RoleManager.ROLE_CALL_SCREENING)) {
+                if (!roleManager.isRoleHeld(RoleManager.ROLE_CALL_SCREENING)) {
+                    val intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_CALL_SCREENING)
+                    startActivityForResult(intent, REQUEST_CODE_CALL_SCREENING)
+                }
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val telecomManager = getSystemService(TELECOM_SERVICE) as TelecomManager
+            val isDefaultDialer = packageName == telecomManager.defaultDialerPackage
+            if (!isDefaultDialer) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    val roleManager = getSystemService(RoleManager::class.java)
+                    if (roleManager.isRoleAvailable(RoleManager.ROLE_DIALER)) {
+                        if (!roleManager.isRoleHeld(RoleManager.ROLE_DIALER)) {
+                            val intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_DIALER)
+                            startActivityForResult(intent, REQUEST_CODE_SET_DEFAULT_DIALER)
+                        }
+                    }
+                } else {
+                    val intent = Intent(TelecomManager.ACTION_CHANGE_DEFAULT_DIALER)
+                    intent.putExtra(TelecomManager.EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME, packageName)
+                    startActivityForResult(intent, REQUEST_CODE_SET_DEFAULT_DIALER)
+                }
+
+            }
+        } else {
+            showSnackBar("Phiên bản Android không hỗ trợ thay đổi trình quay số mặc định")
+        }
     }
 
     override fun onStop() {
