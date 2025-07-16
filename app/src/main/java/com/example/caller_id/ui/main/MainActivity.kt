@@ -15,7 +15,8 @@ import com.example.caller_id.R
 import com.example.caller_id.base.BaseActivity
 import com.example.caller_id.databinding.ActivityMainBinding
 import com.example.caller_id.service.SmsReceiver
-
+import dagger.hilt.android.AndroidEntryPoint
+@AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private lateinit var smsReceiver: SmsReceiver

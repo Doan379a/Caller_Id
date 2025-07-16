@@ -40,6 +40,14 @@
     <string name="type_a_message">Type a message</string>
     <string name="yesterday">yesterday</string>
     <string name="today">Today</string>
+    <string name="add_to_spam">Add to spam</string>
+    <string name="delete_conversation">Delete conversation</string>
+    <string name="block">Block</string>
+    <string name="all_messages">All messages</string>
+    <string name="spam">Spam</string>
+    <string name="messages">Messages</string>
+    <string name="no_search_results">No search results</string>
+    <string name="your_unread_message_appear_here">your unread message appear here</string>
 
 
 </resources>

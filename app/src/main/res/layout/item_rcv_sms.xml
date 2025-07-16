@@ -86,6 +86,7 @@
         android:lines="1"
         android:ellipsize="end"
         tools:text="sssss"
+        android:fontFamily="@font/opensans_regula_400"
         android:textSize="@dimen/_10ssp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

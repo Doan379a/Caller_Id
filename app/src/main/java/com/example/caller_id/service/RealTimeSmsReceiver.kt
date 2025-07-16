@@ -1,5 +1,6 @@
 package com.example.caller_id.service
 
+import android.Manifest
 import android.content.BroadcastReceiver
 import android.content.ContentValues
 import android.content.Context
@@ -9,46 +10,50 @@ import android.net.Uri
 import android.provider.Telephony
 import android.util.Log
 import androidx.core.content.ContextCompat
+import com.example.caller_id.database.dao.BlockedNumberDao
+import com.example.caller_id.database.dao.BlockedSmsDao
+import com.example.caller_id.database.entity.BlockedSms
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class RealTimeSmsReceiver : BroadcastReceiver() {
+    @Inject
+    lateinit var numDao: BlockedNumberDao
+    @Inject
+    lateinit var smsDao: BlockedSmsDao
     companion object {
         const val ACTION_REFRESH = "com.example.caller_id.ACTION_REFRESH_SMS"
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        if (intent?.action == "android.provider.Telephony.SMS_RECEIVED") {
-            // Tin nhắn mới đến!
-            if (ContextCompat.checkSelfPermission(
-                    context!!,
-                    android.Manifest.permission.READ_SMS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                Log.e("DOAN_1", "Không có quyền READ_SMS")
-                return
-            }
+        if (intent?.action != Telephony.Sms.Intents.SMS_RECEIVED_ACTION) return
+        if (ContextCompat.checkSelfPermission(context!!, Manifest.permission.READ_SMS)
+            != PackageManager.PERMISSION_GRANTED) return
 
-            // Trích xuất tin nhắn từ Intent
-            val messages = Telephony.Sms.Intents.getMessagesFromIntent(intent)
-            for (sms in messages) {
-                val sender = sms.originatingAddress
-                val messageBody = sms.messageBody
-                Log.d("DOAN_1", "Tin nhắn mới từ $sender: $messageBody")
+        val messages = Telephony.Sms.Intents.getMessagesFromIntent(intent)
+        val sender = messages[0].originatingAddress ?: return
+        val body = messages.joinToString("") { it.messageBody }
+        val timestamp = messages[0].timestampMillis
 
-                // Chèn tin nhắn vào cơ sở dữ liệu SMS
+        CoroutineScope(Dispatchers.IO).launch {
+//            if (numDao.isBlocked(sender)) {
+//                // Tin từ số bị block ➝ lưu vào Room DB
+//                smsDao.insert(BlockedSms(address = sender, body = body, date = timestamp))
+//            } else {
+                // Tin bình thường ➝ chèn vào hệ thống SMS inbox
                 val values = ContentValues().apply {
-                    put("address", sms.originatingAddress)
-                    put("body", sms.messageBody)
-                    put("read", 0) // Đánh dấu tin nhắn là chưa đọc
-                    put("date", sms.timestampMillis)
-                    put("type", 1) // 1 = inbox
+                    put("address", sender); put("body", body)
+                    put("read", 0); put("date", timestamp); put("type", 1)
                 }
                 context.contentResolver.insert(Uri.parse("content://sms/inbox"), values)
-                val refresh = Intent(ACTION_REFRESH).apply {
-                    setPackage(context.packageName)
-                }
-                context.sendBroadcast(refresh)
+//            }
 
-            }
+            // Gửi thông báo cập nhật UI
+            context.sendBroadcast(Intent(ACTION_REFRESH).setPackage(context.packageName))
         }
     }
 }
