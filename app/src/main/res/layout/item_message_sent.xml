@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/_20sdp"
+    android:layout_marginTop="@dimen/_5sdp"
+    android:gravity="end"
+    android:orientation="vertical"
+    android:padding="@dimen/_10sdp">
+
+    <TextView
+        android:id="@+id/tvDateHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/opensans_semibold_600"
+        android:padding="8dp"
+        android:textColor="#AFAFAF"
+        android:textSize="@dimen/_12ssp"
+        android:visibility="gone"
+        tools:text="kkkk" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_bubble_sent"
+        android:orientation="vertical"
+        android:padding="@dimen/_10sdp">
+
+        <TextView
+            android:id="@+id/tvMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/opensans_regula_400"
+            android:includeFontPadding="false"
+            android:paddingBottom="5dp"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_13ssp"
+            tools:text="tin gửi" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="@dimen/_5sdp"
+                android:fontFamily="@font/opensans_regula_400"
+                android:includeFontPadding="false"
+                android:textColor="#97B4FA"
+                android:textSize="@dimen/_8ssp"
+                tools:text="07:48 AM" />
+
+            <ImageView
+                android:id="@+id/ivStatus"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="end|bottom"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="2dp"
+                android:contentDescription="status" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

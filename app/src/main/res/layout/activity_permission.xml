@@ -52,66 +52,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="8dp"
-                    android:orientation="horizontal"
+                    android:layout_marginTop="22dp"
                     android:background="@drawable/bg_border_item_permission"
-                    android:paddingHorizontal="16dp"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="20dp"
                     android:paddingVertical="12dp">
 
-
-                    <ImageView
-                        android:id="@+id/iv_set_camera_permission"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_switch_not_select" />
-
-                    <ImageView
-                        android:id="@+id/iv_select_camera_permission"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_switch_select"
-                        android:visibility="invisible" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:textColor="@color/black"
+                        android:layout_toStartOf="@id/iv_set_default_SMS_permission"
+                        android:includeFontPadding="false"
                         android:fontFamily="@font/opensans_semibold_600"
-                        android:includeFontPadding="false"
-                        android:layout_toStartOf="@id/iv_set_camera_permission"
-                        android:text="@string/allow_library_access"
-                        android:textSize="18sp" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="22dp"
-                    android:visibility="gone"
-                    android:background="@drawable/bg_border_item_permission"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="20dp"
-                    android:paddingVertical="12dp">
-
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_toStartOf="@id/iv_set_recording_permission"
-                        android:includeFontPadding="false"
-                        android:text="@string/allow_library_access"
-                        android:textColor="#020112"
-                        android:textSize="@dimen/_14sdp" />
+                        android:text="@string/allow_app_to_be_default_SMS"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
 
                     <ImageView
-                        android:id="@+id/iv_set_recording_permission"
+                        android:id="@+id/iv_set_default_SMS_permission"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -119,7 +79,7 @@
                         android:src="@drawable/ic_switch_not_select" />
 
                     <ImageView
-                        android:id="@+id/iv_select_recording_permission"
+                        android:id="@+id/iv_select_default_SMS_permission"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -135,7 +95,6 @@
                     android:layout_marginTop="22dp"
                     android:background="@drawable/bg_border_item_permission"
                     android:orientation="horizontal"
-                    android:visibility="gone"
                     android:paddingHorizontal="20dp"
                     android:paddingVertical="12dp">
 
@@ -144,14 +103,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_toStartOf="@id/iv_set_storage_permission"
+                        android:layout_toStartOf="@id/iv_set_call_logs_permission"
                         android:includeFontPadding="false"
-                        android:text="@string/allow_library_access"
-                        android:textColor="#020112"
-                        android:textSize="@dimen/_14sdp" />
+                        android:fontFamily="@font/opensans_semibold_600"
+                        android:text="@string/allow_reading_of_call_logs"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
 
                     <ImageView
-                        android:id="@+id/iv_set_storage_permission"
+                        android:id="@+id/iv_set_call_logs_permission"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -159,7 +119,7 @@
                         android:src="@drawable/ic_switch_not_select" />
 
                     <ImageView
-                        android:id="@+id/iv_select_storage_permission"
+                        android:id="@+id/iv_select_call_logs_permission"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
