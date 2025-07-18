@@ -22,7 +22,7 @@ abstract class BaseAdapter<VB : ViewBinding, M : Any> :
         return creatVH(binding)
     }
 
-    override fun getItemCount(): Int = if (listData.size > 0) listData.size else 1
+    override fun getItemCount(): Int = if (listData.size > 0) listData.size else 0
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (listData.size == 0) {

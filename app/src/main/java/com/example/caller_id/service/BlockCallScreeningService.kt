@@ -6,30 +6,93 @@ import android.provider.ContactsContract
 import android.telecom.Call
 import android.telecom.CallScreeningService
 import android.util.Log
+import androidx.room.Room
+import com.example.caller_id.database.db.AppDatabase
+import com.example.caller_id.database.repository.BlockRepository
 import com.example.caller_id.sharePreferent.SharePrefUtils
 import com.example.caller_id.widget.isInternationalNumber
 import com.example.caller_id.widget.normalizeToE164
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.runBlocking
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class BlockCallScreeningService : CallScreeningService() {
+    @Inject
+    lateinit var repo: BlockRepository
 
     override fun onScreenCall(callDetails: Call.Details) {
         val number = callDetails.handle?.schemeSpecificPart ?: return
         val context = applicationContext
 
+        val numberInternational = normalizeToE164(context, number)
         val blockTopSpammer = SharePrefUtils.getSetting(context, "CBSPAMMER")
         val blockPrivate = SharePrefUtils.getSetting(context, "CBHIDDENNUMBER")
         val blockInternational = SharePrefUtils.getSetting(context, "CBINTERNATIONALCALLS")
         val blockUnknownContacts = SharePrefUtils.getSetting(context, "CBNOTINCONTACTS")
 
+
+        val db = Room.databaseBuilder(
+            context,
+            AppDatabase::class.java,
+            "sms_db"
+        ).build()
+
+        val dao = db.blockedCalledDao()
+        /// number
+        val blockedNumberList = runBlocking {
+            dao.getAllBlockCalled().firstOrNull()
+                ?.filter { it.type == "number" }
+                ?: emptyList()
+        }
+        val isBlocked = blockedNumberList.any {
+            try {
+                normalizeToE164(context, it.number) == numberInternational
+            } catch (e: Exception) {
+                false
+            }
+        }
+
+        ///Country code
+        val blockedCountryList = runBlocking {
+            dao.getAllBlockCalled().firstOrNull()
+                ?.filter { it.type == "country" }
+                ?: emptyList()
+        }
+        val isBlockedCountry = blockedCountryList.any { blocked ->
+            numberInternational.startsWith(blocked.number)
+        }
+
+        //// start end
+        val blockedStartList = runBlocking {
+            dao.getAllBlockCalled().firstOrNull()
+                ?.filter { it.type == "numberstart" }
+                ?: emptyList()
+        }
+        val isBlockedStart = blockedStartList.any { blocked ->
+            number.startsWith(blocked.number)
+        }
+
+        val blockedEndList = runBlocking {
+            dao.getAllBlockCalled().firstOrNull()
+                ?.filter { it.type == "numberend" }
+                ?: emptyList()
+        }
+        val isBlockedEnd = blockedEndList.any { blocked ->
+            number.startsWith(blocked.number)
+        }
+
         val isPrivateOrUnknown = number.isEmpty() || number == "Unknown"
 
-        val numberInternational = normalizeToE164(context, number)
         val isInternational = isInternationalNumber(context, numberInternational)
         Log.d("numbercallDetails", numberInternational)
         val isNotInContacts = !isNumberInContacts(context, number)
         val isTopSpammer = isTopSpammer(number)
 
-        val shouldBlock = (blockTopSpammer && isTopSpammer) ||
+
+        val shouldBlock = isBlocked || isBlockedCountry || isBlockedStart || isBlockedEnd ||
+                (blockTopSpammer && isTopSpammer) ||
                 (blockPrivate && isPrivateOrUnknown) ||
                 (blockInternational && isInternational) ||
                 (blockUnknownContacts && isNotInContacts)
@@ -57,7 +120,10 @@ class BlockCallScreeningService : CallScreeningService() {
 
     private fun isNumberInContacts(context: Context, number: String): Boolean {
         val cr = context.contentResolver
-        val uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number))
+        val uri = Uri.withAppendedPath(
+            ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
+            Uri.encode(number)
+        )
         val cursor = cr.query(uri, arrayOf(ContactsContract.PhoneLookup._ID), null, null, null)
         cursor?.use {
             return it.moveToFirst()

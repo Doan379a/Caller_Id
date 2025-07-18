@@ -49,9 +49,11 @@ interface BlockedCalledDao {
   suspend fun deleteById(id: Long)
 
 
+
   @Query("SELECT * FROM blocked_called WHERE isSpam = 1")
   fun getAllSpamCalled(): Flow<List<BlockedCalled>>
 
   @Query("SELECT * FROM blocked_called WHERE isSpam = 0")
   fun getAllBlockCalled(): Flow<List<BlockedCalled>>
+
 }

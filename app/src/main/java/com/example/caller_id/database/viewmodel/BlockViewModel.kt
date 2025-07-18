@@ -1,6 +1,7 @@
 package com.example.caller_id.database.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -37,6 +38,14 @@ class BlockViewModel @Inject constructor(
 
     fun search(key: String) {
         _listSearch.value = key
+    }
+
+    private val _listSearchBlock = MutableLiveData<String>()
+    val listSearchBlock: LiveData<String> get() = _listSearchBlock
+
+    fun searchBlock(query: String) {
+        Log.d("searchBlock", "Query: $query")
+        _listSearchBlock.value = query
     }
 
     fun block(num: String) = viewModelScope.launch { repo.block(num) }
