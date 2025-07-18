@@ -15,6 +15,7 @@ import com.example.caller_id.widget.setDrawableStartWithTint
 class CallLogAdapter(val context: Context,
                      val onClick :(callLogItem: CallLogItem)->Unit
 ) :BaseAdapter<ItemCallLogBinding, CallLogItem>() {
+    var onClickSms :((sms: String)-> Unit)? = null
     override fun createBinding(
         inflater: LayoutInflater,
         parent: ViewGroup,
@@ -51,6 +52,9 @@ class CallLogAdapter(val context: Context,
                 binding.txtName.text = data.number + countText
             }
             binding.txtDate.text = data.date
+            binding.imgSms.setOnClickListener{
+                onClickSms?.invoke(data.number ?: "")
+            }
         }
     }
     @SuppressLint("NotifyDataSetChanged")

@@ -17,17 +17,26 @@ class ChatMenuPopup(
     private val onSpam: () -> Unit,
     private val onBlock: () -> Unit,
     private val onDelete: () -> Unit,
-    private val onUnBlock: () -> Unit,
-) : BasePopupWindow<PopupChatMenuBinding>(context) {
 
+    ) : BasePopupWindow<PopupChatMenuBinding>(context) {
+    var onRemoveSpam: (() -> Unit)? = null
+    var onUnBlock: (() -> Unit)? = null
     override fun getViewBinding(inflater: LayoutInflater): PopupChatMenuBinding {
         return PopupChatMenuBinding.inflate(inflater)
     }
+
     fun setUnBlock(unblock: Boolean) {
         binding.itemUnBlock.visibleOrGone(unblock)
         binding.itemBlock.visibleOrGone(!unblock)
         Log.d("DOAN_3", "setType=$unblock")
     }
+
+    fun setRemoveSpam(unblock: Boolean) {
+        binding.itemRemoveSpam.visibleOrGone(unblock)
+        binding.itemSpam.visibleOrGone(!unblock)
+        Log.d("DOAN_3", "setType=$unblock")
+    }
+
     override fun onBind(binding: PopupChatMenuBinding) {
 
         binding.itemSpam.setOnClickListener {
@@ -44,7 +53,11 @@ class ChatMenuPopup(
         }
         binding.itemUnBlock.setOnClickListener {
             dismiss()
-            onUnBlock()
+            onUnBlock?.invoke()
+        }
+        binding.itemRemoveSpam.setOnClickListener {
+            dismiss()
+            onRemoveSpam?.invoke()
         }
     }
 }

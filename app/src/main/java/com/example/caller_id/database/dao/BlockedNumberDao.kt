@@ -7,7 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.caller_id.database.entity.BlockedCalled
 import com.example.caller_id.database.entity.BlockedNumber
-import com.example.caller_id.database.entity.BlockedSms
+import com.example.caller_id.database.entity.SpamNumberSms
 
 import kotlinx.coroutines.flow.Flow
 
@@ -27,17 +27,18 @@ interface BlockedNumberDao {
 }
 
 @Dao
-interface BlockedSmsDao {
+interface SpamNumberSmsDao {
+  @Query("SELECT EXISTS(SELECT 1 FROM spam_numbers_sms WHERE number = :num)")
+  suspend fun isBlocked(num: String): Boolean
+
   @Insert(onConflict = OnConflictStrategy.IGNORE)
-  suspend fun insert(sms: BlockedSms)
+  suspend fun insert(num: SpamNumberSms)
 
+  @Delete
+  suspend fun delete(num: SpamNumberSms)
 
-  @Query("SELECT * FROM blocked_sms WHERE address = :address ORDER BY date ASC")
-  fun getSmsByAddress(address: String): Flow<List<BlockedSms>>
-
-  @Query("SELECT * FROM blocked_sms")
-  fun getAllBlockedSms(): Flow<List<BlockedSms>>
-
+  @Query("SELECT * FROM spam_numbers_sms")
+  fun getAllSpamNumber(): Flow<List<SpamNumberSms>>
 }
 
 @Dao

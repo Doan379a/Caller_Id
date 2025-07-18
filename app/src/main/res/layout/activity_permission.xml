@@ -103,6 +103,45 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
+                        android:layout_toStartOf="@id/iv_set_read_sms_permission"
+                        android:includeFontPadding="false"
+                        android:fontFamily="@font/opensans_semibold_600"
+                        android:text="read sms"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/iv_set_read_sms_permission"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_switch_not_select" />
+
+                    <ImageView
+                        android:id="@+id/iv_select_red_sms_permission"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_switch_select"
+                        android:visibility="invisible" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="22dp"
+                    android:background="@drawable/bg_border_item_permission"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="12dp">
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
                         android:layout_toStartOf="@id/iv_set_call_logs_permission"
                         android:includeFontPadding="false"
                         android:fontFamily="@font/opensans_semibold_600"
@@ -127,7 +166,6 @@
                         android:src="@drawable/ic_switch_select"
                         android:visibility="invisible" />
                 </RelativeLayout>
-
             </LinearLayout>
 
             <TextView

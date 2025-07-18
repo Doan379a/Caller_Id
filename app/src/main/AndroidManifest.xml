@@ -4,15 +4,13 @@
     <uses-permission android:name="android.permission.READ_CALL_LOG"/>
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.SCREEN_CALLS" />
-
+    <uses-permission android:name="android.permission.WRITE_CALL_LOG"/>
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
-    <uses-permission android:name="android.permission.READ_CALL_LOG"/>
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:name=".MyApp"
@@ -77,14 +75,27 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.fragment.message.chat.ChatAllActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+            android:exported="true"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.SENDTO" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="sms" />
+                <data android:scheme="smsto" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.main.fragment.message.chat.ChatBlockActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.fragment.message.chat.ChatSpamActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.fragment.message.chat.NewChatActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
 

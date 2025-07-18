@@ -11,10 +11,15 @@ import com.example.caller_id.R
 import com.example.caller_id.databinding.ItemRcvSmsBinding
 import com.example.caller_id.model.SmsConversation
 import com.example.caller_id.utils.SmsUtils.formatSmsTimestamp
+import com.example.caller_id.utils.SmsUtils.lookupContactName
+import com.example.caller_id.utils.SmsUtils.toNational
+import java.text.Normalizer.normalize
 import kotlin.math.absoluteValue
 
-class SmsAdapter(var conversations: MutableList<SmsConversation>,
-                 private val onClick: (String,String,Int) -> Unit) :
+class SmsAdapter(
+    var conversations: MutableList<SmsConversation>,
+    private val onClick: (String, String, Int) -> Unit
+) :
     RecyclerView.Adapter<SmsAdapter.SmsViewHolder>() {
 
     inner class SmsViewHolder(val binding: ItemRcvSmsBinding) :
@@ -30,24 +35,30 @@ class SmsAdapter(var conversations: MutableList<SmsConversation>,
         val binding = holder.binding
         val params = holder.binding.root.layoutParams as ViewGroup.MarginLayoutParams
         if (position == itemCount - 1) {
-            params.bottomMargin = (150 * binding.root.context.resources.displayMetrics.density).toInt()
+            params.bottomMargin =
+                (150 * binding.root.context.resources.displayMetrics.density).toInt()
         } else {
             params.bottomMargin = 0
         }
         holder.binding.root.layoutParams = params
+        val local = toNational(sms.address)
+        val namePhone = lookupContactName(binding.root.context, local ?: sms.address)
 
-
-        binding.tvAddress.text = sms.address
+//        binding.tvAddress.text = normalized
+        val default = sms.address ?: "?"
+        binding.tvAddress.text = if (namePhone !== "") namePhone else local ?: sms.address
         binding.tvBody.text = sms.latestMessage
         binding.tvTime.text = formatSmsTimestamp(binding.root.context, sms.date)
-        binding.tvAvatar.text = sms.address.firstOrNull()?.uppercaseChar()?.toString() ?: "?"
+        binding.tvAvatar.text =
+            namePhone.firstOrNull()?.uppercaseChar()?.toString() ?: default.firstOrNull()
+                ?.uppercaseChar()?.toString() ?: "?"
         val textColor = if (sms.unreadCount > 0) {
-            ContextCompat.getColor(binding.root.context,R.color.color_262626)
+            ContextCompat.getColor(binding.root.context, R.color.color_262626)
         } else {
             ContextCompat.getColor(binding.root.context, R.color.color_505050)
         }
         val textBodyColor = if (sms.unreadCount > 0) {
-            ContextCompat.getColor(binding.root.context,R.color.color_262626)
+            ContextCompat.getColor(binding.root.context, R.color.color_262626)
         } else {
             ContextCompat.getColor(binding.root.context, R.color.color_7C7E81)
         }
@@ -58,18 +69,20 @@ class SmsAdapter(var conversations: MutableList<SmsConversation>,
         binding.cardAvatar.setCardBackgroundColor(getColorFromAddress(sms.address))
         binding.root.setOnClickListener {
             val color = getColorFromAddress(sms.address)
-            onClick(sms.displayName,sms.address,color)
+            onClick(sms.displayName, sms.address, color)
         }
     }
 
     override fun getItemCount() = conversations.size
     fun updateData(newItems: MutableList<SmsConversation>) {
         Log.d("SmsAdapter", "Cập nhật danh sách ${newItems.size} cuộc hội thoại")
-        conversations=newItems
+        conversations = newItems
         notifyDataSetChanged()
     }
+
     val currentList: List<SmsConversation>
         get() = conversations
+
     fun getColorFromAddress(address: String): Int {
         val colors = listOf(
             Color.parseColor("#EF5350"), // Đỏ

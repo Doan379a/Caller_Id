@@ -11,8 +11,8 @@ import android.provider.Telephony
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.example.caller_id.database.dao.BlockedNumberDao
-import com.example.caller_id.database.dao.BlockedSmsDao
-import com.example.caller_id.database.entity.BlockedSms
+import com.example.caller_id.ui.main.MainActivity
+import com.example.caller_id.widget.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,8 +23,7 @@ import javax.inject.Inject
 class RealTimeSmsReceiver : BroadcastReceiver() {
     @Inject
     lateinit var numDao: BlockedNumberDao
-    @Inject
-    lateinit var smsDao: BlockedSmsDao
+
     companion object {
         const val ACTION_REFRESH = "com.example.caller_id.ACTION_REFRESH_SMS"
     }
@@ -33,7 +32,6 @@ class RealTimeSmsReceiver : BroadcastReceiver() {
         if (intent?.action != Telephony.Sms.Intents.SMS_RECEIVED_ACTION) return
         if (ContextCompat.checkSelfPermission(context!!, Manifest.permission.READ_SMS)
             != PackageManager.PERMISSION_GRANTED) return
-
         val messages = Telephony.Sms.Intents.getMessagesFromIntent(intent)
         val sender = messages[0].originatingAddress ?: return
         val body = messages.joinToString("") { it.messageBody }
@@ -51,8 +49,6 @@ class RealTimeSmsReceiver : BroadcastReceiver() {
                 }
                 context.contentResolver.insert(Uri.parse("content://sms/inbox"), values)
 //            }
-
-            // Gửi thông báo cập nhật UI
             context.sendBroadcast(Intent(ACTION_REFRESH).setPackage(context.packageName))
         }
     }

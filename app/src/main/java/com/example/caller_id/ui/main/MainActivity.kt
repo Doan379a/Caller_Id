@@ -2,6 +2,8 @@ package com.example.caller_id.ui.main
 
 import android.Manifest
 import android.app.role.RoleManager
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
@@ -24,6 +26,8 @@ import com.example.caller_id.database.viewmodel.BlockViewModel
 import com.example.caller_id.databinding.ActivityMainBinding
 import com.example.caller_id.service.SmsReceiver
 import com.example.caller_id.library.magicindicator.buildins.commonnavigator.CommonNavigator
+import com.example.caller_id.service.RealTimeSmsReceiver
+import com.example.caller_id.widget.getTagDebug
 import com.example.caller_id.widget.showSnackBar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -53,14 +57,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         binding.viewPager2.isUserInputEnabled = false
 
         checkSmsPermission()
-        if (Telephony.Sms.getDefaultSmsPackage(this) != this.packageName) {
-            val intent = Intent(Telephony.Sms.Intents.ACTION_CHANGE_DEFAULT)
-            intent.putExtra(Telephony.Sms.Intents.EXTRA_PACKAGE_NAME, this.packageName)
-            startActivity(intent)
-        }
-        val isDefault = Telephony.Sms.getDefaultSmsPackage(this) == this.packageName
-        Log.d("CHECK2222222", "Is default SMS app? $isDefault")
-
         binding.viewPager2.adapter = MainAdapter(this)
         binding.viewPager2.registerOnPageChangeCallback(myPageChangeCallback)
     }
@@ -142,25 +138,34 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             if (allGranted) {
                 loadUnreadSmsCount()
             } else {
-                Toast.makeText(this, "Bạn cần cấp đủ quyền để sử dụng chức năng này", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Bạn cần cấp đủ quyền để sử dụng chức năng này",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
 
 
     fun loadUnreadSmsCount() {
-            val blocked = vm.blockedNumbers.value ?: emptySet()
-            val filterNotIn = if (blocked.isNotEmpty()) {
-                " AND address NOT IN (${blocked.joinToString { "?" }})"
-            } else ""
-            val selection = "read = 0$filterNotIn"
-            val selectionArgs = blocked.toTypedArray()
+        val blocked = vm.blockedNumbers.value ?: emptySet()
+        val spam = vm.spamNumbers.value ?: emptySet()
+        val allFilter = blocked + spam
 
-            val uri = Uri.parse("content://sms/inbox")
-            val projection = arrayOf("_id")
-            val cursor = contentResolver.query(uri, projection, selection, selectionArgs, null)
-            val count = cursor?.use { it.count } ?: 0
-            binding.tvCountMessage.text = "$count"
+        val filterNotIn = if (allFilter.isNotEmpty()) {
+            " AND address NOT IN (${allFilter.joinToString { "?" }})"
+        } else ""
+
+        val selection = "read = 0$filterNotIn"
+
+        val selectionArgs = allFilter.toTypedArray()
+
+        val uri = Uri.parse("content://sms/inbox")
+        val projection = arrayOf("_id")
+        val cursor = contentResolver.query(uri, projection, selection, selectionArgs, null)
+        val count = cursor?.use { it.count } ?: 0
+        binding.tvCountMessage.text = "$count"
     }
 
 
@@ -170,12 +175,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         val intentFilter = IntentFilter("android.provider.Telephony.SMS_RECEIVED")
         registerReceiver(smsReceiver, intentFilter)
     }
-    private fun checkPermissionPhone(){
+
+    private fun checkPermissionPhone() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val roleManager = getSystemService(RoleManager::class.java)
             if (roleManager.isRoleAvailable(RoleManager.ROLE_CALL_SCREENING)) {
                 if (!roleManager.isRoleHeld(RoleManager.ROLE_CALL_SCREENING)) {
-                    val intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_CALL_SCREENING)
+                    val intent =
+                        roleManager.createRequestRoleIntent(RoleManager.ROLE_CALL_SCREENING)
                     startActivityForResult(intent, REQUEST_CODE_CALL_SCREENING)
                 }
             }
@@ -189,13 +196,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     val roleManager = getSystemService(RoleManager::class.java)
                     if (roleManager.isRoleAvailable(RoleManager.ROLE_DIALER)) {
                         if (!roleManager.isRoleHeld(RoleManager.ROLE_DIALER)) {
-                            val intent = roleManager.createRequestRoleIntent(RoleManager.ROLE_DIALER)
+                            val intent =
+                                roleManager.createRequestRoleIntent(RoleManager.ROLE_DIALER)
                             startActivityForResult(intent, REQUEST_CODE_SET_DEFAULT_DIALER)
                         }
                     }
                 } else {
                     val intent = Intent(TelecomManager.ACTION_CHANGE_DEFAULT_DIALER)
-                    intent.putExtra(TelecomManager.EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME, packageName)
+                    intent.putExtra(
+                        TelecomManager.EXTRA_CHANGE_DEFAULT_DIALER_PACKAGE_NAME,
+                        packageName
+                    )
                     startActivityForResult(intent, REQUEST_CODE_SET_DEFAULT_DIALER)
                 }
 

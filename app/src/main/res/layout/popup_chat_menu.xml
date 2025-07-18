@@ -18,6 +18,20 @@
         android:textColor="#505050"
         android:text="@string/add_to_spam" />
     <TextView
+        android:id="@+id/item_remove_Spam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_spam"
+        android:padding="8dp"
+        android:visibility="gone"
+        android:fontFamily="@font/opensans_semibold_600"
+        android:drawablePadding="@dimen/_10sdp"
+        style="@style/SelectableItemBackground"
+        android:gravity="center_vertical"
+        android:textColor="#505050"
+        android:text="@string/remove_from_spam" />
+
+    <TextView
         android:id="@+id/itemDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

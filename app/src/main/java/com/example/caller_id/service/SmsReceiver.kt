@@ -9,6 +9,8 @@ import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.provider.Telephony
+import com.example.caller_id.ui.main.MainActivity
+import com.example.caller_id.widget.showToast
 
 
 class SmsReceiver : BroadcastReceiver() {
@@ -16,6 +18,8 @@ class SmsReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent?.action == Telephony.Sms.Intents.SMS_RECEIVED_ACTION) {
             // Không cần làm gì, stub để Android nhận diện
+            context.showToast("SmsReceiver")
+            (context as MainActivity).loadUnreadSmsCount()
         }
     }
 }

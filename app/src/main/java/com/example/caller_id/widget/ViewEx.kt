@@ -1,11 +1,14 @@
 package com.example.caller_id.widget
 
 
+import android.app.Activity
 import android.content.Context
 import android.telephony.TelephonyManager
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.google.i18n.phonenumbers.Phonenumber
 import java.util.Locale
@@ -64,6 +67,16 @@ fun TextView.setDrawableStartWithTint(drawableResId: Int, color: Int) {
     val drawable = ContextCompat.getDrawable(context, drawableResId)?.mutate()
     drawable?.setTint(color)
     setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
+}
+
+fun Activity.hideKeyboard() {
+    val view = currentFocus ?: View(this)
+    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(view.windowToken, 0)
+}
+
+fun Fragment.hideKeyboard() {
+    requireActivity().hideKeyboard()
 }
 
 

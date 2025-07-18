@@ -22,6 +22,7 @@ import com.example.caller_id.model.SmsConversation
 import com.example.caller_id.service.RealTimeSmsReceiver
 import com.example.caller_id.service.SmsReceiver
 import com.example.caller_id.ui.main.MainActivity
+import com.example.caller_id.widget.getTagDebug
 import com.example.caller_id.widget.normalize
 import com.example.caller_id.widget.showSnackBar
 import com.example.caller_id.widget.tap
@@ -47,6 +48,7 @@ class MessageFragment : BaseFragment<FragmentMessageBinding>() {
     }
 
     override fun initView() {
+
         binding.viewPager2.isUserInputEnabled = false
         binding.viewPager2.adapter = MessageAdapterViewPager(requireActivity())
         binding.viewPager2.currentItem = 0
@@ -122,9 +124,19 @@ class MessageFragment : BaseFragment<FragmentMessageBinding>() {
             IntentFilter(RealTimeSmsReceiver.ACTION_REFRESH),
             ContextCompat.RECEIVER_NOT_EXPORTED
         )
+//        if (isDefaultSmsApp()){
+//            Log.d(getTagDebug("QUYEN"), "đã cấp quyền")
+//            requireActivity().showSnackBar("Ứng dụng này đã được cấp quyền SMS mặc định. Bạn có thể sử dụng tính năng này.")
+//        }else{
+//            Log.d(getTagDebug("QUYEN"), "Chưa cấp quyền")
+//            requireActivity().showSnackBar("Ứng dụng này không phải là ứng dụng SMS mặc định. Vui lòng cấp quyền để sử dụng tính năng này.")
+//            requestDefaultSmsRoleIfNeeded()
+//        }
+
         Log.d("kkkk", "Refresh:loooo")
         vm.refreshInbox()
-        vm.refreshBlocked()
+//        vm.refreshBlocked()
+//        vm.refreshSpam()
         (requireActivity() as MainActivity).loadUnreadSmsCount()
     }
 
@@ -143,7 +155,8 @@ class MessageFragment : BaseFragment<FragmentMessageBinding>() {
             if (i?.action == RealTimeSmsReceiver.ACTION_REFRESH) {
                 requireActivity().showSnackBar("tin mới ")
                 vm.refreshInbox()
-                vm.refreshBlocked()
+//                vm.refreshBlocked()
+//                vm.refreshSpam()
                 (requireActivity() as MainActivity).loadUnreadSmsCount()
             }
         }

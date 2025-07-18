@@ -14,6 +14,8 @@ public class Default {
             ? new String[]{Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO}
             : new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
-    public static final String[] SEND_READ_SMS = new String[]{Manifest.permission.READ_SMS, Manifest.permission.SEND_SMS};
-    public static final String[] CALL_PHONE = new String[]{Manifest.permission.READ_CALL_LOG };
+    public static final String[] SEND_READ_SMS = new String[]{ Manifest.permission.READ_SMS,
+            Manifest.permission.SEND_SMS, Manifest.permission.RECEIVE_SMS};
+    public static final String[] CALL_PHONE = new String[]{  Manifest.permission.READ_CALL_LOG,
+            Manifest.permission.WRITE_CALL_LOG};
 }

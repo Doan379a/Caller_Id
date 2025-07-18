@@ -1,6 +1,7 @@
 package com.example.caller_id.ui.main.fragment.message.chat
 
 import android.content.Context
+import android.graphics.Color
 import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -12,13 +13,15 @@ import com.example.caller_id.databinding.ItemMessageSentBinding
 import com.example.caller_id.model.SmsMessage
 import com.example.caller_id.model.SmsSendStatus
 import com.example.caller_id.utils.SmsUtils.formatSmsTimestamp
+import com.example.caller_id.utils.SmsUtils.lookupContactName
+import com.example.caller_id.utils.SmsUtils.toNational
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
 class ChatAdapter (private val items: List<SmsMessage>,
-                  private val colorAvatar: Int? = null) :
+                  private val colorAvatar: Int? =  null):
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -61,12 +64,14 @@ class ChatAdapter (private val items: List<SmsMessage>,
             }
         } else if (holder is ReceivedViewHolder) {
             val headerText = getHeaderDateText(holder.binding.root.context,sms.date)
+            val local = toNational(sms.address)
+            val  namePhone= lookupContactName(holder.binding.root.context, local ?: sms.address)
             holder.binding.tvDateHeader.apply {
                 visibility = if (showHeader) View.VISIBLE else View.GONE
                 text = headerText
             }
             colorAvatar?.let { holder.binding.cardAvatar.setCardBackgroundColor(it) }
-            holder.binding.tvAvatar.text = sms.address.firstOrNull()?.uppercaseChar()?.toString() ?: "?"
+            holder.binding.tvAvatar.text = namePhone.firstOrNull()?.uppercaseChar()?.toString() ?: local?.firstOrNull()?.uppercaseChar()?.toString()
             holder.binding.tvMessage.text = sms.body
             holder.binding.tvTime.text = formatSmsTimestamp(holder.binding.root.context, sms.date)
         }

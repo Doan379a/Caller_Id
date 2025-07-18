@@ -12,9 +12,11 @@ import com.example.caller_id.databinding.FragmentAllSmsMessageBinding
 import com.example.caller_id.model.SmsConversation
 import com.example.caller_id.ui.main.fragment.message.SmsAdapter
 import com.example.caller_id.ui.main.fragment.message.chat.ChatAllActivity
+import com.example.caller_id.utils.SmsUtils.lookupContactName
 import com.example.caller_id.widget.normalize
 import com.example.caller_id.widget.visibleOrGone
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.Normalizer.normalize
 
 @AndroidEntryPoint
 class AllMessageSmsFragment : BaseFragment<FragmentAllSmsMessageBinding>() {
@@ -36,6 +38,8 @@ class AllMessageSmsFragment : BaseFragment<FragmentAllSmsMessageBinding>() {
     private fun rcvSetUp() = binding.apply {
         adapter = SmsAdapter(mutableListOf()) { displayName, address, color ->
             val intent = Intent(requireActivity(), ChatAllActivity::class.java).apply {
+//                val name = lookupContactName(requireActivity(), normalized)
+                Log.d("Doan_1", "Contact name for $address: $displayName")
                 putExtra("displayName", displayName)
                 putExtra("address", address)
                 putExtra("color", color)

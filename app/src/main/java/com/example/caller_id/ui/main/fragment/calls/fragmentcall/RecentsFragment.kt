@@ -1,5 +1,7 @@
 package com.example.caller_id.ui.main.fragment.calls.fragmentcall
 
+import android.content.Intent
+import android.net.Uri
 import android.provider.CallLog
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +10,10 @@ import com.example.caller_id.base.BaseFragment
 import com.example.caller_id.databinding.FragmentRecentsBinding
 import com.example.caller_id.model.CallLogItem
 import com.example.caller_id.ui.main.fragment.calls.CallLogAdapter
+import com.example.caller_id.ui.main.fragment.message.chat.ChatAllActivity
+import com.example.caller_id.utils.SmsUtils.normalizePhone
 import com.example.caller_id.utils.SystemUtil
+import com.example.caller_id.widget.showSnackBar
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -24,12 +29,20 @@ class RecentsFragment : BaseFragment<FragmentRecentsBinding>() {
 
     override fun initView() {
         val list = getCallLogs()
-        adapter = CallLogAdapter(requireContext()){data->
+        adapter = CallLogAdapter(requireContext()) { data ->
 
         }
         binding.rcv.layoutManager = LinearLayoutManager(requireActivity())
         binding.rcv.adapter = adapter
         adapter.updateList(list)
+        adapter.onClickSms = {sms->
+            val normalized = normalizePhone(sms) ?: sms
+            val smsIntent = Intent(requireActivity(), ChatAllActivity::class.java).apply {
+                putExtra("address", normalized)
+            }
+            startActivity(smsIntent)
+
+        }
     }
 
     override fun viewListener() {

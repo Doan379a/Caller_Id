@@ -2,16 +2,21 @@ package com.example.caller_id.utils
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.BlockedNumberContract
 import android.provider.ContactsContract
+import android.telephony.PhoneNumberUtils.normalizeNumber
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.example.caller_id.R
 import com.example.caller_id.model.SmsConversation
 import com.example.caller_id.model.SmsMessage
+import com.google.i18n.phonenumbers.NumberParseException
+import com.google.i18n.phonenumbers.PhoneNumberUtil
+import kotlinx.coroutines.runBlocking
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -57,7 +62,7 @@ object SmsUtils {
         }
     }
 
-    fun getGroupedSmsInbox(context: Context): MutableList<SmsConversation> {
+    fun getGroupedSmsInbox(context: Context): MutableList<SmsConversation>  {
         val unreadCountMap = mutableMapOf<String, Int>()
         val latestMap = mutableMapOf<String, SmsConversation>()
 
@@ -79,32 +84,61 @@ object SmsUtils {
             val idxRead = it.getColumnIndex("read")
 
             while (it.moveToNext()) {
-                val address = it.getString(idxAddress) ?: continue
+                val raw = it.getString(idxAddress) ?: continue
+                val normalized = normalizePhone(raw) ?: raw
+//                val local = toNational(raw) ?: raw
                 val body = it.getString(idxBody) ?: ""
                 val date = it.getLong(idxDate)
                 val read = it.getInt(idxRead)
 
-                // Đếm chưa đọc
                 if (read == 0) {
-                    unreadCountMap[address] = unreadCountMap.getOrDefault(address, 0) + 1
+                    unreadCountMap[normalized] = unreadCountMap.getOrDefault(normalized, 0) + 1
                 }
+                Log.d("Doan_3", "Processing SMS from: $normalized, body: $body, date: $date, read: $read")
 
-                // Lưu tin mới nhất theo người gửi
-                val existing = latestMap[address]
+                val existing = latestMap[normalized]
+//                val name = contactsMap[normalized] ?: normalized
 //                val name = lookupContactName(context, address)
                 if (existing == null || date > existing.date) {
-                    latestMap[address] = SmsConversation(
-                        address = address,
-//                        displayName = if (name.isNotEmpty()) name else address,
+                    latestMap[normalized] = SmsConversation(
+                        address = normalized,
+//                        displayName =  name ,
                         latestMessage = body,
                         date = date,
-                        unreadCount = unreadCountMap[address] ?: 0
+                        unreadCount = unreadCountMap[normalized] ?: 0
                     )
                 }
             }
         }
+         return latestMap.values.sortedByDescending { it.date }.toMutableList()
+    }
 
-        return latestMap.values.sortedByDescending { it.date }.toMutableList()
+     fun normalizePhone(raw: String): String? {
+        val pu = PhoneNumberUtil.getInstance()
+        return try {
+            val phoneProto = if (raw.startsWith("+")) {
+                pu.parse(raw, "")  // không dùng null
+            } else {
+                pu.parse(raw, Locale.getDefault().country)
+            }
+            pu.format(phoneProto, PhoneNumberUtil.PhoneNumberFormat.E164)
+        } catch (e: NumberParseException) {
+            null
+        }
+    }
+
+     fun toNational(rawE164: String): String? {
+        val pu = PhoneNumberUtil.getInstance()
+        return try {
+            val proto = pu.parse(rawE164, "") // parse số quốc tế
+            if (pu.isValidNumber(proto)) {
+                pu.format(proto, PhoneNumberUtil.PhoneNumberFormat.NATIONAL)
+            } else {
+                rawE164.removePrefix("+84")
+            }
+        } catch (e: NumberParseException) {
+            null
+        }
     }
 
 
@@ -114,7 +148,10 @@ object SmsUtils {
 
         if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.READ_CONTACTS)
             != PackageManager.PERMISSION_GRANTED
-        ) return ""
+        ) {
+            Log.d("DOAN_4", "ko quyen ")
+            return ""
+        }
 
         val lookupUri = Uri.withAppendedPath(
             ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
@@ -135,36 +172,35 @@ object SmsUtils {
     fun loadSmsByAddress(context: Context, address: String): List<SmsMessage> {
         val smsList = mutableListOf<SmsMessage>()
         val uri = Uri.parse("content://sms/")
-        val cursor = context.contentResolver.query(
-            uri,
-            arrayOf("address", "body", "date", "type", "read"),
-            "address = ?",
-            arrayOf(address),
-            "date ASC"
-        )
+        val projection = arrayOf("address", "body", "date", "type", "read", "_id")
 
-        cursor?.use {
-            val indexAddress = it.getColumnIndex("address")
-            val indexBody = it.getColumnIndex("body")
-            val indexDate = it.getColumnIndex("date")
-            val indexRead = it.getColumnIndex("read")
-            val indexType = it.getColumnIndex("type")
-
-            while (it.moveToNext()) {
-                val isSent = it.getInt(indexType) == 2 // 1: received, 2: sent
-                smsList.add(
-                    SmsMessage(
-                        address = it.getString(indexAddress),
-                        body = it.getString(indexBody),
-                        date = it.getLong(indexDate),
-                        read = it.getInt(indexRead) == 1,
-                        isSentByMe = isSent
-                    )
-                )
-            }
+        fun fetchFor(arg: String?) {
+            if (arg.isNullOrBlank()) return
+            context.contentResolver.query(uri, projection, "address = ?", arrayOf(arg), "date ASC")
+                ?.use { cur ->
+                    if (cur.moveToFirst()) {
+                        do {
+                            val isSent = cur.getInt(cur.getColumnIndexOrThrow("type")) == 2
+                            smsList += SmsMessage(
+                                address = cur.getString(cur.getColumnIndexOrThrow("address")),
+                                body = cur.getString(cur.getColumnIndexOrThrow("body")),
+                                date = cur.getLong(cur.getColumnIndexOrThrow("date")),
+                                read = cur.getInt(cur.getColumnIndexOrThrow("read")) == 1,
+                                isSentByMe = isSent
+                            )
+                        } while (cur.moveToNext())
+                    }
+                }
         }
+
+        fetchFor(address)
+        if (smsList.isNotEmpty()) return smsList
+
+        val alt = toNational(address)
+        fetchFor(alt)
         return smsList
     }
+
 
     fun getThreadIdForAddress(context: Context, address: String): Long? {
         val uri = Uri.parse("content://sms")
@@ -197,4 +233,12 @@ object SmsUtils {
         return blocked
     }
 
+    fun markSmsAsRead(context: Context, from: String, body: String) {
+        val uri = Uri.parse("content://sms/inbox")
+        val selection = "address = ? AND body = ? AND read = 0"
+        val args = arrayOf(from, body)
+        val values = ContentValues().apply { put("read", 1) }
+        val updated = context.contentResolver.update(uri, values, selection, args)
+        Log.d("SMS", "Đã đánh dấu $updated tin nhắn là đã đọc")
+    }
 }

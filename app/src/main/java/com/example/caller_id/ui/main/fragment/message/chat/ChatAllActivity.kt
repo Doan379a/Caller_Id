@@ -1,5 +1,6 @@
 package com.example.caller_id.ui.main.fragment.message.chat
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.PendingIntent
 import android.content.*
@@ -13,6 +14,7 @@ import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.caller_id.base.BaseActivity
+import com.example.caller_id.base.BaseActivity2
 import com.example.caller_id.database.viewmodel.BlockViewModel
 import com.example.caller_id.databinding.ActivityChatBinding
 import com.example.caller_id.dialog.ChatMenuPopup
@@ -21,15 +23,25 @@ import com.example.caller_id.model.SmsSendStatus
 import com.example.caller_id.service.RealTimeSmsReceiver
 import com.example.caller_id.utils.SmsUtils.getThreadIdForAddress
 import com.example.caller_id.utils.SmsUtils.loadSmsByAddress
+import com.example.caller_id.utils.SmsUtils.lookupContactName
+import com.example.caller_id.utils.SmsUtils.markSmsAsRead
+import com.example.caller_id.utils.SmsUtils.normalizePhone
+import com.example.caller_id.utils.SmsUtils.toNational
 import com.example.caller_id.widget.getTagDebug
+import com.example.caller_id.widget.gone
+import com.example.caller_id.widget.hideKeyboard
 import com.example.caller_id.widget.showSnackBar
+import com.example.caller_id.widget.showToast
 import com.example.caller_id.widget.tap
+import com.example.caller_id.widget.visible
+import com.google.android.material.internal.ViewUtils.hideKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ChatAllActivity : BaseActivity<ActivityChatBinding>() {
+class ChatAllActivity : BaseActivity2<ActivityChatBinding>() {
     private val blockViewModel: BlockViewModel by viewModels()
     private lateinit var address: String
+    private var displayName: String = ""
     private var colorAvatar: Int? = null
     private val smsList = mutableListOf<SmsMessage>()
     private lateinit var adapter: ChatAdapter
@@ -60,7 +72,6 @@ class ChatAllActivity : BaseActivity<ActivityChatBinding>() {
                     loadMessages()
                     val refreshIntent = Intent("com.example.caller_id.ACTION_REFRESH_SMS")
                     context?.sendBroadcast(refreshIntent)
-
                 }
             }
         }
@@ -82,27 +93,45 @@ class ChatAllActivity : BaseActivity<ActivityChatBinding>() {
         return ActivityChatBinding.inflate(layoutInflater)
     }
 
-    override fun initView() {
-        address = intent.getStringExtra("address") ?: ""
-        val displayName = intent.getStringExtra("displayName") ?: ""
-        Log.d(getTagDebug("DOAN_2"), "Address: $address, Display Name: $displayName")
-        colorAvatar = intent.getIntExtra("color", Color.GRAY)
-        binding.tvAddress.apply {
-            text = displayName
-            if (displayName.isBlank()) {
-                visibility = View.GONE
-            } else {
-                visibility = View.VISIBLE
+
+    private fun handleSendToIntent(intent: Intent) {
+        Log.d("Chat", "handleSendToIntent called: action=${intent.action}, data=${intent.data}")
+        if (intent.action == Intent.ACTION_SENDTO) {
+            intent.data?.schemeSpecificPart?.let { number ->
+                val pre = intent.getStringExtra("sms_body") ?: ""
+                Log.d("Chat", "SENDTO intent: $number, prebody: \"$pre\"")
+                val normalized = normalizePhone(number) ?: number
+                address = normalized
+                binding.ivMenu.gone()
             }
         }
-        binding.tvPhone.text = address
+    }
+
+    @SuppressLint("RestrictedApi")
+    override fun initView() {
+        address = intent.getStringExtra("address") ?: ""
+
+        handleSendToIntent(intent)
+        val local = toNational(address)
+        colorAvatar = intent.getIntExtra("color", Color.parseColor("#42A5F5"))
+        val name = lookupContactName(this, local ?: address)
+        displayName = if (name.isNotBlank()) name else local ?: address
+
+
+        binding.tvAddress.text = displayName
+        binding.tvPhone.text = if (local !== null) local else address
+        Log.d(getTagDebug("DOAN_2"), "Address: $address, Display Name: $displayName,name${name}")
         adapter = ChatAdapter(smsList, colorAvatar)
         binding.rcvMessages.layoutManager = LinearLayoutManager(this)
         binding.rcvMessages.adapter = adapter
         loadMessages()
+
     }
 
     override fun viewListener() {
+        binding.root.setOnClickListener {
+            hideKeyboard()
+        }
         binding.ivBack.setOnClickListener {
             finish()
         }
@@ -115,7 +144,10 @@ class ChatAllActivity : BaseActivity<ActivityChatBinding>() {
         }
         binding.ivMenu.tap {
             val popup = ChatMenuPopup(this,
-                onSpam = { /* Xử lý */ },
+                onSpam = {
+                    blockViewModel.spamSms(address)
+                    finish()
+                },
                 onDelete = {
                     val threadId = getThreadIdForAddress(this, address) ?: return@ChatMenuPopup
                     val uri = ContentUris.withAppendedId(
@@ -124,7 +156,7 @@ class ChatAllActivity : BaseActivity<ActivityChatBinding>() {
                     )
                     val deletedCount = contentResolver.delete(uri, null, null)
                     showSnackBar("Đã xóa $deletedCount tin nhắn")
-                  finish()
+                    finish()
                 },
                 onBlock = {
                     val canBlock = BlockedNumberContract.canCurrentUserBlockNumbers(this)
@@ -146,8 +178,6 @@ class ChatAllActivity : BaseActivity<ActivityChatBinding>() {
                         Log.d(getTagDebug("DOAN_2"), "Chặn số thành công: $e.message")
 
                     }
-                }, onUnBlock ={
-
                 }
             )
             popup.showAtView(binding.ivMenu)
@@ -159,12 +189,13 @@ class ChatAllActivity : BaseActivity<ActivityChatBinding>() {
     private fun loadMessages() {
         smsList.clear()
         val loaded = loadSmsByAddress(this, address)
-        smsList.addAll(loaded)
+
         Log.d(getTagDebug("DOAN_2"), "Loaded ${loaded.size} messages for address: $address")
         loaded.filter { !it.read && !it.isSentByMe }.forEach {
             markSmsAsRead(this, it.address, it.body)
         }
-        adapter.notifyItemInserted(smsList.size - 1)
+        smsList.addAll(loaded)
+        adapter.notifyDataSetChanged()
         binding.rcvMessages.scrollToPosition(smsList.size - 1)
     }
 
@@ -195,8 +226,6 @@ class ChatAllActivity : BaseActivity<ActivityChatBinding>() {
     }
 
 
-
-
     override fun onResume() {
         super.onResume()
         registerReceiver(smsSentReceiver, IntentFilter("SMS_SENT"))
@@ -216,12 +245,5 @@ class ChatAllActivity : BaseActivity<ActivityChatBinding>() {
         unregisterReceiver(smsRefreshReceiver)
     }
 
-    private fun markSmsAsRead(context: Context, from: String, body: String) {
-        val uri = Uri.parse("content://sms/inbox")
-        val selection = "address = ? AND body = ? AND read = 0"
-        val args = arrayOf(from, body)
-        val values = ContentValues().apply { put("read", 1) }
-        val updated = context.contentResolver.update(uri, values, selection, args)
-        Log.d("SMS", "Đã đánh dấu $updated tin nhắn là đã đọc")
-    }
+
 }

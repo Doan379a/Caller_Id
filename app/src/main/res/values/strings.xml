@@ -74,6 +74,7 @@
     <string name="number">Number</string>
     <string name="enter_a_number_or_a_pattern">Enter a number or a pattern (e.g. *12345*, +1*8888) to block all calls and messages from numbers matching the pattern.</string>
     <string name="select_a_country_code_you_want_to_block">Select a country Code you want to block</string>
+    <string name="remove_from_spam">Remove from spam</string>
 
 
 </resources>
