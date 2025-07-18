@@ -71,10 +71,20 @@
     <string name="do_not_disturb">Do not Disturb</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="block_a_number">Block a Number</string>
+    <string name="block_a_sender_name">Block a sender name</string>
+    <string name="block_a_country_code">Block a country code</string>
+    <string name="block_a_number_series">Block a Number Series</string>
     <string name="number">Number</string>
     <string name="enter_a_number_or_a_pattern">Enter a number or a pattern (e.g. *12345*, +1*8888) to block all calls and messages from numbers matching the pattern.</string>
     <string name="select_a_country_code_you_want_to_block">Select a country Code you want to block</string>
     <string name="remove_from_spam">Remove from spam</string>
 
+    <string name="any_sender_which_the_name_you_enter">Any sender which contain\'s the name you enter will be blocked</string>
+    <string name="blocked_user">Blocked User</string>
+    <string name="number_start_with">Number start with</string>
+    <string name="number_end_with">Number end with</string>
+    <string name="sender">Sender</string>
+    <string name="are_you_sure_you_want_to_unblock">Are You Sure You Want to Unblock</string>
+    <string name="unblocked">Unblocked</string>
 
 </resources>

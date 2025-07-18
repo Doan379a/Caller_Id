@@ -1,17 +1,24 @@
 package com.example.caller_id.ui.main.fragment.block
 
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.example.caller_id.R
 import com.example.caller_id.base.BaseFragment
+import com.example.caller_id.database.viewmodel.BlockViewModel
 import com.example.caller_id.databinding.FragmentBlockBinding
-import com.example.caller_id.ui.main.fragment.calls.CallAdapter
+import com.example.caller_id.ui.main.fragment.block.adapterblock.BlockAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class BlockFragment:BaseFragment<FragmentBlockBinding>() {
-
+    private val sharedViewModel: BlockViewModel by activityViewModels()
     override fun setViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -36,6 +43,13 @@ class BlockFragment:BaseFragment<FragmentBlockBinding>() {
     }
 
     override fun viewListener() {
+        binding.edtSearch.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                sharedViewModel.searchBlock(s.toString())
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
         binding.ivSetting.setOnClickListener {
             setUpColorTab(0)
             binding.viewPager2.currentItem = 0

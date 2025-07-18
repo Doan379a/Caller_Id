@@ -55,10 +55,13 @@
                         android:textSize="11sp" />
                 </LinearLayout>
 
-                <androidx.appcompat.widget.AppCompatCheckBox
+                <CheckBox
                     android:id="@+id/cb_Spammer"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawableEnd="@drawable/checkbox_selector"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -101,10 +104,14 @@
                         android:textSize="11sp" />
                 </LinearLayout>
 
-                <androidx.appcompat.widget.AppCompatCheckBox
+                <CheckBox
                     android:id="@+id/cb_hidden_number"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:button="@null"
+                    android:drawableEnd="@drawable/checkbox_selector"
+                    android:text=""
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -147,10 +154,15 @@
                         android:textSize="11sp" />
                 </LinearLayout>
 
-                <androidx.appcompat.widget.AppCompatCheckBox
+                <CheckBox
                     android:id="@+id/cb_international_calls"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:button="@null"
+                    android:drawableEnd="@drawable/checkbox_selector"
+                    android:text=""
+                    />
             </LinearLayout>
             <LinearLayout
                 android:layout_marginTop="15dp"
@@ -192,10 +204,16 @@
                         android:textSize="11sp" />
                 </LinearLayout>
 
-                <androidx.appcompat.widget.AppCompatCheckBox
+                <CheckBox
                     android:id="@+id/cb_notin_contacts"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:button="@null"
+                    android:drawableEnd="@drawable/checkbox_selector"
+                    android:text=""
+                    
+                    />
             </LinearLayout>
             <TextView
                 android:layout_marginTop="30dp"
@@ -213,6 +231,7 @@
                 android:layout_marginTop="15dp"
                 >
                 <TextView
+                    android:id="@+id/iv_phoneNumber"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -229,6 +248,7 @@
                     android:layout_marginEnd="10dp"
                     />
                 <TextView
+                    android:id="@+id/iv_message_sender_name"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -252,6 +272,7 @@
                 android:layout_marginTop="15dp"
                 >
                 <TextView
+                    android:id="@+id/iv_country_code"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -268,6 +289,7 @@
                     android:layout_marginEnd="10dp"
                     />
                 <TextView
+                    android:id="@+id/iv_number_series"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -284,11 +306,6 @@
                     android:layout_marginStart="10dp"
                     />
             </LinearLayout>
-            <Spinner
-                android:id="@+id/spinnerCountry"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
 
         </LinearLayout>
     </ScrollView>

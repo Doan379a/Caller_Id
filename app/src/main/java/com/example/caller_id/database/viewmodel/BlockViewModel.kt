@@ -2,6 +2,7 @@ package com.example.caller_id.database.viewmodel
 
 import android.content.Context
 import android.provider.ContactsContract
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -111,4 +112,11 @@ class BlockViewModel @Inject constructor(
     }
     val callBlockedList: LiveData<List<BlockedCalled>> = repo.getAllBlockedCalledFlow().asLiveData()
     val callSpamList: LiveData<List<BlockedCalled>> = repo.getAllSpamCalledFlow().asLiveData()
+    private val _listSearchBlock = MutableLiveData<String>()
+    val listSearchBlock: LiveData<String> get() = _listSearchBlock
+
+    fun searchBlock(query: String) {
+        Log.d("searchBlock", "Query: $query")
+        _listSearchBlock.value = query
+    }
 }

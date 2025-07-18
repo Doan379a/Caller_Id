@@ -8,6 +8,7 @@ import com.example.caller_id.database.entity.BlockedCalled
 import com.example.caller_id.database.entity.BlockedNumber
 import com.example.caller_id.database.entity.SpamNumberSms
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -35,5 +36,6 @@ class BlockRepository @Inject constructor(
   suspend fun insertCalled(num: String, type: String, isSpam: Boolean) = blockedCalledDao.insert(BlockedCalled(number = num, type = type, isSpam = isSpam))
   suspend fun deleteCalled(id: Long) = blockedCalledDao.deleteById(id)
   fun getAllBlockedCalledFlow(): Flow<List<BlockedCalled>> = blockedCalledDao.getAllBlockCalled()
+
   fun getAllSpamCalledFlow(): Flow<List<BlockedCalled>> = blockedCalledDao.getAllSpamCalled()
 }

@@ -2,6 +2,7 @@ package com.example.caller_id.ui.main.fragment.calls
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import com.example.caller_id.base.BaseAdapter
 import com.example.caller_id.databinding.ItemCallLogBinding
 import com.example.caller_id.model.CallLogItem
 import com.example.caller_id.widget.setDrawableStartWithTint
+import kotlin.math.absoluteValue
 
 class CallLogAdapter(val context: Context,
                      val onClick :(callLogItem: CallLogItem)->Unit
@@ -35,6 +37,8 @@ class CallLogAdapter(val context: Context,
 
         override fun bind(data: CallLogItem) {
             super.bind(data)
+            binding.tvAvatar.text = data.name?.firstOrNull()?.uppercaseChar()?.toString()  ?: data.number.firstOrNull()?.toString().orEmpty()
+            binding.cardAvatar.setCardBackgroundColor(getColorFromAddress())
             val countText = if (data.count > 1) " (${data.count})" else ""
             if (data.type == "Incoming"){
                 binding.txtDate.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_call_incoming, 0, 0, 0)
@@ -62,5 +66,18 @@ class CallLogAdapter(val context: Context,
         listData.clear()
         listData.addAll(newList)
         notifyDataSetChanged()
+    }
+    fun getColorFromAddress(): Int {
+        val colors = listOf(
+            Color.parseColor("#EF5350"), // Đỏ
+            Color.parseColor("#AB47BC"), // Tím
+            Color.parseColor("#42A5F5"), // Xanh dương
+            Color.parseColor("#26A69A"), // Xanh ngọc
+            Color.parseColor("#FFA726"), // Cam
+            Color.parseColor("#66BB6A"), // Xanh lá
+            Color.parseColor("#FF7043"), // Cam đậm
+        )
+
+        return colors.random()
     }
 }

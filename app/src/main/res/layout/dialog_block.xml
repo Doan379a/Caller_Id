@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/bg_conner_edit"
             android:paddingHorizontal="10dp"
-            android:paddingVertical="15dp"
+            android:paddingVertical="10dp"
             android:visibility="gone"
             />
 
@@ -73,6 +73,7 @@
             android:fontFamily="@font/opensans_bold_700"
             android:textSize="16sp"
             android:textColor="@color/color_505050"
+            android:inputType="numberSigned"
             />
         <TextView
             android:id="@+id/txt_content"
@@ -87,7 +88,7 @@
 
         <TextView
             android:layout_marginTop="20dp"
-            android:id="@+id/txtBlock"
+            android:id="@+id/iv_Block"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="15sp"
