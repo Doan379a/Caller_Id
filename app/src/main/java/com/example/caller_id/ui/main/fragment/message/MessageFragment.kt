@@ -22,6 +22,7 @@ import com.example.caller_id.model.SmsConversation
 import com.example.caller_id.service.RealTimeSmsReceiver
 import com.example.caller_id.service.SmsReceiver
 import com.example.caller_id.ui.main.MainActivity
+import com.example.caller_id.ui.main.fragment.message.chat.NewChatActivity
 import com.example.caller_id.widget.getTagDebug
 import com.example.caller_id.widget.normalize
 import com.example.caller_id.widget.showSnackBar
@@ -60,6 +61,10 @@ class MessageFragment : BaseFragment<FragmentMessageBinding>() {
     }
 
     override fun viewListener() {
+        binding.imgNewMessage.tap {
+            val intent = Intent(requireActivity(), NewChatActivity::class.java)
+            startActivity(intent)
+        }
         binding.imgMenu.tap {
             Log.d("MSG", "Before showing popup, 3333intSelector=$intSelector")
             popup.setType(binding.viewPager2.currentItem)

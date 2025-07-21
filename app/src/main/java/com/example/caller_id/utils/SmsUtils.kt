@@ -8,15 +8,19 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.BlockedNumberContract
 import android.provider.ContactsContract
+import android.provider.Telephony
 import android.telephony.PhoneNumberUtils.normalizeNumber
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.example.caller_id.R
+import com.example.caller_id.model.ContactModel
 import com.example.caller_id.model.SmsConversation
 import com.example.caller_id.model.SmsMessage
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -62,7 +66,7 @@ object SmsUtils {
         }
     }
 
-    fun getGroupedSmsInbox(context: Context): MutableList<SmsConversation>  {
+   suspend fun getGroupedSmsInbox(context: Context): MutableList<SmsConversation> = withContext(Dispatchers.IO) {
         val unreadCountMap = mutableMapOf<String, Int>()
         val latestMap = mutableMapOf<String, SmsConversation>()
 
@@ -110,7 +114,7 @@ object SmsUtils {
                 }
             }
         }
-         return latestMap.values.sortedByDescending { it.date }.toMutableList()
+          latestMap.values.sortedByDescending { it.date }.toMutableList()
     }
 
      fun normalizePhone(raw: String): String? {
@@ -241,4 +245,45 @@ object SmsUtils {
         val updated = context.contentResolver.update(uri, values, selection, args)
         Log.d("SMS", "Đã đánh dấu $updated tin nhắn là đã đọc")
     }
+
+    suspend fun loadContacts(context: Context): List<ContactModel> = withContext(Dispatchers.IO) {
+        val list = mutableListOf<ContactModel>()
+        val cr = context.contentResolver
+        val uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
+        val projection = arrayOf(
+            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+            ContactsContract.CommonDataKinds.Phone.NUMBER
+        )
+        val cursor = cr.query(uri, projection, null, null,
+            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC")
+        cursor?.use {
+            val idxName = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
+            val idxNum = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
+            while (it.moveToNext()) {
+                val name = it.getString(idxName) ?: ""
+                val number = it.getString(idxNum) ?: ""
+                list.add(ContactModel(name, number))
+            }
+        }
+        list
+    }
+
+    suspend fun loadConversationAddresses(context: Context): List<String> = withContext(Dispatchers.IO) {
+        val list = mutableSetOf<String>()
+        val uri = Uri.parse("content://sms")
+        val projection = arrayOf("address")
+        val cursor = context.contentResolver.query(uri, projection, null, null, "date DESC")
+
+        cursor?.use { c ->
+            val idx = c.getColumnIndex("address")
+            while (c.moveToNext()) {
+                val raw = c.getString(idx) ?: continue
+                val normalized = normalizePhone(raw) ?: raw
+                list.add(normalized)
+            }
+        }
+        list.toList()
+    }
+
+
 }

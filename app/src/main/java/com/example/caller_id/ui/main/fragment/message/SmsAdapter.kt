@@ -74,6 +74,7 @@ class SmsAdapter(
     }
 
     override fun getItemCount() = conversations.size
+
     fun updateData(newItems: MutableList<SmsConversation>) {
         Log.d("SmsAdapter", "Cập nhật danh sách ${newItems.size} cuộc hội thoại")
         conversations = newItems
