@@ -64,14 +64,13 @@ class ChatAdapter (private val items: List<SmsMessage>,
             }
         } else if (holder is ReceivedViewHolder) {
             val headerText = getHeaderDateText(holder.binding.root.context,sms.date)
-            val local = toNational(sms.address)
-            val  namePhone= lookupContactName(holder.binding.root.context, local ?: sms.address)
+            val  namePhone= lookupContactName(holder.binding.root.context, sms.address)
             holder.binding.tvDateHeader.apply {
                 visibility = if (showHeader) View.VISIBLE else View.GONE
                 text = headerText
             }
             colorAvatar?.let { holder.binding.cardAvatar.setCardBackgroundColor(it) }
-            holder.binding.tvAvatar.text = namePhone.firstOrNull()?.uppercaseChar()?.toString() ?: local?.firstOrNull()?.uppercaseChar()?.toString()
+            holder.binding.tvAvatar.text = namePhone.firstOrNull()?.uppercaseChar()?.toString() ?: sms.address?.firstOrNull()?.uppercaseChar()?.toString()
             holder.binding.tvMessage.text = sms.body
             holder.binding.tvTime.text = formatSmsTimestamp(holder.binding.root.context, sms.date)
         }

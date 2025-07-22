@@ -7,80 +7,88 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Color
 import android.net.Uri
-import android.provider.CallLog
-import android.provider.ContactsContract
 import android.telephony.SmsManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.caller_id.base.BaseActivity2
 import com.example.caller_id.databinding.ActivityNewChatBinding
-import com.example.caller_id.model.CallLogItem
 import com.example.caller_id.model.ContactModel
-import com.example.caller_id.model.SmsConversation
 import com.example.caller_id.model.SmsMessage
 import com.example.caller_id.model.SmsSendStatus
 import com.example.caller_id.service.RealTimeSmsReceiver
-import com.example.caller_id.ui.main.fragment.calls.CallLogAdapter
-import com.example.caller_id.ui.main.fragment.calls.fragmentcall.RecentsFragment
-import com.example.caller_id.ui.main.fragment.message.SmsAdapter
+import com.example.caller_id.utils.SmsUtils.getCheckAddress
 import com.example.caller_id.utils.SmsUtils.loadContacts
 import com.example.caller_id.utils.SmsUtils.loadConversationAddresses
 import com.example.caller_id.utils.SmsUtils.loadSmsByAddress
+import com.example.caller_id.utils.SmsUtils.lookupContactName
 import com.example.caller_id.utils.SmsUtils.markSmsAsRead
 import com.example.caller_id.utils.SmsUtils.toNational
-import com.example.caller_id.utils.SystemUtil
+import com.example.caller_id.widget.getLogDebug
 import com.example.caller_id.widget.getTagDebug
 import com.example.caller_id.widget.gone
 import com.example.caller_id.widget.normalize
 import com.example.caller_id.widget.showSnackBar
+import com.example.caller_id.widget.showToast
 import com.example.caller_id.widget.tap
 import com.example.caller_id.widget.visible
 import com.example.caller_id.widget.visibleOrGone
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class NewChatActivity : BaseActivity2<ActivityNewChatBinding>() {
     private val smsList: MutableList<SmsMessage> = mutableListOf()
-    private val smsAdapter: ChatAdapter by lazy { ChatAdapter(smsList) }
+    private val smsAdapter: ChatAdapter by lazy { ChatAdapter(smsList, Color.parseColor("#42A5F5")) }
     private var contactModel = mutableListOf<ContactModel>()
     private var address: String = ""
-    private lateinit var adapterContact: SearchContact
+    private lateinit var adapterContact: SearchContactAdapter
     override fun setViewBinding(): ActivityNewChatBinding {
         return ActivityNewChatBinding.inflate(layoutInflater)
     }
 
     override fun initView() {
-
         binding.rcvMessages.layoutManager = LinearLayoutManager(this)
         binding.rcvMessages.adapter = smsAdapter
         loadMessages()
         lifecycleScope.launch {
-            val list = loadContacts(this@NewChatActivity)
-            val test = loadConversationAddresses(this@NewChatActivity)
-            Log.d("DOAN_7", "test: $test")
-            test.forEach {
-                contactModel += ContactModel(name = it, number = it)
+            val listContacts = loadContacts(this@NewChatActivity)
+            val listSmsAddress = loadConversationAddresses(this@NewChatActivity)
+            val merged = mutableListOf<ContactModel>()
+
+            listSmsAddress.forEach { raw ->
+                val normalized = getCheckAddress(raw) // chuẩn hóa +84/0
+                val name = lookupContactName(this@NewChatActivity, normalized)
+                val displayName = name.takeIf { it.isNotBlank() } ?: normalized
+                merged += ContactModel(name = displayName, number = normalized)
             }
-            contactModel.addAll(list)
-            adapterContact = SearchContact(contactModel) { data ->
+
+            listContacts.forEach { c ->
+                val normalized = getCheckAddress(c.number)
+                if (merged.none { it.number == normalized }) {
+                    val displayName = lookupContactName(this@NewChatActivity, normalized)
+                        .takeIf { it.isNotBlank() } ?: normalized
+                    merged += ContactModel(name = displayName, number = normalized)
+                }
+            }
+
+            contactModel=merged
+            adapterContact = SearchContactAdapter(merged.toMutableList()) { data ->
                 Log.d("DOAN_2", "contact data: $data")
+                val name = lookupContactName(this@NewChatActivity, data.number)
+                val displayName = name.takeIf { it.isNotBlank() } ?: data.number
                 address = data.number
-                binding.edtSearch.setText(address)
+                binding.edtSearch.setText(displayName)
                 loadMessages()
+                binding.edtSearch.clearFocus()
+                binding.edtMessage.requestFocus()
                 binding.includeSearchContact.searchContact.gone()
                 binding.rcvMessages.visible()
             }
-            Log.d(getTagDebug("DOAN_2"), "List size: ${list?.size}")
+            Log.d(getTagDebug("DOAN_2"), "List size: ${listContacts?.size}")
             binding.includeSearchContact.rcvSearchContact.layoutManager =
                 LinearLayoutManager(this@NewChatActivity)
             binding.includeSearchContact.rcvSearchContact.adapter = adapterContact
@@ -118,61 +126,59 @@ class NewChatActivity : BaseActivity2<ActivityNewChatBinding>() {
             val text = binding.edtMessage.text.toString()
             if (text.isNotBlank()) {
                 sendSmsWithStatus()
+                binding.edtMessage.text.clear()
+            }else{
+                showToast("bạn chưa chọn contact")
             }
         }
     }
 
     private fun loadMessages() {
         smsList.clear()
-        var listLoaded = mutableListOf<SmsMessage>()
-        fun fetchFor(arg: String) {
-            listLoaded = loadSmsByAddress(this, arg).toMutableList()
-            Log.d(getTagDebug("DOAN_2"), "Loaded ${listLoaded.size} messages for address: $arg")
-        }
+        val loaded = loadSmsByAddress(this, getCheckAddress(address))
 
-        Log.d(getTagDebug("DOAN_2"), "Loaded ${listLoaded.size} messages for address: $address")
-        listLoaded.filter { !it.read && !it.isSentByMe }.forEach {
+        Log.d(getTagDebug("DOAN_2"), "Loaded ${loaded.size} messages for address: ${getCheckAddress(address)}")
+        loaded.filter { !it.read && !it.isSentByMe }.forEach {
             markSmsAsRead(this, it.address, it.body)
         }
-        fetchFor(address)
-        if (smsList.isNotEmpty()) {
-            smsList.addAll(listLoaded)
-        }
-
-        val alt = toNational(address)
-        alt?.let { fetchFor(it) }
-        smsList.addAll(listLoaded)
+        smsList.addAll(loaded)
         smsAdapter.notifyDataSetChanged()
         binding.rcvMessages.scrollToPosition(smsList.size - 1)
     }
 
     override fun dataObservable() {
     }
-    private fun sendSmsWithStatus() {
-        val dest = address.normalize().trim()
-        val body = binding.edtMessage.text.toString()
 
+    private fun sendSmsWithStatus() {
+        val dest = address.trim()
+        val body = binding.edtMessage.text.toString()
+        getLogDebug("NewChat", "dest: $dest, body: $body")
         if (dest.isBlank() || body.isBlank()) {
             showSnackBar("Vui lòng nhập số và nội dung")
             return
         }
+        val sms = SmsMessage(
+            address = dest,
+            body = body,
+            date = System.currentTimeMillis(),
+            read = true,
+            isSentByMe = true,
+            status = SmsSendStatus.SENDING
+        )
 
-        // Nếu là short code nhỏ (3–6 chữ số), dùng SMS Intent để đảm bảo gửi
-        if (dest.length < 7 && dest.all { it.isDigit() }) {
-            val intent = Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:$dest"))
-            intent.putExtra("sms_body", body)
-            startActivity(intent)
-            return
-        }
+        val sentIntent = Intent("SMS_SENT")
+        val sentPendingIntent = PendingIntent.getBroadcast(
+            this,
+            0,
+            sentIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val smsManager = getSystemService(SmsManager::class.java)
+        smsManager.sendTextMessage(dest, null, body, sentPendingIntent, null)
 
-        val sms = SmsMessage(dest, body, System.currentTimeMillis(), true, true, SmsSendStatus.SENDING)
-        smsList += sms
-        smsAdapter.notifyItemInserted(smsList.lastIndex)
-        binding.rcvMessages.scrollToPosition(smsList.lastIndex)
-        binding.edtMessage.text?.clear()
-
-        val sentPI = PendingIntent.getBroadcast(this, 0, Intent("SMS_SENT"), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-        SmsManager.getDefault().sendTextMessage(dest, null, body, sentPI, null)
+        smsList.add(sms)
+        smsAdapter.notifyItemInserted(smsList.size - 1)
+        binding.rcvMessages.scrollToPosition(smsList.size - 1)
     }
 
     // Broadcast nhận khi gửi xong
@@ -216,6 +222,7 @@ class NewChatActivity : BaseActivity2<ActivityNewChatBinding>() {
             }
         }
     }
+
     override fun onResume() {
         super.onResume()
         registerReceiver(smsSentReceiver, IntentFilter("SMS_SENT"))

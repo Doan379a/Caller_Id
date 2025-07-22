@@ -203,7 +203,8 @@ class ChatSpamActivity : BaseActivity2<ActivityChatBinding>() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        SmsManager.getDefault().sendTextMessage(address, null, body, sentPendingIntent, null)
+        val smsManager=getSystemService(SmsManager::class.java)
+        smsManager.sendTextMessage(address, null, body, sentPendingIntent, null)
 
         smsList.add(sms)
         adapter.notifyItemInserted(smsList.size - 1)

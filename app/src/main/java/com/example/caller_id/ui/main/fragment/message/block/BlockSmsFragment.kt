@@ -44,7 +44,7 @@ class BlockSmsFragment : BaseFragment<FragmentBlockSmsBinding>() {
     }
 
     override fun dataObservable() {
-        vm.listSearch.observe(viewLifecycleOwner) { query ->
+        vm.listSearchMessage.observe(viewLifecycleOwner) { query ->
             val filtered = listBlock.filter { app ->
                 app.address.normalize().lowercase().contains(query)
             }

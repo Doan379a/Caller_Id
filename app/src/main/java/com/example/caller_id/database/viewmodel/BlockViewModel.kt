@@ -7,15 +7,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import com.example.caller_id.database.entity.BlockedCalled
 import com.example.caller_id.database.repository.BlockRepository
+import com.example.caller_id.model.ContactModel
 import com.example.caller_id.model.SmsConversation
 import com.example.caller_id.model.SmsMessage
 import com.example.caller_id.model.SmsSendStatus
 import com.example.caller_id.utils.SmsUtils.getGroupedSmsInbox
+import com.example.caller_id.utils.SmsUtils.loadContacts
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -41,17 +44,17 @@ class BlockViewModel @Inject constructor(
     private val repo: BlockRepository
 ) : ViewModel() {
 
-    // Trigger cho reload inbox
     private val refreshTrigger = MutableSharedFlow<Unit>(replay = 1).apply {
-        tryEmit(Unit)  // load lần đầu khi init ViewModel
+        tryEmit(Unit)
     }
 
-    // Shared inboxFlow: đọc SMS mỗi khi có trigger
     private val inboxFlow: SharedFlow<List<SmsConversation>> =
         refreshTrigger
             .flatMapLatest {
                 flow {
+                    _loading.postValue(true)
                     emit(getGroupedSmsInbox(context))
+                    _loading.postValue(false)
                 }.flowOn(Dispatchers.IO)
             }
             .shareIn(viewModelScope, SharingStarted.Lazily, replay = 1)
@@ -61,15 +64,28 @@ class BlockViewModel @Inject constructor(
     private val spamFlow = repo.getSpamSmsNumbersFlow()
     val blockedNumbers: LiveData<Set<String>> = blockedFlow.asLiveData()
     val spamNumbers: LiveData<Set<String>> = spamFlow.asLiveData()
-
-    // Tìm kiếm theo query
-    private val _listSearch = MutableLiveData<String>()
-    val listSearch: LiveData<String> get() = _listSearch
-
-    fun search(query: String) {
-        _listSearch.value = query
+    private val _loading = MutableLiveData<Boolean>()
+    val loading: LiveData<Boolean> get() = _loading
+    val contacts: LiveData<List<ContactModel>> = liveData {
+        val result = loadContacts(context)
+        emit(result)
     }
 
+
+
+    // Tìm kiếm theo query
+    private val _listSearchMessage = MutableLiveData<String>()
+    val listSearchMessage : LiveData<String> get() = _listSearchMessage
+
+    fun searchMessage(query: String) {
+        _listSearchMessage .value = query
+    }
+    private val _listSearchContact = MutableLiveData<String>()
+    val listSearchContact : LiveData<String> get() = _listSearchContact
+
+    fun searchContact(query: String) {
+        _listSearchContact .value = query
+    }
     // Tổng hợp bộ lọc chung
     private val allFilterFlow = blockedFlow.combine(spamFlow) { b, s -> b + s }
 
@@ -97,6 +113,8 @@ class BlockViewModel @Inject constructor(
         viewModelScope.launch { refreshTrigger.emit(Unit) }
     }
 
+
+
     // Chặn, spam SMS
     fun block(num: String) = viewModelScope.launch { repo.block(num) }
     fun unblock(num: String) = viewModelScope.launch { repo.unblock(num) }
@@ -107,9 +125,11 @@ class BlockViewModel @Inject constructor(
     fun insertCallBlock(num: String, type: String, isSpam: Boolean) = viewModelScope.launch {
         repo.insertCalled(num, type, isSpam)
     }
+
     fun deleteCallById(id: Long) = viewModelScope.launch {
         repo.deleteCalled(id)
     }
+
     val callBlockedList: LiveData<List<BlockedCalled>> = repo.getAllBlockedCalledFlow().asLiveData()
     val callSpamList: LiveData<List<BlockedCalled>> = repo.getAllSpamCalledFlow().asLiveData()
     private val _listSearchBlock = MutableLiveData<String>()

@@ -41,12 +41,11 @@ class SmsAdapter(
             params.bottomMargin = 0
         }
         holder.binding.root.layoutParams = params
-        val local = toNational(sms.address)
-        val namePhone = lookupContactName(binding.root.context, local ?: sms.address)
+        val namePhone = lookupContactName(binding.root.context,  sms.address)
 
 //        binding.tvAddress.text = normalized
-        val default = sms.address ?: "?"
-        binding.tvAddress.text = if (namePhone !== "") namePhone else local ?: sms.address
+        val default = sms.address
+        binding.tvAddress.text = if (namePhone !== "") namePhone else  sms.address
         binding.tvBody.text = sms.latestMessage
         binding.tvTime.text = formatSmsTimestamp(binding.root.context, sms.date)
         binding.tvAvatar.text =

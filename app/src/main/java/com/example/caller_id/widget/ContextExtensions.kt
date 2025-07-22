@@ -21,6 +21,10 @@ fun Any?.getTagDebug(keyCheck: String="DOAN_1"): String {
     val className = this?.javaClass?.simpleName ?: "UnknownClass"
     return "$className - $keyCheck"
 }
+fun Any?.getLogDebug(keyCheck: String = "DOAN_1",message: String ) {
+    val tag = this?.javaClass?.simpleName ?: "UnknownClass"
+    android.util.Log.d("$tag - $keyCheck", message)
+}
 
 fun Context?.getResString(@StringRes stringId: Int): String {
     return this?.resources?.getString(stringId) ?: ""

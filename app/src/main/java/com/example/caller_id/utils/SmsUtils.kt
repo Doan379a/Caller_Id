@@ -16,17 +16,62 @@ import com.example.caller_id.R
 import com.example.caller_id.model.ContactModel
 import com.example.caller_id.model.SmsConversation
 import com.example.caller_id.model.SmsMessage
+import com.example.caller_id.widget.getLogDebug
 import com.google.i18n.phonenumbers.NumberParseException
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import org.xmlpull.v1.XmlPullParser
+import org.xmlpull.v1.XmlPullParserException
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import java.util.regex.Pattern
 
 object SmsUtils {
+    private val patternsByRegion = mutableMapOf<String, Pattern>()
+
+    fun init(context: Context) {
+        val parser = context.resources.getXml(R.xml.short_codes)
+        var eventType = parser.eventType
+        while (eventType != XmlPullParser.END_DOCUMENT) {
+            if (eventType == XmlPullParser.START_TAG && parser.name == "shortcode") {
+                val country = parser.getAttributeValue(null, "country")?.uppercase(Locale.ROOT)
+                val pattern = parser.getAttributeValue(null, "pattern")
+                if (country != null && pattern != null) {
+                    patternsByRegion[country] = Pattern.compile(pattern)
+                }
+            }
+            eventType = parser.next()
+        }
+    }
+
+    fun getCheckAddress(address: String): String {
+        val local = toNational(address) ?: address
+        getLogDebug("OOO","dsssssss+$local")
+        val toSend = try {
+            if (isShortCode(local)) {
+                local  // gửi đúng "191"
+            } else {
+                val proto =
+                    PhoneNumberUtil.getInstance().parse(address, Locale.getDefault().country)
+                PhoneNumberUtil.getInstance().format(proto, PhoneNumberUtil.PhoneNumberFormat.E164)
+            }
+        } catch (e: Exception) {
+            getLogDebug("LOI_CHAT_ALL", "error $e")
+            local
+        }
+        return toSend
+    }
+
+    fun isShortCode(input: String): Boolean {
+        val region = Locale.getDefault().country
+        val pattern = patternsByRegion[region] ?: return false
+        return pattern.matcher(input).matches()
+    }
 
     fun formatSmsTimestamp(context: Context, timestamp: Long): String {
         val now = Calendar.getInstance()
@@ -66,58 +111,62 @@ object SmsUtils {
         }
     }
 
-   suspend fun getGroupedSmsInbox(context: Context): MutableList<SmsConversation> = withContext(Dispatchers.IO) {
-        val unreadCountMap = mutableMapOf<String, Int>()
-        val latestMap = mutableMapOf<String, SmsConversation>()
+    suspend fun getGroupedSmsInbox(context: Context): MutableList<SmsConversation> =
+        withContext(Dispatchers.IO) {
+            val unreadCountMap = mutableMapOf<String, Int>()
+            val latestMap = mutableMapOf<String, SmsConversation>()
 
-        val uri = Uri.parse("content://sms")
-        val projection = arrayOf("address", "body", "date", "read")
+            val uri = Uri.parse("content://sms")
+            val projection = arrayOf("address", "body", "date", "read")
 
-        val cursor = context.contentResolver.query(
-            uri,
-            projection,
-            null,
-            null,
-            "date DESC"
-        )
+            val cursor = context.contentResolver.query(
+                uri,
+                projection,
+                null,
+                null,
+                "date DESC"
+            )
 
-        cursor?.use {
-            val idxAddress = it.getColumnIndex("address")
-            val idxBody = it.getColumnIndex("body")
-            val idxDate = it.getColumnIndex("date")
-            val idxRead = it.getColumnIndex("read")
+            cursor?.use {
+                val idxAddress = it.getColumnIndex("address")
+                val idxBody = it.getColumnIndex("body")
+                val idxDate = it.getColumnIndex("date")
+                val idxRead = it.getColumnIndex("read")
 
-            while (it.moveToNext()) {
-                val raw = it.getString(idxAddress) ?: continue
-                val normalized = normalizePhone(raw) ?: raw
+                while (it.moveToNext()) {
+                    val raw = it.getString(idxAddress) ?: continue
+                    val normalized = getCheckAddress(raw) ?: raw
 //                val local = toNational(raw) ?: raw
-                val body = it.getString(idxBody) ?: ""
-                val date = it.getLong(idxDate)
-                val read = it.getInt(idxRead)
+                    val body = it.getString(idxBody) ?: ""
+                    val date = it.getLong(idxDate)
+                    val read = it.getInt(idxRead)
 
-                if (read == 0) {
-                    unreadCountMap[normalized] = unreadCountMap.getOrDefault(normalized, 0) + 1
-                }
-                Log.d("Doan_3", "Processing SMS from: $normalized, body: $body, date: $date, read: $read")
+                    if (read == 0) {
+                        unreadCountMap[normalized] = unreadCountMap.getOrDefault(normalized, 0) + 1
+                    }
+                    Log.d(
+                        "Doan_3",
+                        "Processing SMS from: $normalized, body: $body, date: $date, read: $read"
+                    )
 
-                val existing = latestMap[normalized]
+                    val existing = latestMap[normalized]
 //                val name = contactsMap[normalized] ?: normalized
 //                val name = lookupContactName(context, address)
-                if (existing == null || date > existing.date) {
-                    latestMap[normalized] = SmsConversation(
-                        address = normalized,
+                    if (existing == null || date > existing.date) {
+                        latestMap[normalized] = SmsConversation(
+                            address = normalized,
 //                        displayName =  name ,
-                        latestMessage = body,
-                        date = date,
-                        unreadCount = unreadCountMap[normalized] ?: 0
-                    )
+                            latestMessage = body,
+                            date = date,
+                            unreadCount = unreadCountMap[normalized] ?: 0
+                        )
+                    }
                 }
             }
+            latestMap.values.sortedByDescending { it.date }.toMutableList()
         }
-          latestMap.values.sortedByDescending { it.date }.toMutableList()
-    }
 
-     fun normalizePhone(raw: String): String? {
+    fun normalizePhone(raw: String): String? {
         val pu = PhoneNumberUtil.getInstance()
         return try {
             val phoneProto = if (raw.startsWith("+")) {
@@ -131,19 +180,21 @@ object SmsUtils {
         }
     }
 
-     fun toNational(rawE164: String): String? {
+    fun toNational(rawE164: String): String? {
         val pu = PhoneNumberUtil.getInstance()
         return try {
-            val proto = pu.parse(rawE164, "") // parse số quốc tế
+            val proto = pu.parse(rawE164, Locale.getDefault().country)
             if (pu.isValidNumber(proto)) {
                 pu.format(proto, PhoneNumberUtil.PhoneNumberFormat.NATIONAL)
             } else {
-                rawE164.removePrefix("+84")
+                // fallback: xoá +<mã nước> nếu có
+                rawE164.substringAfter('+').substringAfter("${proto.countryCode}")
             }
-        } catch (e: NumberParseException) {
+        } catch (e: Exception) {
             null
         }
     }
+
 
 
     @SuppressLint("Range")
@@ -210,7 +261,8 @@ object SmsUtils {
         val uri = Uri.parse("content://sms")
         val projection = arrayOf("thread_id")
         val selection = "address = ?"
-        val cursor = context.contentResolver.query(uri, projection, selection, arrayOf(address), "date DESC")
+        val cursor =
+            context.contentResolver.query(uri, projection, selection, arrayOf(address), "date DESC")
 
         cursor?.use {
             if (it.moveToFirst()) {
@@ -229,7 +281,8 @@ object SmsUtils {
         val projection = arrayOf(BlockedNumberContract.BlockedNumbers.COLUMN_ORIGINAL_NUMBER)
 
         context.contentResolver.query(uri, projection, null, null, null)?.use { cursor ->
-            val idx = cursor.getColumnIndex(BlockedNumberContract.BlockedNumbers.COLUMN_ORIGINAL_NUMBER)
+            val idx =
+                cursor.getColumnIndex(BlockedNumberContract.BlockedNumbers.COLUMN_ORIGINAL_NUMBER)
             while (cursor.moveToNext()) {
                 cursor.getString(idx)?.let { blocked.add(it) }
             }
@@ -254,8 +307,10 @@ object SmsUtils {
             ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
             ContactsContract.CommonDataKinds.Phone.NUMBER
         )
-        val cursor = cr.query(uri, projection, null, null,
-            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC")
+        val cursor = cr.query(
+            uri, projection, null, null,
+            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC"
+        )
         cursor?.use {
             val idxName = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)
             val idxNum = it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)
@@ -268,22 +323,23 @@ object SmsUtils {
         list
     }
 
-    suspend fun loadConversationAddresses(context: Context): List<String> = withContext(Dispatchers.IO) {
-        val list = mutableSetOf<String>()
-        val uri = Uri.parse("content://sms")
-        val projection = arrayOf("address")
-        val cursor = context.contentResolver.query(uri, projection, null, null, "date DESC")
+    suspend fun loadConversationAddresses(context: Context): List<String> =
+        withContext(Dispatchers.IO) {
+            val list = mutableSetOf<String>()
+            val uri = Uri.parse("content://sms")
+            val projection = arrayOf("address")
+            val cursor = context.contentResolver.query(uri, projection, null, null, "date DESC")
 
-        cursor?.use { c ->
-            val idx = c.getColumnIndex("address")
-            while (c.moveToNext()) {
-                val raw = c.getString(idx) ?: continue
-                val normalized = normalizePhone(raw) ?: raw
-                list.add(normalized)
+            cursor?.use { c ->
+                val idx = c.getColumnIndex("address")
+                while (c.moveToNext()) {
+                    val raw = c.getString(idx) ?: continue
+                    val normalized = normalizePhone(raw) ?: raw
+                    list.add(normalized)
+                }
             }
+            list.toList()
         }
-        list.toList()
-    }
 
 
 }

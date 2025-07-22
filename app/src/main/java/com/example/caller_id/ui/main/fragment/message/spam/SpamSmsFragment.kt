@@ -43,7 +43,7 @@ class SpamSmsFragment:BaseFragment<FragmentSpamSmsBinding>() {
     }
 
     override fun dataObservable() {
-        vm.listSearch.observe(viewLifecycleOwner) { query ->
+        vm.listSearchMessage.observe(viewLifecycleOwner) { query ->
             val filtered = listSpam.filter { app ->
                 app.address.normalize().lowercase().contains(query)
             }

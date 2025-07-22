@@ -88,5 +88,7 @@
     <string name="unblocked">Unblocked</string>
     <string name="new_conversation">New conversation</string>
     <string name="receiver">Receiver</string>
+    <string name="search_contact">Search Contact</string>
+    <string name="contact">Contact</string>
 
 </resources>

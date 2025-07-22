@@ -21,12 +21,14 @@ import com.example.caller_id.dialog.ChatMenuPopup
 import com.example.caller_id.model.SmsMessage
 import com.example.caller_id.model.SmsSendStatus
 import com.example.caller_id.service.RealTimeSmsReceiver
+import com.example.caller_id.utils.SmsUtils.getCheckAddress
 import com.example.caller_id.utils.SmsUtils.getThreadIdForAddress
+import com.example.caller_id.utils.SmsUtils.isShortCode
 import com.example.caller_id.utils.SmsUtils.loadSmsByAddress
 import com.example.caller_id.utils.SmsUtils.lookupContactName
 import com.example.caller_id.utils.SmsUtils.markSmsAsRead
 import com.example.caller_id.utils.SmsUtils.normalizePhone
-import com.example.caller_id.utils.SmsUtils.toNational
+import com.example.caller_id.widget.getLogDebug
 import com.example.caller_id.widget.getTagDebug
 import com.example.caller_id.widget.gone
 import com.example.caller_id.widget.hideKeyboard
@@ -35,7 +37,9 @@ import com.example.caller_id.widget.showToast
 import com.example.caller_id.widget.tap
 import com.example.caller_id.widget.visible
 import com.google.android.material.internal.ViewUtils.hideKeyboard
+import com.google.i18n.phonenumbers.PhoneNumberUtil
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 
 @AndroidEntryPoint
 class ChatAllActivity : BaseActivity2<ActivityChatBinding>() {
@@ -109,17 +113,17 @@ class ChatAllActivity : BaseActivity2<ActivityChatBinding>() {
 
     @SuppressLint("RestrictedApi")
     override fun initView() {
-        address = intent.getStringExtra("address") ?: ""
-
+        address =getCheckAddress( intent.getStringExtra("address") ?: "")
+        getLogDebug("LOI_CHAT_ALL","address $address")
         handleSendToIntent(intent)
-        val local = toNational(address)
+//        val local = getCheckAddress(address)
         colorAvatar = intent.getIntExtra("color", Color.parseColor("#42A5F5"))
-        val name = lookupContactName(this, local ?: address)
-        displayName = if (name.isNotBlank()) name else local ?: address
+        val name = lookupContactName(this, address )
+        displayName = if (name.isNotBlank()) name else address
 
 
         binding.tvAddress.text = displayName
-        binding.tvPhone.text = if (local !== null) local else address
+        binding.tvPhone.text = if (address !== null) address else address
         Log.d(getTagDebug("DOAN_2"), "Address: $address, Display Name: $displayName,name${name}")
         adapter = ChatAdapter(smsList, colorAvatar)
         binding.rcvMessages.layoutManager = LinearLayoutManager(this)
@@ -140,6 +144,8 @@ class ChatAllActivity : BaseActivity2<ActivityChatBinding>() {
             if (text.isNotBlank()) {
                 sendSmsWithStatus(address, text)
                 binding.edtMessage.text.clear()
+            }else{
+                showToast("Vui lòng nhập tin nhắn")
             }
         }
         binding.ivMenu.tap {
@@ -188,9 +194,10 @@ class ChatAllActivity : BaseActivity2<ActivityChatBinding>() {
 
     private fun loadMessages() {
         smsList.clear()
-        val loaded = loadSmsByAddress(this, address)
+        getLogDebug("NewChat", "Sending to: ${getCheckAddress(address)}")
+        val loaded = loadSmsByAddress(this, getCheckAddress(address))
 
-        Log.d(getTagDebug("DOAN_2"), "Loaded ${loaded.size} messages for address: $address")
+        Log.d(getTagDebug("DOAN_2"), "Loaded ${loaded.size} messages for address: ${getCheckAddress(address)}")
         loaded.filter { !it.read && !it.isSentByMe }.forEach {
             markSmsAsRead(this, it.address, it.body)
         }
@@ -217,8 +224,8 @@ class ChatAllActivity : BaseActivity2<ActivityChatBinding>() {
             sentIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-
-        SmsManager.getDefault().sendTextMessage(address, null, body, sentPendingIntent, null)
+        val smsManager=getSystemService(SmsManager::class.java)
+        smsManager.sendTextMessage(address, null, body, sentPendingIntent, null)
 
         smsList.add(sms)
         adapter.notifyItemInserted(smsList.size - 1)

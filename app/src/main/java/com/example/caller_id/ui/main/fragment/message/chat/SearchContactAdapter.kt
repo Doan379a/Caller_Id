@@ -6,10 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.caller_id.databinding.ItemSearchContactBinding
 import com.example.caller_id.model.ContactModel
 
-class SearchContact(
+class SearchContactAdapter(
     var list: MutableList<ContactModel>,
     val onClick: (ContactModel) -> Unit
-) : RecyclerView.Adapter<SearchContact.ContactHolder>() {
+) : RecyclerView.Adapter<SearchContactAdapter.ContactHolder>() {
     inner class ContactHolder(val binding: ItemSearchContactBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(contact: ContactModel) {

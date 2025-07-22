@@ -94,7 +94,7 @@ class MessageFragment : BaseFragment<FragmentMessageBinding>() {
                 val filtered = listAll.filter { app ->
                     app.address.normalize().lowercase().contains(query)
                 }
-                vm.search(query)
+                vm.searchMessage(query)
             }
 
             override fun afterTextChanged(s: Editable?) {}
