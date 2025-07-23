@@ -11,7 +11,9 @@ import com.example.caller_id.model.ContactModel
 import com.example.caller_id.widget.getLogDebug
 import com.example.caller_id.widget.normalize
 import com.example.caller_id.widget.showSnackBar
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ContactFavoritesFragment : BaseFragment<FragmentContactFavoritesBinding>() {
     private val vm: BlockViewModel by activityViewModels()
     private var listContact: MutableList<ContactModel> = mutableListOf()

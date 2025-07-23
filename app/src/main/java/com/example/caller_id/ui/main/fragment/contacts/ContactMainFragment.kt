@@ -11,7 +11,9 @@ import com.example.caller_id.base.BaseFragment
 import com.example.caller_id.database.viewmodel.BlockViewModel
 import com.example.caller_id.databinding.FragmentContactMainBinding
 import com.example.caller_id.widget.normalize
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ContactMainFragment : BaseFragment<FragmentContactMainBinding>() {
     private val vm: BlockViewModel by activityViewModels()
 

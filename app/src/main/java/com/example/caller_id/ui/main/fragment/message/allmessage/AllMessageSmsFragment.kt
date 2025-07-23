@@ -14,6 +14,7 @@ import com.example.caller_id.ui.main.fragment.message.SmsAdapter
 import com.example.caller_id.ui.main.fragment.message.chat.ChatAllActivity
 import com.example.caller_id.utils.SmsUtils.lookupContactName
 import com.example.caller_id.utils.SmsUtils.toNational
+import com.example.caller_id.widget.getLogDebug
 import com.example.caller_id.widget.normalize
 import com.example.caller_id.widget.visibleOrGone
 import dagger.hilt.android.AndroidEntryPoint
@@ -73,6 +74,7 @@ class AllMessageSmsFragment : BaseFragment<FragmentAllSmsMessageBinding>() {
             binding.tvNodata.visibleOrGone(filtered.isEmpty())
         }
         vm.inboxFiltered.observe(viewLifecycleOwner) { smsList ->
+            getLogDebug("ALL_SMS","list:$smsList")
             listMessage = smsList.toMutableList()
             adapter.updateData(smsList.toMutableList())
         }

@@ -14,7 +14,9 @@ import com.example.caller_id.utils.SmsUtils.getCheckAddress
 import com.example.caller_id.widget.getLogDebug
 import com.example.caller_id.widget.normalize
 import com.example.caller_id.widget.showSnackBar
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ContactFragment : BaseFragment<FragmentContactBinding>() {
     private val vm: BlockViewModel by activityViewModels()
     private val adapter: ContactAdapter by lazy { ContactAdapter(mutableListOf()) }
