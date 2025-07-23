@@ -1,7 +1,9 @@
 package com.example.caller_id.service
 
+import android.app.NotificationManager
 import android.content.Context
 import android.net.Uri
+import android.os.Build
 import android.provider.ContactsContract
 import android.telecom.Call
 import android.telecom.CallScreeningService
@@ -32,7 +34,11 @@ class BlockCallScreeningService : CallScreeningService() {
         val blockInternational = SharePrefUtils.getSetting(context, "CBINTERNATIONALCALLS")
         val blockUnknownContacts = SharePrefUtils.getSetting(context, "CBNOTINCONTACTS")
 
+        if (isDoNotDisturbEnabled(context)){
 
+        }else{
+
+        }
         val db = Room.databaseBuilder(
             context,
             AppDatabase::class.java,
@@ -99,10 +105,10 @@ class BlockCallScreeningService : CallScreeningService() {
 
         val response = if (shouldBlock) {
             CallResponse.Builder()
-                .setDisallowCall(true)
-                .setRejectCall(true)
-                .setSkipCallLog(false)
-                .setSkipNotification(true)
+                .setDisallowCall(true) //không hiện ui
+                .setRejectCall(true) // từ chối
+                .setSkipCallLog(false) // ghi nhật ký
+                .setSkipNotification(true)  // không thông báo
                 .build()
         } else {
             CallResponse.Builder().build()
@@ -130,4 +136,19 @@ class BlockCallScreeningService : CallScreeningService() {
         }
         return false
     }
+
+    fun isDoNotDisturbEnabled(context: Context): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val notificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            if (!notificationManager.isNotificationPolicyAccessGranted) {
+                return false
+            }
+
+            return notificationManager.currentInterruptionFilter == NotificationManager.INTERRUPTION_FILTER_NONE
+        }
+        return false
+    }
+
 }

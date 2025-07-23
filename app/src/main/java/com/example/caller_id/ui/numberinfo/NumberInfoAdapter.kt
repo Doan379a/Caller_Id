@@ -1,4 +1,4 @@
-package com.example.caller_id.ui.main.fragment.calls
+package com.example.caller_id.ui.numberinfo
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -11,11 +11,12 @@ import com.example.caller_id.R
 import com.example.caller_id.base.BaseAdapter
 import com.example.caller_id.databinding.ItemCallLogBinding
 import com.example.caller_id.model.CallLogItem
+import com.example.caller_id.widget.gone
 import com.example.caller_id.widget.setDrawableStartWithTint
 import kotlin.math.absoluteValue
 
-class CallLogAdapter(val context: Context,
-                     val onClick :(callLogItem: CallLogItem)-> Unit
+class NumberInfoAdapter(val context: Context,
+                        val onClick :(callLogItem: CallLogItem)-> Unit
 ) :BaseAdapter<ItemCallLogBinding, CallLogItem>() {
     var onClickSms :((sms: String)-> Unit)? = null
     override fun createBinding(
@@ -37,6 +38,8 @@ class CallLogAdapter(val context: Context,
 
         override fun bind(data: CallLogItem) {
             super.bind(data)
+            binding.ivCall.gone()
+            binding.imgSms.gone()
             binding.tvAvatar.text = data.name?.firstOrNull()?.uppercaseChar()?.toString()  ?: data.number.firstOrNull()?.toString().orEmpty()
             binding.cardAvatar.setCardBackgroundColor(getColorFromAddress())
             val countText = if (data.count > 1) " (${data.count})" else ""

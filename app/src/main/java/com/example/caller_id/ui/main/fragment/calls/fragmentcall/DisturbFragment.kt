@@ -1,60 +1,105 @@
 package com.example.caller_id.ui.main.fragment.calls.fragmentcall
 
+import android.app.NotificationManager
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.caller_id.R
+import com.example.caller_id.base.BaseFragment
+import com.example.caller_id.bottomsheet.DisturbBottomSheet
+import com.example.caller_id.database.viewmodel.BlockViewModel
+import com.example.caller_id.databinding.FragmentBlockedBinding
+import com.example.caller_id.databinding.FragmentDisturbBinding
+import com.example.caller_id.ui.main.fragment.calls.DoNotDisturbAdapter
+import com.example.caller_id.widget.tap
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class DisturbFragment : BaseFragment<FragmentDisturbBinding>() {
+    private val vm: BlockViewModel by activityViewModels()
+    private lateinit var adapter: DoNotDisturbAdapter
+    override fun setViewBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentDisturbBinding {
+        return FragmentDisturbBinding.inflate(layoutInflater)
+    }
 
-/**
- * A simple [Fragment] subclass.
- * Use the [DisturbFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class DisturbFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    override fun initView() {
+        deleteExpired()
+        adapter = DoNotDisturbAdapter(requireContext(), { data ->
+            vm.deleteDndCalled(data.id)
+            Toast.makeText(requireActivity(), "Đã xóa số ${data.number}", Toast.LENGTH_SHORT).show()
+        })
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+
+        binding.rcvDnd.layoutManager = LinearLayoutManager(requireActivity())
+        binding.rcvDnd.adapter = adapter
+        vm.dndCalledList.observe(viewLifecycleOwner) {
+            adapter.updateList(it)
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_disturb, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment DisturbFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            DisturbFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun viewListener() {
+        binding.ivManually.tap {
+            DisturbBottomSheet().show(parentFragmentManager, "ExampleBottomSheet")
+        }
+        binding.cbDisturb.setOnCheckedChangeListener { _, isChecked ->
+            val notificationManager =
+                requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (!notificationManager.isNotificationPolicyAccessGranted) {
+                    val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
+                    startActivity(intent)
+                    binding.cbDisturb.isChecked = false
+                } else {
+                    val filter = if (isChecked) {
+                        NotificationManager.INTERRUPTION_FILTER_NONE
+                    } else {
+                        NotificationManager.INTERRUPTION_FILTER_ALL
+                    }
+                    notificationManager.setInterruptionFilter(filter)
                 }
             }
+        }
+
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        deleteExpired()
+        updateDisturbCheckboxState()
+    }
+
+    fun deleteExpired() {
+        val now = System.currentTimeMillis()
+        Log.d("now", "now: $now")
+        vm.deleteExpired(now)
+    }
+
+    private fun updateDisturbCheckboxState() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val notificationManager =
+                requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            if (notificationManager.isNotificationPolicyAccessGranted) {
+                val currentFilter = notificationManager.currentInterruptionFilter
+                binding.cbDisturb.isChecked =
+                    (currentFilter == NotificationManager.INTERRUPTION_FILTER_NONE)
+            } else {
+                binding.cbDisturb.isChecked = false
+            }
+        }
+    }
+
+    override fun dataObservable() {
     }
 }

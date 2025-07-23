@@ -12,8 +12,10 @@ import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import com.example.caller_id.database.entity.BlockedCalled
+import com.example.caller_id.database.entity.DoNotDisturbNumber
 import com.example.caller_id.database.repository.BlockRepository
 import com.example.caller_id.model.ContactModel
+import com.example.caller_id.model.DndType
 import com.example.caller_id.model.SmsConversation
 import com.example.caller_id.model.SmsMessage
 import com.example.caller_id.model.SmsSendStatus
@@ -48,6 +50,7 @@ class BlockViewModel @Inject constructor(
         tryEmit(Unit)
     }
 
+    // Shared inboxFlow: đọc SMS mỗi khi có trigger
     private val inboxFlow: SharedFlow<List<SmsConversation>> =
         refreshTrigger
             .flatMapLatest {
@@ -125,11 +128,9 @@ class BlockViewModel @Inject constructor(
     fun insertCallBlock(num: String, type: String, isSpam: Boolean) = viewModelScope.launch {
         repo.insertCalled(num, type, isSpam)
     }
-
     fun deleteCallById(id: Long) = viewModelScope.launch {
         repo.deleteCalled(id)
     }
-
     val callBlockedList: LiveData<List<BlockedCalled>> = repo.getAllBlockedCalledFlow().asLiveData()
     val callSpamList: LiveData<List<BlockedCalled>> = repo.getAllSpamCalledFlow().asLiveData()
     private val _listSearchBlock = MutableLiveData<String>()
@@ -139,4 +140,22 @@ class BlockViewModel @Inject constructor(
         Log.d("searchBlock", "Query: $query")
         _listSearchBlock.value = query
     }
+
+    //do not disturb
+    fun insertDndCalled(num: String, type: DndType, endTimeMillis: Long, remainingCount: Int) = viewModelScope.launch {
+        repo.insertDndCalled(num, type, endTimeMillis, remainingCount)
+    }
+    fun deleteDndCalled(id: Long) = viewModelScope.launch {
+        repo.deleteDndCalled(id)
+    }
+    fun deleteExpired(id: Long) = viewModelScope.launch {
+        repo.deleteExpired(id)
+    }
+    fun decreaseCounter(number: String) = viewModelScope.launch {
+        repo.decreaseCounter(number)
+    }
+    fun deleteIfCounterReached(number: String) = viewModelScope.launch {
+        repo.deleteIfCounterReached(number)
+    }
+    val dndCalledList: LiveData<List<DoNotDisturbNumber>> = repo.getAllDndCalledFlow().asLiveData()
 }
