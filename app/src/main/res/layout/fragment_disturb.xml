@@ -1,14 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.fragment.calls.fragmentcall.DisturbFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/color_F6F6F8">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical">
 
-</FrameLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            android:background="@drawable/bg_conner_blue"
+            android:backgroundTint="@color/color_EDEDED"
+            android:padding="15dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/cb_disturb"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_bold_700"
+                    android:text="@string/don_t_disturb_me"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:fontFamily="@font/opensans_regula_400"
+                    android:text="@string/snooze_all_incoming_calls"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/cb_disturb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:background="@android:color/transparent"
+                android:button="@null"
+                android:drawableEnd="@drawable/checkbox_selector"
+                android:text="" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_marginTop="35dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/from_contacts"
+            android:fontFamily="@font/opensans_semibold_600"
+            android:textSize="14sp"
+            android:textColor="@color/color_3368EE"
+            android:gravity="center"
+            android:background="@drawable/bg_conner_blue"
+            android:backgroundTint="#E4EBFF"
+            android:paddingVertical="15dp"
+            android:layout_marginHorizontal="15dp"
+            />
+        <TextView
+            android:layout_marginTop="18dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/from_call_history"
+            android:fontFamily="@font/opensans_semibold_600"
+            android:textSize="14sp"
+            android:textColor="@color/color_3368EE"
+            android:gravity="center"
+            android:background="@drawable/bg_conner_blue"
+            android:backgroundTint="#E4EBFF"
+            android:paddingVertical="15dp"
+            android:layout_marginHorizontal="18dp"
+            />
+        <TextView
+            android:id="@+id/iv_manually"
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_number_manually"
+            android:fontFamily="@font/opensans_semibold_600"
+            android:textSize="14sp"
+            android:textColor="@color/color_3368EE"
+            android:gravity="center"
+            android:background="@drawable/bg_conner_blue"
+            android:backgroundTint="#E4EBFF"
+            android:paddingVertical="15dp"
+            android:layout_marginHorizontal="15dp"
+            />
+        <RelativeLayout
+            android:layout_marginTop="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            android:background="@drawable/bg_conner_blue"
+            android:backgroundTint="#E4EBFF"
+            android:padding="15dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/appCompatImageView4"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/opensans_semibold_600"
+                    android:text="@string/snoozed_user"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:fontFamily="@font/opensans_regula_400"
+                    android:text="555-555-555"
+                    android:textColor="@color/color_505050"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/appCompatImageView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                app:srcCompat="@drawable/ic_snoozed"
+                android:layout_centerVertical="true"
+                />
+        </RelativeLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_dnd"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

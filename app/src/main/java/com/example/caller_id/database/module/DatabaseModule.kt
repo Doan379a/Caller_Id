@@ -20,4 +20,5 @@ object DatabaseModule {
     @Provides fun provideNumDao(db: AppDatabase) = db.blockedNumberDao()
     @Provides fun provideSpamSmsDao(db: AppDatabase) = db.spamNumberSmsDao()
     @Provides fun provideCalledDao(db: AppDatabase) = db.blockedCalledDao()
+    @Provides fun provideDndCalledDao(db: AppDatabase) = db.dndCalledDao()
 }

@@ -72,12 +72,93 @@
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="15dp"
         android:layout_marginTop="30dp"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/img_info"
         tools:layout_editor_absoluteX="15dp">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_info_call"
+            android:text="@string/call"
+            android:fontFamily="@font/opensans_regula_400"
+            android:textSize="12sp"
+            android:textColor="@color/color_505050"
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_info_message"
+            android:text="@string/messages"
+            android:fontFamily="@font/opensans_regula_400"
+            android:textSize="12sp"
+            android:textColor="@color/color_505050"
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            android:checked="true"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:freezesText="true"
+            android:maxLines="1"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_info_whatsapp"
+            android:text="@string/whatsapp"
+            android:fontFamily="@font/opensans_regula_400"
+            android:textSize="12sp"
+            android:textColor="@color/color_505050"
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            android:checked="true"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:freezesText="true"
+            android:maxLines="1"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_info_favorites"
+            android:text="@string/favorites"
+            android:fontFamily="@font/opensans_regula_400"
+            android:textSize="12sp"
+            android:textColor="@color/color_505050"
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            android:checked="true"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:freezesText="true"
+            android:maxLines="1"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_info_block"
+            android:text="@string/block"
+            android:fontFamily="@font/opensans_regula_400"
+            android:textSize="12sp"
+            android:textColor="@color/color_505050"
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            />
 
     </LinearLayout>
 
@@ -89,12 +170,238 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
         android:layout_marginHorizontal="15dp"
         android:layout_marginTop="15dp"
+
         >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_conner_blue"
+                android:backgroundTint="#EEF3FA"
+                android:paddingVertical="7dp"
+                >
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toStartOf="@+id/appCompatImageView3"
+                    android:orientation="vertical"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="15dp"
+                    android:layout_centerVertical="true"
+                    >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_bold_700"
+                        android:textColor="@color/color_505050"
+                        android:textSize="16sp"
+                        tools:text="+84973975566" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/opensans_regula_400"
+                        android:text="@string/mobile"
+                        android:textColor="#7C7E81"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/appCompatImageView3"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentEnd="true"
+                    android:rotationY="180"
+                    app:srcCompat="@drawable/ic_info_call2"
+                    />
+            </RelativeLayout>
+            <LinearLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_conner_blue"
+                android:backgroundTint="@color/white"
+                android:padding="15dp"
+                >
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_info_message_edit"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/suggest_a_name"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/opensans_semibold_600"
+                    android:textColor="@color/color_505050"
+                    android:layout_marginStart="10dp"
+                    android:includeFontPadding="true"
+                    android:layout_gravity="center_vertical"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_conner_blue"
+                android:backgroundTint="@color/white"
+                android:padding="15dp"
+                >
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_info_report_spam"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/report_spam"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/opensans_semibold_600"
+                    android:textColor="@color/color_505050"
+                    android:layout_marginStart="10dp"
+                    android:includeFontPadding="true"
+                    android:layout_gravity="center_vertical"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_conner_blue"
+                android:backgroundTint="@color/white"
+                android:padding="15dp"
+                >
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_info_location"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/location"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/opensans_semibold_600"
+                    android:textColor="@color/color_505050"
+                    android:layout_marginStart="10dp"
+                    android:includeFontPadding="true"
+                    android:layout_gravity="center_vertical"
+                    />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_conner_blue"
+                android:backgroundTint="@color/white"
+                android:padding="15dp"
+                >
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/opensans_semibold_600"
+                    android:includeFontPadding="true"
+                    android:text="@string/your_call_status_with_hh"
+                    android:textColor="@color/color_505050"
+                    android:textSize="14sp" />
+
+                <com.github.mikephil.charting.charts.PieChart
+                    android:layout_marginTop="15dp"
+                    android:id="@+id/pieChart"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:layout_below="@+id/textView2"
+                    android:layout_centerHorizontal="true"
+                    />
+                <HorizontalScrollView
+                    android:layout_marginTop="15dp"
+                    android:layout_below="@+id/pieChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/incoming"
+                        android:fontFamily="@font/opensans_regula_400"
+                        android:textSize="10dp"
+                        android:textColor="#48AE67"
+                        android:layout_marginEnd="15dp"
+                        android:drawableStart="@drawable/ic_status_green"
+                        android:includeFontPadding="true"
+                        android:drawablePadding="7dp"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/outgoing"
+                        android:fontFamily="@font/opensans_regula_400"
+                        android:textSize="10dp"
+                        android:textColor="#3778DA"
+                        android:layout_marginEnd="15dp"
+                        android:drawableStart="@drawable/ic_status_blue"
+                        android:includeFontPadding="true"
+                        android:drawablePadding="7dp"
+                        />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/missed_calls"
+                            android:fontFamily="@font/opensans_regula_400"
+                            android:textSize="10dp"
+                            android:textColor="#FF5972"
+                            android:layout_marginEnd="15dp"
+                            android:drawableStart="@drawable/ic_status_pink"
+                            android:includeFontPadding="true"
+                            android:drawablePadding="7dp"
+                            />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/unanswered"
+                            android:fontFamily="@font/opensans_regula_400"
+                            android:textSize="10dp"
+                            android:textColor="#FF8C5B"
+                            android:layout_marginEnd="15dp"
+                            android:drawableStart="@drawable/ic_status_origin"
+                            android:includeFontPadding="true"
+                            android:drawablePadding="7dp"
+                            />
+                    </LinearLayout>
+                </HorizontalScrollView>
+            </RelativeLayout>
+            <TextView
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/recently"
+                android:textColor="@color/color_7C7E81"
+                android:fontFamily="@font/opensans_bold_700"
+                android:textSize="14sp"
+                />
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="10dp"
+                android:id="@+id/rcv_recent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

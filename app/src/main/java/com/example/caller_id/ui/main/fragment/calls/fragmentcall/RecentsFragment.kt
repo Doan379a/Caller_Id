@@ -11,6 +11,7 @@ import com.example.caller_id.databinding.FragmentRecentsBinding
 import com.example.caller_id.model.CallLogItem
 import com.example.caller_id.ui.main.fragment.calls.CallLogAdapter
 import com.example.caller_id.ui.main.fragment.message.chat.ChatAllActivity
+import com.example.caller_id.ui.numberinfo.NumberInfoActivity
 import com.example.caller_id.utils.SmsUtils.normalizePhone
 import com.example.caller_id.utils.SystemUtil
 import com.example.caller_id.widget.showSnackBar
@@ -30,7 +31,10 @@ class RecentsFragment : BaseFragment<FragmentRecentsBinding>() {
     override fun initView() {
         val list = getCallLogs()
         adapter = CallLogAdapter(requireContext()) { data ->
-
+                val intent = Intent(requireActivity(),NumberInfoActivity::class.java).apply {
+                    putExtra("number", data.number)
+                }
+            startActivity(intent)
         }
         binding.rcv.layoutManager = LinearLayoutManager(requireActivity())
         binding.rcv.adapter = adapter

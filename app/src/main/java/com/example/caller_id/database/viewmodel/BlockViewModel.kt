@@ -11,7 +11,9 @@ import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import com.example.caller_id.database.entity.BlockedCalled
+import com.example.caller_id.database.entity.DoNotDisturbNumber
 import com.example.caller_id.database.repository.BlockRepository
+import com.example.caller_id.model.DndType
 import com.example.caller_id.model.SmsConversation
 import com.example.caller_id.model.SmsMessage
 import com.example.caller_id.model.SmsSendStatus
@@ -119,4 +121,22 @@ class BlockViewModel @Inject constructor(
         Log.d("searchBlock", "Query: $query")
         _listSearchBlock.value = query
     }
+
+    //do not disturb
+    fun insertDndCalled(num: String, type: DndType, endTimeMillis: Long, remainingCount: Int) = viewModelScope.launch {
+        repo.insertDndCalled(num, type, endTimeMillis, remainingCount)
+    }
+    fun deleteDndCalled(id: Long) = viewModelScope.launch {
+        repo.deleteDndCalled(id)
+    }
+    fun deleteExpired(id: Long) = viewModelScope.launch {
+        repo.deleteExpired(id)
+    }
+    fun decreaseCounter(number: String) = viewModelScope.launch {
+        repo.decreaseCounter(number)
+    }
+    fun deleteIfCounterReached(number: String) = viewModelScope.launch {
+        repo.deleteIfCounterReached(number)
+    }
+    val dndCalledList: LiveData<List<DoNotDisturbNumber>> = repo.getAllDndCalledFlow().asLiveData()
 }
