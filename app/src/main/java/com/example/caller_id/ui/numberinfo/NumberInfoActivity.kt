@@ -1,12 +1,17 @@
 package com.example.caller_id.ui.numberinfo
 
 import android.content.pm.ActivityInfo
+import android.graphics.Color
 import android.provider.CallLog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.caller_id.base.BaseActivity
 import com.example.caller_id.databinding.ActivityNumberInfoBinding
 import com.example.caller_id.model.CallLogItem
 import com.example.caller_id.utils.SystemUtil
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.formatter.ValueFormatter
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -21,12 +26,58 @@ class NumberInfoActivity: BaseActivity<ActivityNumberInfoBinding>() {
     override fun initView() {
         number = intent.getStringExtra("number") ?: ""
         binding.txtName.text = number
+        val logs = getCallLogsForNumber(number)
+
+        val incomingCount = logs.count { it.type == "Incoming" }
+        val outgoingCount = logs.count { it.type == "Outgoing" }
+        val missedCount = logs.count { it.type == "Missed" }
+        val otherCount = logs.count { it.type == "Other" }
+
+        val entries = listOf(
+            PieEntry(incomingCount.toFloat()),
+            PieEntry(outgoingCount.toFloat()),
+            PieEntry(missedCount.toFloat()),
+            PieEntry(otherCount.toFloat())
+        )
+
+        val dataSet = PieDataSet(entries, "").apply {
+            valueFormatter = object : ValueFormatter() {
+                override fun getFormattedValue(value: Float): String {
+                    return value.toInt().toString()
+                }
+            }
+            colors = listOf(
+                Color.parseColor("#4CAF50"), // xanh lá
+                Color.parseColor("#F44336"), // đỏ
+                Color.parseColor("#FF9800"), // cam
+                Color.parseColor("#2196F3")  // xanh dương
+            )
+            setDrawValues(true)
+            valueTextColor = Color.WHITE
+            valueTextSize = 16f
+            sliceSpace = 2f
+        }
+
+        val data = PieData(dataSet)
+
+        binding.pieChart.apply {
+            this.data = data
+            description.isEnabled = false
+            legend.isEnabled = false
+            setDrawEntryLabels(false)
+            setUsePercentValues(false)
+            isDrawHoleEnabled = true
+            setHoleColor(Color.WHITE)
+            setTouchEnabled(false)
+            invalidate()
+        }
+
         adapter = NumberInfoAdapter(this) { callLogItem ->
 
         }
         binding.rcvRecent.layoutManager = LinearLayoutManager(this)
         binding.rcvRecent.adapter= adapter
-        adapter.updateList(getCallLogsForNumber(number))
+        adapter.updateList(logs)
     }
 
     override fun viewListener() {
