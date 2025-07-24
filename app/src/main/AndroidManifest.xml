@@ -113,6 +113,18 @@
             android:name=".ui.numberinfo.NumberInfoActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.filtercall.FilterCallHomeActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.keypad.KeypadActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.user.UserInfoActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
 
 

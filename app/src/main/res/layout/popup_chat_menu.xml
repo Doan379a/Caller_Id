@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/itemSpam"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/ic_spam"
         android:padding="8dp"
@@ -45,7 +45,7 @@
         android:text="@string/delete_conversation" />
     <TextView
         android:id="@+id/itemBlock"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/ic_block_menu"
         style="@style/SelectableItemBackground"

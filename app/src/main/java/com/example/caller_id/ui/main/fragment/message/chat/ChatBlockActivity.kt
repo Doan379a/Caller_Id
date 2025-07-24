@@ -21,6 +21,7 @@ import com.example.caller_id.dialog.ChatMenuPopup
 import com.example.caller_id.model.SmsMessage
 import com.example.caller_id.model.SmsSendStatus
 import com.example.caller_id.service.RealTimeSmsReceiver
+import com.example.caller_id.utils.SmsUtils.getCheckAddress
 import com.example.caller_id.utils.SmsUtils.getThreadIdForAddress
 import com.example.caller_id.utils.SmsUtils.loadSmsByAddress
 import com.example.caller_id.utils.SmsUtils.lookupContactName
@@ -29,6 +30,7 @@ import com.example.caller_id.utils.SmsUtils.toNational
 import com.example.caller_id.widget.getTagDebug
 import com.example.caller_id.widget.hideKeyboard
 import com.example.caller_id.widget.showSnackBar
+import com.example.caller_id.widget.showToast
 import com.example.caller_id.widget.tap
 import com.google.android.material.internal.ViewUtils.hideKeyboard
 import dagger.hilt.android.AndroidEntryPoint
@@ -91,14 +93,13 @@ class ChatBlockActivity : BaseActivity2<ActivityChatBinding>() {
 
     @SuppressLint("RestrictedApi")
     override fun initView() {
-        address = intent.getStringExtra("address") ?: ""
+        address = getCheckAddress( intent.getStringExtra("address") ?: "")
         colorAvatar = intent.getIntExtra("color", Color.parseColor("#42A5F5"))
 
-        val local = toNational(address)
-        val name = lookupContactName(this, local ?: address)
-        val displayName = if (name.isNotBlank()) name else local ?: address
+        val name = lookupContactName(this,  address)
+        val displayName = if (name.isNotBlank()) name else  address
         binding.tvAddress.text = displayName
-        binding.tvPhone.text = if (local!==null) local else address
+        binding.tvPhone.text = address
         adapter = ChatAdapter(smsList, colorAvatar)
         binding.rcvMessages.layoutManager = LinearLayoutManager(this)
         binding.rcvMessages.adapter = adapter
@@ -117,6 +118,8 @@ class ChatBlockActivity : BaseActivity2<ActivityChatBinding>() {
             if (text.isNotBlank()) {
                 sendSmsWithStatus(address, text)
                 binding.edtMessage.text.clear()
+            }else{
+                showToast("Vui lòng nhập tin nhắn")
             }
         }
         binding.ivMenu.tap {
@@ -158,7 +161,7 @@ class ChatBlockActivity : BaseActivity2<ActivityChatBinding>() {
 
     private fun loadMessages() {
         smsList.clear()
-        val loaded = loadSmsByAddress(this, address)
+        val loaded = loadSmsByAddress(this, getCheckAddress(address))
         smsList.addAll(loaded)
         Log.d(getTagDebug("DOAN_2"), "Loaded ${loaded.size} messages for address: $address")
         loaded.filter { !it.read && !it.isSentByMe }.forEach {

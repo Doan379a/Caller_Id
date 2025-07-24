@@ -27,8 +27,10 @@ import com.example.caller_id.databinding.ActivityMainBinding
 import com.example.caller_id.service.SmsReceiver
 import com.example.caller_id.library.magicindicator.buildins.commonnavigator.CommonNavigator
 import com.example.caller_id.service.RealTimeSmsReceiver
+import com.example.caller_id.ui.keypad.KeypadActivity
 import com.example.caller_id.widget.getTagDebug
 import com.example.caller_id.widget.showSnackBar
+import com.example.caller_id.widget.tap
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -77,6 +79,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         binding.imgBlock.setOnClickListener {
             setUpColorTab(3)
             binding.viewPager2.currentItem = 3
+        }
+        binding.imgKeypad.tap {
+            showActivity(KeypadActivity::class.java)
         }
     }
 

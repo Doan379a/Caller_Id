@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F6F6F8"
+    android:paddingTop="15dp">
+
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:src="@drawable/ic_back_chat"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/opensans_bold_700"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="@string/setting"
+        android:textColor="#373A3A"
+        android:textSize="@dimen/_20sdp"
+        app:layout_constraintBottom_toBottomOf="@id/iv_back"
+        app:layout_constraintTop_toTopOf="@id/iv_back" />
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:fontFamily="@font/opensans_bold_700"
+                android:gravity="start"
+                android:includeFontPadding="false"
+                android:text="@string/call_settings"
+                android:textColor="#7C7E81"
+                android:textSize="@dimen/_14sdp" />
+
+            <TextView
+                android:id="@+id/tv_Caller_id"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_55sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:background="@drawable/bg_item_setting"
+                android:drawableEnd="@drawable/ic_next"
+                android:drawablePadding="16dp"
+                android:fontFamily="@font/opensans_semibold_600"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:paddingHorizontal="19dp"
+                android:paddingVertical="@dimen/_12sdp"
+                android:text="@string/caller_info"
+                android:textColor="#505050"
+                app:drawableStartCompat="@drawable/ic_call_id" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:background="@drawable/bg_item_setting">
+
+                <TextView
+                    android:id="@+id/tv_Do_not_disturb"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_item_setting"
+                    android:drawablePadding="16dp"
+                    android:fontFamily="@font/opensans_semibold_600"
+                    android:gravity="center_vertical"
+                    android:includeFontPadding="false"
+                    android:paddingHorizontal="19dp"
+                    android:paddingVertical="@dimen/_12sdp"
+                    android:text="@string/do_not_disturb"
+                    android:textColor="#505050"
+                    android:textSize="@dimen/_14ssp"
+                    app:drawableStartCompat="@drawable/ic_do_not_disturb"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <CheckBox
+                    android:id="@+id/cb_do_not_disturb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:background="@android:color/transparent"
+                    android:button="@null"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:drawableEnd="@drawable/checkbox_selector"
+                    android:text=""
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_Do_not_disturb"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:fontFamily="@font/opensans_bold_700"
+                android:gravity="start"
+                android:includeFontPadding="false"
+                android:text="@string/support"
+                android:textColor="#7C7E81"
+                android:textSize="@dimen/_14sdp" />
+
+            <TextView
+                android:id="@+id/tv_language"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:background="@drawable/bg_item_setting"
+                android:drawableEnd="@drawable/ic_next"
+                android:drawablePadding="16dp"
+                android:fontFamily="@font/opensans_semibold_600"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:paddingHorizontal="19dp"
+                android:paddingVertical="@dimen/_12sdp"
+                android:text="@string/Language"
+                android:textColor="#505050"
+                android:textSize="@dimen/_14ssp"
+                app:drawableStartCompat="@drawable/ic_language" />
+
+
+            <TextView
+                android:id="@+id/tv_policy"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:background="@drawable/bg_item_setting"
+                android:drawableEnd="@drawable/ic_next"
+                android:drawablePadding="16dp"
+                android:fontFamily="@font/opensans_semibold_600"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:paddingHorizontal="19dp"
+                android:paddingVertical="@dimen/_12sdp"
+                android:text="@string/policy"
+                android:textColor="#505050"
+                android:textSize="@dimen/_14ssp"
+                app:drawableStartCompat="@drawable/ic_policy" />
+
+            <TextView
+                android:id="@+id/tv_share"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:background="@drawable/bg_item_setting"
+                android:drawableEnd="@drawable/ic_next"
+                android:drawablePadding="16dp"
+                android:fontFamily="@font/opensans_semibold_600"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:paddingHorizontal="19dp"
+                android:paddingVertical="@dimen/_12sdp"
+                android:text="@string/share"
+                android:textColor="#505050"
+                android:textSize="@dimen/_14ssp"
+                app:drawableStartCompat="@drawable/ic_share" />
+
+            <TextView
+                android:id="@+id/tv_rate"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:background="@drawable/bg_item_setting"
+                android:drawableEnd="@drawable/ic_next"
+                android:drawablePadding="16dp"
+                android:fontFamily="@font/opensans_semibold_600"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:paddingHorizontal="19dp"
+                android:paddingVertical="@dimen/_12sdp"
+                android:text="@string/rate_us"
+                android:textColor="#505050"
+                android:textSize="@dimen/_14ssp"
+                app:drawableStartCompat="@drawable/ic_rate_us" />
+
+            <TextView
+                android:id="@+id/tv_feedback"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:background="@drawable/bg_item_setting"
+                android:drawableEnd="@drawable/ic_next"
+                android:drawablePadding="16dp"
+                android:fontFamily="@font/opensans_semibold_600"
+                android:gravity="center_vertical"
+                android:includeFontPadding="false"
+                android:paddingHorizontal="19dp"
+                android:paddingVertical="@dimen/_12sdp"
+                android:text="@string/feedback"
+                android:textColor="#505050"
+                android:textSize="@dimen/_14ssp"
+                app:drawableStartCompat="@drawable/ic_feedback" />
+
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

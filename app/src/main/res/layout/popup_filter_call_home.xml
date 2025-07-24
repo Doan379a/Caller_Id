@@ -1,0 +1,74 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_popup"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/item_all"
+        style="@style/SelectableItemBackground"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_all"
+        android:drawablePadding="@dimen/_10sdp"
+        android:fontFamily="@font/opensans_semibold_600"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:text="@string/all"
+        android:textColor="#505050" />
+
+    <TextView
+        android:id="@+id/item_incoming_calls"
+        style="@style/SelectableItemBackground"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_call_incoming"
+
+        android:drawablePadding="@dimen/_10sdp"
+        android:fontFamily="@font/opensans_semibold_600"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:text="@string/incoming_calls"
+        android:textColor="#505050" />
+
+    <TextView
+        android:id="@+id/item_call_outgoing"
+        style="@style/SelectableItemBackground"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_call_outgoing"
+        android:drawablePadding="@dimen/_10sdp"
+        android:fontFamily="@font/opensans_semibold_600"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:text="@string/outgoing_calls"
+        android:textColor="#505050" />
+
+    <TextView
+        android:id="@+id/item_call_missed"
+        style="@style/SelectableItemBackground"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_call_missed"
+        android:drawablePadding="@dimen/_10sdp"
+        android:fontFamily="@font/opensans_semibold_600"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:text="@string/missed_calls"
+        android:textColor="#505050" />
+
+    <TextView
+        android:id="@+id/item_clear_all_calls"
+        style="@style/SelectableItemBackground"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_delete"
+        android:drawablePadding="@dimen/_10sdp"
+        android:fontFamily="@font/opensans_semibold_600"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:text="@string/clear_all_calls"
+        android:textColor="#505050" />
+
+</LinearLayout>

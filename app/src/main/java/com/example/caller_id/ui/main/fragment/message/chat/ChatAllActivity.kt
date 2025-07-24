@@ -123,7 +123,7 @@ class ChatAllActivity : BaseActivity2<ActivityChatBinding>() {
 
 
         binding.tvAddress.text = displayName
-        binding.tvPhone.text = if (address !== null) address else address
+        binding.tvPhone.text =  address
         Log.d(getTagDebug("DOAN_2"), "Address: $address, Display Name: $displayName,name${name}")
         adapter = ChatAdapter(smsList, colorAvatar)
         binding.rcvMessages.layoutManager = LinearLayoutManager(this)

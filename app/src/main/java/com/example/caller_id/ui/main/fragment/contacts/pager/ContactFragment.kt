@@ -15,6 +15,7 @@ import com.example.caller_id.utils.SmsUtils.getCheckAddress
 import com.example.caller_id.widget.getLogDebug
 import com.example.caller_id.widget.normalize
 import com.example.caller_id.widget.showSnackBar
+import com.example.caller_id.widget.visibleOrGone
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,6 +37,12 @@ class ContactFragment : BaseFragment<FragmentContactBinding>() {
     }
 
     override fun viewListener() {
+        adapter.onClickItem = { data ->
+            val intent = Intent(requireActivity(), NumberInfoActivity::class.java).apply {
+                putExtra("number", data.number)
+            }
+            startActivity(intent)
+        }
         adapter.onClickCall = { phone ->
             requireActivity().showSnackBar("ssss$phone")
             getLogDebug("CONTACT", "kkk$phone")
@@ -66,7 +73,8 @@ class ContactFragment : BaseFragment<FragmentContactBinding>() {
                     .removePrefix("+84").contains(query)
             }
             adapter.updateList(listQuery.toMutableList())
-
+            binding.rcv.visibleOrGone(listQuery.isNotEmpty())
+            binding.tvNodata.visibleOrGone(listQuery.isEmpty())
         }
         vm.contacts.observe(viewLifecycleOwner) { list ->
             listContact = list.toMutableList()

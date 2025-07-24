@@ -10,7 +10,9 @@ import com.example.caller_id.R
 import com.example.caller_id.base.BaseFragment
 import com.example.caller_id.database.viewmodel.BlockViewModel
 import com.example.caller_id.databinding.FragmentContactMainBinding
+import com.example.caller_id.dialog.FilterCallHomePopup
 import com.example.caller_id.widget.normalize
+import com.example.caller_id.widget.tap
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,6 +34,10 @@ class ContactMainFragment : BaseFragment<FragmentContactMainBinding>() {
     }
 
     override fun viewListener() {
+        binding.imgPopup.tap {
+            val popup= FilterCallHomePopup(requireActivity())
+            popup.showAtView(binding.imgPopup)
+        }
         binding.tvContact.setOnClickListener {
             binding.viewPager2.currentItem = 0
             setUpColorTab(binding.viewPager2.currentItem)

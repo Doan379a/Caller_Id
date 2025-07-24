@@ -1,5 +1,6 @@
 package com.example.caller_id.ui.main.fragment.calls
 
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +9,10 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.caller_id.R
 import com.example.caller_id.base.BaseFragment
 import com.example.caller_id.databinding.FragmentCallBinding
+import com.example.caller_id.dialog.FilterCallHomePopup
 import com.example.caller_id.ui.main.MainAdapter
+import com.example.caller_id.ui.main.user.UserInfoActivity
+import com.example.caller_id.widget.tap
 
 class CallFragment:BaseFragment<FragmentCallBinding>() {
 
@@ -35,6 +39,13 @@ class CallFragment:BaseFragment<FragmentCallBinding>() {
     }
 
     override fun viewListener() {
+        binding.imgUser.tap {
+            startActivity(Intent(requireActivity(),UserInfoActivity::class.java))
+        }
+        binding.imgPopup.tap {
+            val popup= FilterCallHomePopup(requireActivity())
+            popup.showAtView(binding.imgPopup)
+        }
         binding.ivRecent.setOnClickListener {
             setUpColorTab(0)
             binding.viewPager2.currentItem = 0

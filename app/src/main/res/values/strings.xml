@@ -125,4 +125,22 @@
     <string name="please_select_statel">Please select statel</string>
     <string name="are_you_sure_you_want_to_unblock_spam">Are You Sure You Want to unblock Spam?</string>
     <string name="unblocked_spam">Unblocked spam</string>
+    <string name="all">All</string>
+    <string name="incoming_calls">Incoming Calls</string>
+    <string name="outgoing_calls">Outgoing Calls</string>
+    <string name="blocked_calls">Blocked Calls</string>
+    <string name="clear_all_calls">Clear all Calls</string>
+    <string name="no_data">No data</string>
+    <string name="policy">Policy</string>
+    <string name="share">Share</string>
+    <string name="feedback">Feedback</string>
+    <string name="support">Support</string>
+    <string name="call_settings">Call settings</string>
+    <string name="caller_info">
+  <font color="#505050" size="15" >Caller ID\n</font><br />
+  <font color="#7C7E81" size="12">Show information during phone calls</font>
+</string>
+    <string name="call_dialer">Call dialer</string>
+
+
 </resources>
