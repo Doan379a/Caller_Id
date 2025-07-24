@@ -17,8 +17,8 @@ import com.example.caller_id.widget.setDrawableStartWithTint
 import com.example.caller_id.widget.tap
 import kotlin.math.absoluteValue
 
-class BlockedAdapter(val context: Context,
-                     val onClick :(callLogItem: BlockedCalled)->Unit
+class SpamAdapter(val context: Context,
+                  val onClick :(callLogItem: BlockedCalled)->Unit
 ) :BaseAdapter<ItemBlockedBinding, BlockedCalled>() {
     private var filterList: List<BlockedCalled> = listData
     override fun createBinding(
@@ -41,20 +41,8 @@ class BlockedAdapter(val context: Context,
             super.bind(data)
             binding.tvAvatar.text = data.number.firstOrNull()?.uppercaseChar()?.toString() ?: "?"
             binding.cardAvatar.setCardBackgroundColor(getColorFromAddress())
-            if (data.type == "number") {
                 binding.txtName.text = if (!data.name.isNullOrBlank()) data.name else data.number
-            } else if (data.type == "sender") {
-                binding.txtName.text = context.getString(R.string.sender) + " (${data.number})"
-            } else if (data.type == "country") {
-                binding.txtName.text =
-                    context.getString(R.string.country_code) + " (${data.number})"
-            } else if (data.type == "0") {
-                binding.txtName.text =
-                    context.getString(R.string.number_start_with) + " (${data.number})"
-            }else if (data.type == "1"){
-                binding.txtName.text =
-                    context.getString(R.string.number_end_with) + " (${data.number})"
-            }
+
             binding.ivClear.tap {
                 onClick.invoke(data)
             }

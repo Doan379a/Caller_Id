@@ -125,11 +125,14 @@ class BlockViewModel @Inject constructor(
     fun unSpamSms(num: String) = viewModelScope.launch { repo.unSpamSms(num) }
 
     // Chặn, spam cuộc gọi
-    fun insertCallBlock(num: String, type: String, isSpam: Boolean) = viewModelScope.launch {
-        repo.insertCalled(num, type, isSpam)
+    fun insertCallBlock(num: String,name: String, type: String, isSpam: Boolean) = viewModelScope.launch {
+        repo.insertCalled(num, name,type, isSpam)
     }
     fun deleteCallById(id: Long) = viewModelScope.launch {
         repo.deleteCalled(id)
+    }
+    fun deleteCallByNumber(number: String, type: String) = viewModelScope.launch {
+        repo.deleteCalledNumber(number,type)
     }
     val callBlockedList: LiveData<List<BlockedCalled>> = repo.getAllBlockedCalledFlow().asLiveData()
     val callSpamList: LiveData<List<BlockedCalled>> = repo.getAllSpamCalledFlow().asLiveData()
@@ -139,6 +142,18 @@ class BlockViewModel @Inject constructor(
     fun searchBlock(query: String) {
         Log.d("searchBlock", "Query: $query")
         _listSearchBlock.value = query
+    }
+    fun checkIfBlocked(number: String, callback: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val isBlocked = repo.isNumberBlocked(number)
+            callback(isBlocked)
+        }
+    }
+    fun checkIfFavoritesBlocked(number: String, callback: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            val isBlocked = repo.isFavoritesBlocked(number)
+            callback(isBlocked)
+        }
     }
 
     //do not disturb

@@ -84,7 +84,7 @@
     <string name="number_start_with">Number start with</string>
     <string name="number_end_with">Number end with</string>
     <string name="sender">Sender</string>
-    <string name="are_you_sure_you_want_to_unblock">Are You Sure You Want to Unblock</string>
+    <string name="are_you_sure_you_want_to_unblock">Are You Sure You Want to Unblock?</string>
     <string name="unblocked">Unblocked</string>
     <string name="new_conversation">New conversation</string>
     <string name="receiver">Receiver</string>
@@ -123,5 +123,6 @@
     <string name="n2_hours">2\nhours</string>
     <string name="n8_hours">8\nhours</string>
     <string name="please_select_statel">Please select statel</string>
-
+    <string name="are_you_sure_you_want_to_unblock_spam">Are You Sure You Want to unblock Spam?</string>
+    <string name="unblocked_spam">Unblocked spam</string>
 </resources>

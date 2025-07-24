@@ -50,8 +50,9 @@ class BlockedFragment : BaseFragment<FragmentBlockedBinding>() {
         binding.rcvBlock.adapter = adapter
 
         vm.callBlockedList.observe(viewLifecycleOwner) { list ->
+            val filter = list.filter { it.type != "favorites" }
             Log.d("callBlockedList", list.toString())
-            adapter.updateList(list)
+            adapter.updateList(filter)
         }
 
     }

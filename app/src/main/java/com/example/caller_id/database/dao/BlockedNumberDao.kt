@@ -56,6 +56,15 @@ interface BlockedCalledDao {
 
   @Query("SELECT * FROM blocked_called WHERE isSpam = 0")
   fun getAllBlockCalled(): Flow<List<BlockedCalled>>
+
+  @Query("DELETE FROM blocked_called WHERE number = :number AND type = :type")
+  suspend fun deleteByNumberAndType(number: String, type: String)
+
+  @Query("SELECT EXISTS(SELECT 1 FROM blocked_called WHERE number = :number AND type = 'number')")
+  suspend fun isNumberBlocked(number: String): Boolean
+
+  @Query("SELECT EXISTS(SELECT 1 FROM blocked_called WHERE number = :number AND type = 'favorites')")
+  suspend fun isFavoritesBlocked(number: String): Boolean
 }
 
 @Dao

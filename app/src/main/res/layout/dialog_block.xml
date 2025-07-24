@@ -60,6 +60,16 @@
             android:paddingVertical="10dp"
             android:visibility="gone"
             />
+        <Spinner
+            android:layout_marginTop="20dp"
+            android:id="@+id/spinnerNumberSeries"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_conner_edit"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="10dp"
+            android:visibility="gone"
+            />
 
         <EditText
             android:id="@+id/edt_content"

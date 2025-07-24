@@ -55,25 +55,25 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
 
         binding.ivPhoneNumber.tap {
             BlockDialog(requireActivity(), 0) { number, type ->
-                vm.insertCallBlock(number, type,false)
+                vm.insertCallBlock(number, name = "", type,false)
                 Toast.makeText(requireContext(), "Đã chặn $number", Toast.LENGTH_SHORT).show()
             }.show()
         }
         binding.ivMessageSenderName.tap {
             BlockDialog(activity1 = requireActivity(), type = 1, actionBlock = { number, type ->
-                vm.insertCallBlock(number, type,false)
+                vm.insertCallBlock(number, name = "",type,false)
                 Toast.makeText(requireContext(), "Đã chặn $number", Toast.LENGTH_SHORT).show()
             }).show()
         }
         binding.ivCountryCode.tap {
             BlockDialog(activity1 = requireActivity(), type = 2, actionBlock = { number, type ->
-                vm.insertCallBlock(number, type,false)
+                vm.insertCallBlock(number, name = "", type,false)
                 Toast.makeText(requireContext(), "Đã chặn mã nước $number", Toast.LENGTH_SHORT).show()
             }).show()
         }
         binding.ivNumberSeries.tap {
             BlockDialog(activity1 = requireActivity(), type = 3, actionBlock = { number, type ->
-                vm.insertCallBlock(number, type,false)
+                vm.insertCallBlock(number,  name = "", type,false)
                 Toast.makeText(requireContext(), "Đã chặn chuỗi $number", Toast.LENGTH_SHORT).show()
             }).show()
         }

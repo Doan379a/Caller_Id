@@ -10,6 +10,7 @@ import com.example.caller_id.database.viewmodel.BlockViewModel
 import com.example.caller_id.databinding.FragmentContactBinding
 import com.example.caller_id.model.ContactModel
 import com.example.caller_id.ui.main.fragment.message.chat.ChatAllActivity
+import com.example.caller_id.ui.numberinfo.NumberInfoActivity
 import com.example.caller_id.utils.SmsUtils.getCheckAddress
 import com.example.caller_id.widget.getLogDebug
 import com.example.caller_id.widget.normalize
@@ -48,6 +49,13 @@ class ContactFragment : BaseFragment<FragmentContactBinding>() {
                 putExtra("address", normalized)
             }
             startActivity(smsIntent)
+        }
+        adapter.onClickNext ={data ->
+            val intent = Intent(requireActivity(), NumberInfoActivity::class.java).apply {
+                putExtra("number", data.number)
+                putExtra("name", data.name)
+            }
+            startActivity(intent)
         }
     }
 

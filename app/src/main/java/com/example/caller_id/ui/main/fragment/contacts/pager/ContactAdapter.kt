@@ -17,7 +17,7 @@ class ContactAdapter(var list: MutableList<ContactModel>, val keyCheck: Boolean 
     RecyclerView.Adapter<ContactAdapter.ContactViewHolder>() {
     var onClickSms: ((sms: String) -> Unit)? = null
     var onClickCall: ((call: String) -> Unit)? = null
-    var onClickNext: ((phone: String) -> Unit)? = null
+    var onClickNext: ((data: ContactModel) -> Unit)? = null
 
     inner class ContactViewHolder(val binding: ItemRcvContactBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -36,8 +36,8 @@ class ContactAdapter(var list: MutableList<ContactModel>, val keyCheck: Boolean 
             binding.imgCall.tap {
                 onClickCall?.invoke(contact.number)
             }
-            binding.imgNext.tap {
-                onClickNext?.invoke(contact.number)
+            binding.root.tap {
+                onClickNext?.invoke(contact)
             }
         }
     }

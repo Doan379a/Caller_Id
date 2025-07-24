@@ -17,9 +17,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.caller_id.R
 import com.example.caller_id.base.BaseFragment
 import com.example.caller_id.bottomsheet.DisturbBottomSheet
+import com.example.caller_id.database.entity.DoNotDisturbNumber
 import com.example.caller_id.database.viewmodel.BlockViewModel
 import com.example.caller_id.databinding.FragmentBlockedBinding
 import com.example.caller_id.databinding.FragmentDisturbBinding
+import com.example.caller_id.model.DndType
+import com.example.caller_id.service.DndListenerManager
+import com.example.caller_id.service.DndUpdateListener
 import com.example.caller_id.ui.main.fragment.calls.DoNotDisturbAdapter
 import com.example.caller_id.widget.tap
 
@@ -46,6 +50,7 @@ class DisturbFragment : BaseFragment<FragmentDisturbBinding>() {
         vm.dndCalledList.observe(viewLifecycleOwner) {
             adapter.updateList(it)
         }
+
     }
 
     override fun viewListener() {
@@ -55,27 +60,51 @@ class DisturbFragment : BaseFragment<FragmentDisturbBinding>() {
         binding.cbDisturb.setOnCheckedChangeListener { _, isChecked ->
             val notificationManager =
                 requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (!notificationManager.isNotificationPolicyAccessGranted) {
                     val intent = Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS)
                     startActivity(intent)
+
                     binding.cbDisturb.isChecked = false
-                } else {
-                    val filter = if (isChecked) {
-                        NotificationManager.INTERRUPTION_FILTER_NONE
-                    } else {
-                        NotificationManager.INTERRUPTION_FILTER_ALL
-                    }
-                    notificationManager.setInterruptionFilter(filter)
+                    return@setOnCheckedChangeListener
                 }
+
+                val filter = if (isChecked) {
+                    NotificationManager.INTERRUPTION_FILTER_NONE
+                } else {
+                    NotificationManager.INTERRUPTION_FILTER_ALL
+                }
+                notificationManager.setInterruptionFilter(filter)
+
+                if (isChecked) {
+                    binding.ll2.alpha = 0.4f
+                    binding.ivManually.isEnabled = false
+                    binding.ivHistory.isEnabled = false
+                    binding.ivContact.isEnabled  =false
+                } else {
+                    binding.ll2.alpha = 1f
+                    binding.ivManually.isEnabled = true
+                    binding.ivHistory.isEnabled = true
+                    binding.ivContact.isEnabled  =true
+                }
+
+
             }
         }
-
-
     }
 
     override fun onResume() {
         super.onResume()
+        DndListenerManager.listener = object : DndUpdateListener {
+            override fun onDndUpdated(data: DoNotDisturbNumber) {
+                vm.decreaseCounter(data.number)
+                vm.deleteIfCounterReached(data.number)
+                vm.dndCalledList.observe(viewLifecycleOwner) {
+                    adapter.updateList(it)
+                }
+            }
+        }
         deleteExpired()
         updateDisturbCheckboxState()
     }

@@ -33,6 +33,7 @@ class RecentsFragment : BaseFragment<FragmentRecentsBinding>() {
         adapter = CallLogAdapter(requireContext()) { data ->
                 val intent = Intent(requireActivity(),NumberInfoActivity::class.java).apply {
                     putExtra("number", data.number)
+                    putExtra("name", data.name)
                 }
             startActivity(intent)
         }
@@ -104,6 +105,11 @@ class RecentsFragment : BaseFragment<FragmentRecentsBinding>() {
     }
 
 
+    override fun onResume() {
+        super.onResume()
+        val list = getCallLogs()
+        adapter.updateList(list)
+    }
     override fun dataObservable() {
     }
 

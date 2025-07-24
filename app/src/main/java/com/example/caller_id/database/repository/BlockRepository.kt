@@ -37,11 +37,17 @@ class BlockRepository @Inject constructor(
     spamNumberSmsDao.getAllSpamNumber()
       .map { list -> list.map { it.number }.toSet() }
 
-  suspend fun insertCalled(num: String, type: String, isSpam: Boolean) = blockedCalledDao.insert(BlockedCalled(number = num, type = type, isSpam = isSpam))
+  suspend fun insertCalled(num: String,name: String, type: String, isSpam: Boolean) = blockedCalledDao.insert(BlockedCalled(number = num, name = name, type = type, isSpam = isSpam))
   suspend fun deleteCalled(id: Long) = blockedCalledDao.deleteById(id)
+  suspend fun deleteCalledNumber(number: String, type: String) = blockedCalledDao.deleteByNumberAndType(number,type)
   fun getAllBlockedCalledFlow(): Flow<List<BlockedCalled>> = blockedCalledDao.getAllBlockCalled()
-
   fun getAllSpamCalledFlow(): Flow<List<BlockedCalled>> = blockedCalledDao.getAllSpamCalled()
+    suspend fun isNumberBlocked(number: String): Boolean {
+        return blockedCalledDao.isNumberBlocked(number)
+    }
+    suspend fun isFavoritesBlocked(number: String): Boolean {
+        return blockedCalledDao.isFavoritesBlocked(number)
+    }
 
 
     //do not disturb
