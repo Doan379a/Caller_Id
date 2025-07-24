@@ -7,12 +7,14 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.BlockedNumberContract
+import android.provider.CallLog
 import android.provider.ContactsContract
 import android.provider.Telephony
 import android.telephony.PhoneNumberUtils.normalizeNumber
 import android.util.Log
 import androidx.core.content.ContextCompat
 import com.example.caller_id.R
+import com.example.caller_id.model.CallLogItem
 import com.example.caller_id.model.ContactModel
 import com.example.caller_id.model.SmsConversation
 import com.example.caller_id.model.SmsMessage
@@ -251,7 +253,7 @@ object SmsUtils {
         fetchFor(address)
         if (smsList.isNotEmpty()) return smsList
 
-        val alt = toNational(address)
+        val alt = getCheckAddress(address)
         fetchFor(alt)
         return smsList
     }
@@ -340,6 +342,54 @@ object SmsUtils {
             }
             list.toList()
         }
+    fun getCallLogs(context: Context): List<CallLogItem> {
+        val callLogList = mutableListOf<CallLogItem>()
+        val resolver = context.contentResolver
+        val cursor = resolver.query(
+            CallLog.Calls.CONTENT_URI,
+            null, null, null,
+            "${CallLog.Calls.DATE} DESC"
+        )
 
+        cursor?.use {
+            val nameIndex = it.getColumnIndex(CallLog.Calls.CACHED_NAME)
+            val numberIndex = it.getColumnIndex(CallLog.Calls.NUMBER)
+            val dateIndex = it.getColumnIndex(CallLog.Calls.DATE)
+            val typeIndex = it.getColumnIndex(CallLog.Calls.TYPE)
+
+            while (it.moveToNext()) {
+                val name = it.getString(nameIndex)
+                val number = it.getString(numberIndex)
+                val rawDate = it.getLong(dateIndex)
+
+                val local = SystemUtil.getPreLanguage(context) ?: "en"
+                val sdf = SimpleDateFormat("dd MMM", Locale(local))
+                val dateFormatted = sdf.format(Date(rawDate))
+
+                val type = when (it.getInt(typeIndex)) {
+                    CallLog.Calls.INCOMING_TYPE -> "Incoming"
+                    CallLog.Calls.OUTGOING_TYPE -> "Outgoing"
+                    CallLog.Calls.MISSED_TYPE -> "Missed"
+                    else -> "Other"
+                }
+
+                callLogList.add(
+                    CallLogItem(name, number, dateFormatted, type, rawDate)
+                )
+            }
+        }
+
+        val groupedList = mutableListOf<CallLogItem>()
+        for (item in callLogList) {
+            val last = groupedList.lastOrNull()
+            if (last != null && last.number == item.number && last.type == item.type) {
+                groupedList[groupedList.size - 1] = last.copy(count = last.count + 1)
+            } else {
+                groupedList.add(item)
+            }
+        }
+
+        return groupedList
+    }
 
 }

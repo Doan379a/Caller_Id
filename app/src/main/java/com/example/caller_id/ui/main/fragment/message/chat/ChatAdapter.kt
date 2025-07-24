@@ -15,6 +15,8 @@ import com.example.caller_id.model.SmsSendStatus
 import com.example.caller_id.utils.SmsUtils.formatSmsTimestamp
 import com.example.caller_id.utils.SmsUtils.lookupContactName
 import com.example.caller_id.utils.SmsUtils.toNational
+import com.example.caller_id.widget.gone
+import com.example.caller_id.widget.visible
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -58,9 +60,20 @@ class ChatAdapter (private val items: List<SmsMessage>,
             holder.binding.tvTime.text = formatSmsTimestamp(holder.binding.root.context, sms.date)
 
             when (sms.status) {
-                SmsSendStatus.SENDING -> holder.binding.ivStatus.setImageResource(0)
-                SmsSendStatus.SENT -> holder.binding.ivStatus.setImageResource(R.drawable.ic_check)
-                SmsSendStatus.FAILED -> holder.binding.ivStatus.setImageResource(R.drawable.ic_failed)
+                SmsSendStatus.SENDING -> {
+                    holder.binding.ivStatus.gone()
+                    holder.binding.progressBar.visible()
+                }
+                SmsSendStatus.SENT -> {
+                    holder.binding.ivStatus.visible()
+                    holder.binding.progressBar.gone()
+                    holder.binding.ivStatus.setImageResource(R.drawable.ic_check)
+                }
+                SmsSendStatus.FAILED -> {
+                    holder.binding.ivStatus.visible()
+                    holder.binding.progressBar.gone()
+                    holder.binding.ivStatus.setImageResource(R.drawable.ic_failed)
+                }
             }
         } else if (holder is ReceivedViewHolder) {
             val headerText = getHeaderDateText(holder.binding.root.context,sms.date)

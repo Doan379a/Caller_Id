@@ -42,7 +42,12 @@ import kotlinx.coroutines.launch
 
 class NewChatActivity : BaseActivity2<ActivityNewChatBinding>() {
     private val smsList: MutableList<SmsMessage> = mutableListOf()
-    private val smsAdapter: ChatAdapter by lazy { ChatAdapter(smsList, Color.parseColor("#42A5F5")) }
+    private val smsAdapter: ChatAdapter by lazy {
+        ChatAdapter(
+            smsList,
+            Color.parseColor("#42A5F5")
+        )
+    }
     private var contactModel = mutableListOf<ContactModel>()
     private var address: String = ""
     private lateinit var adapterContact: SearchContactAdapter
@@ -75,7 +80,7 @@ class NewChatActivity : BaseActivity2<ActivityNewChatBinding>() {
                 }
             }
 
-            contactModel=merged
+            contactModel = merged
             adapterContact = SearchContactAdapter(merged.toMutableList()) { data ->
                 Log.d("DOAN_2", "contact data: $data")
                 val name = lookupContactName(this@NewChatActivity, data.number)
@@ -110,8 +115,8 @@ class NewChatActivity : BaseActivity2<ActivityNewChatBinding>() {
                 }
                 adapterContact.submitList(listQuery.toMutableList())
                 val show = query.isNotEmpty() && listQuery.isNotEmpty()
-                binding.includeSearchContact.root.visibleOrGone(show)
-                binding.rcvMessages.gone()
+                includeSearchContact.root.visibleOrGone(show)
+                rcvMessages.gone()
             }
 
             override fun afterTextChanged(s: Editable?) {}
@@ -124,10 +129,15 @@ class NewChatActivity : BaseActivity2<ActivityNewChatBinding>() {
         }
         binding.btnSend.setOnClickListener {
             val text = binding.edtMessage.text.toString()
-            if (text.isNotBlank()) {
-                sendSmsWithStatus()
-                binding.edtMessage.text.clear()
-            }else{
+            val textContact = binding.edtSearch.text.toString()
+            if (textContact.isNotEmpty()) {
+                if (text.isNotBlank()) {
+                    sendSmsWithStatus()
+                    binding.edtMessage.text.clear()
+                } else {
+                    showToast("bạn chưa nhập gì ")
+                }
+            } else {
                 showToast("bạn chưa chọn contact")
             }
         }
@@ -137,7 +147,10 @@ class NewChatActivity : BaseActivity2<ActivityNewChatBinding>() {
         smsList.clear()
         val loaded = loadSmsByAddress(this, getCheckAddress(address))
 
-        Log.d(getTagDebug("DOAN_2"), "Loaded ${loaded.size} messages for address: ${getCheckAddress(address)}")
+        Log.d(
+            getTagDebug("DOAN_2"),
+            "Loaded ${loaded.size} messages for address: ${getCheckAddress(address)}"
+        )
         loaded.filter { !it.read && !it.isSentByMe }.forEach {
             markSmsAsRead(this, it.address, it.body)
         }

@@ -16,7 +16,7 @@ import javax.inject.Singleton
 object DatabaseModule {
     @Provides @Singleton
     fun provideDb(@ApplicationContext ctx: Context) =
-        Room.databaseBuilder(ctx, AppDatabase::class.java, "sms_db").build()
+        Room.databaseBuilder(ctx, AppDatabase::class.java, "sms_db").fallbackToDestructiveMigration().build()
     @Provides fun provideNumDao(db: AppDatabase) = db.blockedNumberDao()
     @Provides fun provideSpamSmsDao(db: AppDatabase) = db.spamNumberSmsDao()
     @Provides fun provideCalledDao(db: AppDatabase) = db.blockedCalledDao()

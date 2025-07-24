@@ -14,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/img_logo"
+            android:id="@+id/img_user"
             android:layout_width="@dimen/_35sdp"
             android:layout_height="@dimen/_35sdp"
             android:src="@drawable/img_people"
@@ -36,7 +36,7 @@
             android:textColorHint="#7C7E81"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/img_setting"
-            app:layout_constraintStart_toEndOf="@+id/img_logo"
+            app:layout_constraintStart_toEndOf="@+id/img_user"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView

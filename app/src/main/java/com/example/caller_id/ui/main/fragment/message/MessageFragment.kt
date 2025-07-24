@@ -17,6 +17,7 @@ import androidx.fragment.app.activityViewModels
 import com.example.caller_id.base.BaseFragment
 import com.example.caller_id.database.viewmodel.BlockViewModel
 import com.example.caller_id.databinding.FragmentMessageBinding
+import com.example.caller_id.dialog.FilterCallHomePopup
 import com.example.caller_id.dialog.MessagePopup
 import com.example.caller_id.model.SmsConversation
 import com.example.caller_id.service.RealTimeSmsReceiver
@@ -61,6 +62,10 @@ class MessageFragment : BaseFragment<FragmentMessageBinding>() {
     }
 
     override fun viewListener() {
+        binding.imgPopup.tap {
+            val popup= FilterCallHomePopup(requireActivity())
+            popup.showAtView(binding.imgPopup)
+        }
         binding.imgNewMessage.tap {
             val intent = Intent(requireActivity(), NewChatActivity::class.java)
             startActivity(intent)

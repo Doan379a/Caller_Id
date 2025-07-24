@@ -67,6 +67,7 @@
         android:drawableStart="@drawable/ic_search"
         android:drawablePadding="@dimen/_5sdp"
         android:hint="Search by number"
+        android:textColor="@color/black"
         android:paddingHorizontal="@dimen/_5sdp"
         android:paddingVertical="@dimen/_10sdp"
         android:textColorHint="#7C7E81"

@@ -11,6 +11,7 @@ import com.example.caller_id.model.ContactModel
 import com.example.caller_id.widget.getLogDebug
 import com.example.caller_id.widget.normalize
 import com.example.caller_id.widget.showSnackBar
+import com.example.caller_id.widget.visibleOrGone
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -45,7 +46,8 @@ class ContactFavoritesFragment : BaseFragment<FragmentContactFavoritesBinding>()
                     .removePrefix("+84").contains(query)
             }
             adapter.updateList(listQuery.toMutableList())
-
+            binding.rcvContactFavorites.visibleOrGone(listQuery.isNotEmpty())
+            binding.tvNodata.visibleOrGone(listQuery.isEmpty())
         }
         vm.contacts.observe(viewLifecycleOwner) { list ->
             listContact = list.toMutableList()

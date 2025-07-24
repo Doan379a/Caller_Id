@@ -15,6 +15,7 @@ import kotlin.math.absoluteValue
 
 class ContactAdapter(var list: MutableList<ContactModel>, val keyCheck: Boolean = false) :
     RecyclerView.Adapter<ContactAdapter.ContactViewHolder>() {
+    var onClickItem: ((item: ContactModel) -> Unit)? = null
     var onClickSms: ((sms: String) -> Unit)? = null
     var onClickCall: ((call: String) -> Unit)? = null
     var onClickNext: ((phone: String) -> Unit)? = null
@@ -38,6 +39,9 @@ class ContactAdapter(var list: MutableList<ContactModel>, val keyCheck: Boolean 
             }
             binding.imgNext.tap {
                 onClickNext?.invoke(contact.number)
+            }
+            binding.root.tap {
+                onClickItem?.invoke(contact)
             }
         }
     }

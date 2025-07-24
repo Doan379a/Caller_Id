@@ -41,7 +41,6 @@ class AllMessageSmsFragment : BaseFragment<FragmentAllSmsMessageBinding>() {
         adapter = SmsAdapter(mutableListOf()) { displayName, address, color ->
             val intent = Intent(requireActivity(), ChatAllActivity::class.java).apply {
 //                val name = lookupContactName(requireActivity(), normalized)
-
                 Log.d("Doan_1", "Contact name for $address: $displayName,")
                 putExtra("displayName", displayName)
                 putExtra("address", address)
