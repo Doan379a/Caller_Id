@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.caller_id.R
 import com.example.caller_id.base.BaseFragment
 import com.example.caller_id.bottomsheet.DisturbBottomSheet
+import com.example.caller_id.bottomsheet.FromContactBottomSheet
 import com.example.caller_id.database.entity.DoNotDisturbNumber
 import com.example.caller_id.database.viewmodel.BlockViewModel
 import com.example.caller_id.databinding.FragmentBlockedBinding
@@ -41,7 +42,7 @@ class DisturbFragment : BaseFragment<FragmentDisturbBinding>() {
         deleteExpired()
         adapter = DoNotDisturbAdapter(requireContext(), { data ->
             vm.deleteDndCalled(data.id)
-            Toast.makeText(requireActivity(), "Đã xóa số ${data.number}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireActivity(), getString(R.string.number_deleted,data.number), Toast.LENGTH_SHORT).show()
         })
 
 
@@ -55,7 +56,7 @@ class DisturbFragment : BaseFragment<FragmentDisturbBinding>() {
 
     override fun viewListener() {
         binding.ivManually.tap {
-            DisturbBottomSheet().show(parentFragmentManager, "ExampleBottomSheet")
+            DisturbBottomSheet("").show(parentFragmentManager, "ExampleBottomSheet")
         }
         binding.cbDisturb.setOnCheckedChangeListener { _, isChecked ->
             val notificationManager =
@@ -91,6 +92,12 @@ class DisturbFragment : BaseFragment<FragmentDisturbBinding>() {
 
 
             }
+        }
+        binding.ivContact.tap {
+            FromContactBottomSheet(0).show(parentFragmentManager, "ExampleBottomSheet")
+        }
+        binding.ivHistory.tap {
+            FromContactBottomSheet(1).show(parentFragmentManager, "ExampleBottomSheet")
         }
     }
 

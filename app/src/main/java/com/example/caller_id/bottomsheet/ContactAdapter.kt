@@ -39,10 +39,11 @@ class ContactAdapter(
 
         override fun bind(data: ContactModel) {
             super.bind(data)
-            binding.imgNext.visible()
+            binding.imgNext.gone()
             binding.imgSms.gone()
             binding.imgCall.gone()
             binding.tvPhone.gone()
+            binding.tvPhone.text = data.number
             binding.tvAvatar.text =
                 data.name.firstOrNull()?.uppercaseChar()?.toString() ?: data.number.firstOrNull()
                     ?.toString().orEmpty()

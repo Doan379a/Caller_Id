@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import com.example.caller_id.R
 import com.example.caller_id.base.BaseFragment
 import com.example.caller_id.database.viewmodel.BlockViewModel
 import com.example.caller_id.databinding.FragmentSettingBinding
@@ -56,25 +57,25 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>() {
         binding.ivPhoneNumber.tap {
             BlockDialog(requireActivity(), 0) { number, type ->
                 vm.insertCallBlock(number, name = "", type,false)
-                Toast.makeText(requireContext(), "Đã chặn $number", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.blocked_number,number), Toast.LENGTH_SHORT).show()
             }.show()
         }
         binding.ivMessageSenderName.tap {
             BlockDialog(activity1 = requireActivity(), type = 1, actionBlock = { number, type ->
                 vm.insertCallBlock(number, name = "",type,false)
-                Toast.makeText(requireContext(), "Đã chặn $number", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.blocked_number,number), Toast.LENGTH_SHORT).show()
             }).show()
         }
         binding.ivCountryCode.tap {
             BlockDialog(activity1 = requireActivity(), type = 2, actionBlock = { number, type ->
                 vm.insertCallBlock(number, name = "", type,false)
-                Toast.makeText(requireContext(), "Đã chặn mã nước $number", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.blocked_number,number), Toast.LENGTH_SHORT).show()
             }).show()
         }
         binding.ivNumberSeries.tap {
             BlockDialog(activity1 = requireActivity(), type = 3, actionBlock = { number, type ->
                 vm.insertCallBlock(number,  name = "", type,false)
-                Toast.makeText(requireContext(), "Đã chặn chuỗi $number", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.blocked_number,number), Toast.LENGTH_SHORT).show()
             }).show()
         }
     }

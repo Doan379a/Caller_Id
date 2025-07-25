@@ -17,7 +17,7 @@ import com.example.caller_id.widget.visible
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
-class DisturbBottomSheet : BaseBottomSheetFragment<BottomsheetDisturbBinding>() {
+class DisturbBottomSheet(val numberPhone: String) : BaseBottomSheetFragment<BottomsheetDisturbBinding>() {
     private val vm: BlockViewModel by activityViewModels()
     private var counter = 0
     private var number = ""
@@ -29,6 +29,7 @@ class DisturbBottomSheet : BaseBottomSheetFragment<BottomsheetDisturbBinding>() 
     }
 
     override fun initView() {
+        binding.edtContent.setText(numberPhone)
         binding.txtCounter.text = "0"
         binding.include.number1.setFormatter { i -> String.format("%02d", i) }
         binding.include.number2.setFormatter { i -> String.format("%02d", i) }

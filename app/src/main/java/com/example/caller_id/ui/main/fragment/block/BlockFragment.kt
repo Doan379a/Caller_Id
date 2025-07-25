@@ -13,7 +13,9 @@ import com.example.caller_id.R
 import com.example.caller_id.base.BaseFragment
 import com.example.caller_id.database.viewmodel.BlockViewModel
 import com.example.caller_id.databinding.FragmentBlockBinding
+import com.example.caller_id.dialog.FilterCallHomePopup
 import com.example.caller_id.ui.main.fragment.block.adapterblock.BlockAdapter
+import com.example.caller_id.widget.tap
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -40,9 +42,14 @@ class BlockFragment:BaseFragment<FragmentBlockBinding>() {
 
         binding.viewPager2.adapter = BlockAdapter(requireActivity())
         binding.viewPager2.registerOnPageChangeCallback(myPageChangeCallback)
+
     }
 
     override fun viewListener() {
+        binding.imgPopup.tap {
+            val popup= FilterCallHomePopup(requireActivity())
+            popup.showAtView(binding.imgPopup)
+        }
         binding.edtSearch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 sharedViewModel.searchBlock(s.toString())
@@ -68,17 +75,23 @@ class BlockFragment:BaseFragment<FragmentBlockBinding>() {
         binding.ivSetting.setBackgroundColor(ContextCompat.getColor(requireActivity(), R.color.color_transparent))
         binding.ivSpam.setBackgroundColor(ContextCompat.getColor(requireActivity(), R.color.color_transparent))
         binding.ivBlocked.setBackgroundColor(ContextCompat.getColor(requireActivity(), R.color.color_transparent))
+        binding.ivSetting.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_707070))
+        binding.ivSpam.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_707070))
+        binding.ivBlocked.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_707070))
         when (selectedTab) {
             0 -> {
                 binding.ivSetting.setBackgroundResource(R.drawable.bg_boder_white)
+                binding.ivSetting.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_3368EE))
             }
 
             1 -> {
                 binding.ivSpam.setBackgroundResource(R.drawable.bg_boder_white)
+                binding.ivSpam.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_3368EE))
             }
 
             2 -> {
                 binding.ivBlocked.setBackgroundResource(R.drawable.bg_boder_white)
+                binding.ivBlocked.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_3368EE))
             }
         }
     }

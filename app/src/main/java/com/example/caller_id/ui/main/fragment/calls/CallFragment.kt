@@ -65,17 +65,24 @@ class CallFragment:BaseFragment<FragmentCallBinding>() {
         binding.ivRecent.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.color_transparent))
         binding.ivFavorites.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.color_transparent))
         binding.ivDisturd.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.color_transparent))
+        binding.ivRecent.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_707070))
+        binding.ivFavorites.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_707070))
+        binding.ivDisturd.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_707070))
+
         when (selectedTab) {
             0 -> {
                 binding.ivRecent.setBackgroundResource(R.drawable.bg_boder_white)
+                binding.ivRecent.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_3368EE))
             }
 
             1 -> {
                 binding.ivFavorites.setBackgroundResource(R.drawable.bg_boder_white)
+                binding.ivFavorites.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_3368EE))
             }
 
             2 -> {
                 binding.ivDisturd.setBackgroundResource(R.drawable.bg_boder_white)
+                binding.ivDisturd.setTextColor(ContextCompat.getColor(requireContext(), R.color.color_3368EE))
             }
         }
     }

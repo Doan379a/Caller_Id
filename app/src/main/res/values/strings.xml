@@ -141,6 +141,9 @@
   <font color="#7C7E81" size="12">Show information during phone calls</font>
 </string>
     <string name="call_dialer">Call dialer</string>
+    <string name="please_enter_number">Please enter number</string>
+    <string name="blocked_number">Blocked \'%s'</string>
+    <string name="number_deleted">Blocked number deleted \'%s'</string>
 
 
 </resources>

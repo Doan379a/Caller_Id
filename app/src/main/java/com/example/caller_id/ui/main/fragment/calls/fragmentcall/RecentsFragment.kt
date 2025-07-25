@@ -59,7 +59,7 @@ class RecentsFragment : BaseFragment<FragmentRecentsBinding>() {
 
     override fun onResume() {
         super.onResume()
-        val list = getCallLogs()
+        val list = getCallLogs(requireActivity())
         adapter.updateList(list)
     }
     override fun dataObservable() {

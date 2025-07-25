@@ -139,14 +139,14 @@ class BlockDialog(
                         actionBlock.invoke(number, spinNumber)
                         binding.edtContent.text.clear()
                     } else {
-                        Toast.makeText(activity, "Vui lòng nhập số", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(activity, activity.getString(R.string.please_enter_number), Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     if (number.isNotEmpty()) {
                         actionBlock.invoke(number, "number")
                         binding.edtContent.text.clear()
                     } else {
-                        Toast.makeText(activity, "Vui lòng nhập số", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(activity, activity.getString(R.string.please_enter_number), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
