@@ -160,7 +160,7 @@
             android:layout_marginBottom="@dimen/_40sdp"
             android:src="@drawable/ic_phone"
             android:padding="@dimen/_10sdp"
-            android:backgroundTint="@drawable/ripple_dialpad"
+            android:background="@drawable/ripple_dialpad"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
