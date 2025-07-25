@@ -45,7 +45,6 @@
     <string name="caller_id_disabled">Caller ID Disabled</string>
     <string name="to_enjoy_enhanced_calling_experience_with_advanced_features">To enjoy enhanced calling experience with advanced features Set Caller ID as your default phone app.</string>
     <string name="set_as_default">Set As Default</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="setting">Setting</string>
     <string name="spam">Spam</string>
     <string name="blocked">Blocked</string>
@@ -142,8 +141,8 @@
 </string>
     <string name="call_dialer">Call dialer</string>
     <string name="please_enter_number">Please enter number</string>
-    <string name="blocked_number">Blocked \'%s'</string>
-    <string name="number_deleted">Blocked number deleted \'%s'</string>
+    <string name="blocked_number">Blocked %1$s</string>
+    <string name="number_deleted">Blocked number deleted %1$s</string>
 
 
 </resources>
