@@ -1,6 +1,8 @@
 package com.example.caller_id.ui.keypad
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,8 +10,11 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.caller_id.R
 import com.example.caller_id.base.BaseActivity
 import com.example.caller_id.databinding.ActivityKeypadBinding
 import com.example.caller_id.model.ContactModel
@@ -47,6 +52,10 @@ class KeypadActivity : BaseActivity<ActivityKeypadBinding>() {
             adapter.updateList(filteredList)
             search()
         }
+        binding.imgPhone.setOnClickListener {
+            makePhoneCall()
+        }
+
     }
 
     private fun search() = binding.apply {
@@ -112,7 +121,20 @@ class KeypadActivity : BaseActivity<ActivityKeypadBinding>() {
         })
     }
 
+    private fun makePhoneCall() {
+        val phoneNumber = binding.edtNumber.text.toString().trim()
+        if (phoneNumber.isNotEmpty()) {
+            val intent = Intent(Intent.ACTION_CALL)
+            intent.data = Uri.parse("tel:$phoneNumber")
+                startActivity(intent)
+
+        } else {
+            Toast.makeText(this, getString(R.string.please_enter_number), Toast.LENGTH_SHORT).show()
+        }
+    }
+
     override fun dataObservable() {
+
     }
 
 }

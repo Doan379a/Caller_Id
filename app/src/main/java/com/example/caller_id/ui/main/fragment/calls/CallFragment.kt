@@ -45,7 +45,9 @@ class CallFragment:BaseFragment<FragmentCallBinding>() {
         binding.imgPopup.tap {
             val popup= FilterCallHomePopup(requireActivity())
             popup.showAtView(binding.imgPopup)
+
         }
+
         binding.ivRecent.setOnClickListener {
             setUpColorTab(0)
             binding.viewPager2.currentItem = 0

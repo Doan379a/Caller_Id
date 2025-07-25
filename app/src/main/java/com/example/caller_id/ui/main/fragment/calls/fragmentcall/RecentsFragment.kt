@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.caller_id.base.BaseFragment
 import com.example.caller_id.databinding.FragmentRecentsBinding
 import com.example.caller_id.model.CallLogItem
+import com.example.caller_id.service.FilterListener
 import com.example.caller_id.ui.main.fragment.calls.CallLogAdapter
 import com.example.caller_id.ui.main.fragment.message.chat.ChatAllActivity
 import com.example.caller_id.ui.numberinfo.NumberInfoActivity
@@ -21,7 +22,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class RecentsFragment : BaseFragment<FragmentRecentsBinding>() {
+class RecentsFragment : BaseFragment<FragmentRecentsBinding>(),FilterListener {
     private lateinit var adapter: CallLogAdapter
     override fun setViewBinding(
         inflater: LayoutInflater,
@@ -63,6 +64,11 @@ class RecentsFragment : BaseFragment<FragmentRecentsBinding>() {
         adapter.updateList(list)
     }
     override fun dataObservable() {
+    }
+
+    override fun onFilterUpdated() {
+        val list = getCallLogs(requireActivity())
+        adapter.updateList(list)
     }
 
 }

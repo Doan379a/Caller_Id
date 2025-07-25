@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="false">
+
+    <ImageView
+        android:id="@+id/imageBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:fitsSystemWindows="false"
+        android:foreground="#33000000"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_name_bg_theme1" />
+
+    <TextView
+        android:id="@+id/textStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:drawableStart="@drawable/ic_call_textstatus"
+        android:drawablePadding="10dp"
+        android:fontFamily="@font/opensans_regula_400"
+        android:gravity="center_horizontal"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/calling" />
+    <TextView
+        android:layout_marginTop="60dp"
+        android:id="@+id/textDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/opensans_regula_400"
+        android:gravity="center_horizontal"
+        android:text="@string/call_via_sim_from"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/textStatus"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ctl_Content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/textDuration"
+
+        >
+
+
+    <TextView
+        android:id="@+id/textDisplayName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/opensans_regula_400"
+        android:gravity="center_horizontal"
+        android:textColor="@android:color/white"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textDuration"
+        tools:text="David Miller" />
+
+    <TextView
+        android:id="@+id/textDisplayNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/opensans_regula_400"
+        android:gravity="center_horizontal"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textDisplayName"
+        tools:text="+91 7622365663" />
+
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="40dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_user"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textDisplayNumber" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/buttonHangup"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginBottom="24dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_button_answer"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible"
+        android:layout_marginStart="20dp"
+        />
+
+    <ImageView
+        android:id="@+id/buttonAnswer"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginBottom="24dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_button_hangup"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="20dp"
+        />
+    <LinearLayout
+        android:id="@+id/ll_more"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="50dp"
+        android:background="@drawable/bg_color_radius_black"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="25dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/imageBackground"
+        tools:layout_editor_absoluteX="20dp">
+
+        <LinearLayout
+            android:id="@+id/ll_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_operation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="5dp"
+                android:ellipsize="none"
+                android:gravity="end"
+                android:maxLines="1"
+                android:padding="8dp"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:textSize="30sp" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/tv_1"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/bg_item_number"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textColor="@color/white"
+                    android:textSize="38sp" />
+
+                <TextView
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/tv_2"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_item_number"
+                    android:gravity="center"
+                    android:text="2"
+                    android:textColor="@color/white"
+                    android:textSize="38sp" />
+
+                <TextView
+                    android:layout_alignParentEnd="true"
+                    android:id="@+id/tv_3"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_item_number"
+                    android:gravity="center"
+                    android:text="3"
+                    android:textColor="@color/white"
+                    android:textSize="38sp" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/tv_4"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/bg_item_number"
+                    android:gravity="center"
+                    android:text="4"
+                    android:textColor="@color/white"
+                    android:textSize="38sp" />
+
+                <TextView
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/tv_5"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_item_number"
+                    android:gravity="center"
+                    android:text="5"
+                    android:textColor="@color/white"
+                    android:textSize="38sp" />
+
+                <TextView
+                    android:layout_alignParentEnd="true"
+                    android:id="@+id/tv_6"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_item_number"
+                    android:gravity="center"
+                    android:text="6"
+                    android:textColor="@color/white"
+                    android:textSize="38sp" />
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/tv_7"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/bg_item_number"
+                    android:gravity="center"
+                    android:text="7"
+                    android:textColor="@color/white"
+                    android:textSize="38sp" />
+
+                <TextView
+                    android:layout_centerHorizontal="true"
+                    android:id="@+id/tv_8"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_item_number"
+                    android:gravity="center"
+                    android:text="8"
+                    android:textColor="@color/white"
+                    android:textSize="38sp" />
+
+                <TextView
+                    android:layout_alignParentEnd="true"
+                    android:id="@+id/tv_9"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_item_number"
+                    android:gravity="center"
+                    android:text="9"
+                    android:textColor="@color/white"
+                    android:textSize="38sp" />
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/tv_sao"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/bg_item_number"
+                    android:gravity="center"
+                    android:text="*"
+                    android:textColor="@color/white"
+                    android:textSize="38sp" />
+
+                <TextView
+                    android:id="@+id/tv_0"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_item_number"
+                    android:gravity="center"
+                    android:text="0"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/white"
+                    android:textSize="38sp" />
+
+                <TextView
+                    android:layout_alignParentEnd="true"
+                    android:id="@+id/tv_thang"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_item_number"
+                    android:gravity="center"
+                    android:text="#"
+                    android:textColor="@color/white"
+                    android:textSize="38sp" />
+
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_volume"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_callscreen_speaker" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_mute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/ic_mute" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_keyboard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_keyboard" />
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/buttonHangup2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            app:srcCompat="@drawable/ic_button_answer2" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
