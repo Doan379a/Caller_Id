@@ -143,6 +143,10 @@
     <string name="please_enter_number">Please enter number</string>
     <string name="blocked_number">Blocked %1$s</string>
     <string name="number_deleted">Blocked number deleted %1$s</string>
+    <string name="first_name">First name</string>
+    <string name="save">Save</string>
+
+
     <string name="call_via_sim_from">Call via SIM from</string>
     <string name="calling">Calling.....</string>
     <string name="connecting">Connecting...</string>

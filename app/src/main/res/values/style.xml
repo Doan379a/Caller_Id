@@ -29,5 +29,17 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="NoFloatingLabelInputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="hintTextColor">#555555</item> <!-- label "First name" -->
+        <item name="boxStrokeWidth">0dp</item> <!-- không viền -->
+        <item name="boxStrokeColor">#1A73E8</item> <!-- viền xanh nếu có -->
+        <item name="boxBackgroundColor">@android:color/transparent</item>
+        <item name="boxCornerRadiusTopStart">0dp</item>
+        <item name="boxCornerRadiusTopEnd">0dp</item>
+        <item name="boxCornerRadiusBottomStart">0dp</item>
+        <item name="boxCornerRadiusBottomEnd">0dp</item>
+        <item name="android:textColorHint">#555555</item>
+    </style>
+
 
 </resources>

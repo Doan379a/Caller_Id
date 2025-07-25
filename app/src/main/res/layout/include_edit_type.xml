@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_edit_type"
+    android:orientation="vertical">
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/transparent"
+        android:hint="@string/first_name"
+        android:paddingTop="@dimen/_10sdp"
+        app:boxBackgroundMode="none"
+        app:boxStrokeColor="@color/blue_600"
+        app:boxStrokeWidthFocused="2dp"
+        app:hintEnabled="true"
+        app:hintTextColor="@color/blue_600">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edt_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:fontFamily="@font/opensans_semibold_600"
+            android:paddingVertical="16dp"
+            android:text="Kenji"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/blue_600" />
+</LinearLayout>

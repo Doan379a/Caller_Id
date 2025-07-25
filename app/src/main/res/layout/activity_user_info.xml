@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F6F6F8"
     app:layoutDescription="@xml/activity_user_info_scene"
     app:showPaths="false"
     tools:showPaths="true">
@@ -20,8 +21,9 @@
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_50sdp"
         android:fillViewport="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tv_save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/header">
@@ -31,47 +33,55 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <EditText
+            <include
+                android:id="@+id/first_name"
+                layout="@layout/include_edit_type"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_150sdp"
-                android:layout_marginBottom="@dimen/_10sdp"
-                android:background="@color/black" />
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="@dimen/_10sdp" />
 
-            <EditText
+            <include
+                android:id="@+id/last_Name"
+                layout="@layout/include_edit_type"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_150sdp"
-                android:layout_marginBottom="@dimen/_10sdp"
-                android:background="@color/black" />
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="@dimen/_10sdp" />
 
-            <EditText
+            <include
+                android:id="@+id/phone_number"
+                layout="@layout/include_edit_type"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_150sdp"
-                android:layout_marginBottom="@dimen/_10sdp"
-                android:background="@color/black" />
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="@dimen/_10sdp" />
 
-            <EditText
+            <include
+                android:id="@+id/email"
+                layout="@layout/include_edit_type"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_150sdp"
-                android:layout_marginBottom="@dimen/_10sdp"
-                android:background="@color/black" />
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="@dimen/_10sdp" />
 
-            <EditText
+            <include
+                android:id="@+id/birthday"
+                layout="@layout/include_edit_type"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_150sdp"
-                android:layout_marginBottom="@dimen/_10sdp"
-                android:background="@color/black" />
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="@dimen/_10sdp" />
 
-            <EditText
+            <include
+                android:id="@+id/gender"
+                layout="@layout/include_edit_type"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_150sdp"
-                android:layout_marginBottom="@dimen/_10sdp"
-                android:background="@color/black" />
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="@dimen/_10sdp" />
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_150sdp"
-                android:layout_marginBottom="@dimen/_10sdp"
-                android:background="@color/black" />
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
@@ -100,30 +110,49 @@
         app:shape_circle_borderColor="@color/white"
         app:shape_circle_borderWidth="3dp">
 
-        <ImageView
-            android:id="@+id/img_chosse"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:elevation="5dp"
-            android:src="@drawable/ic_chosse" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/headerText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:elevation="4dp"
+            android:elevation="3dp"
+            android:fontFamily="@font/opensans_bold_700"
             android:gravity="center"
             android:shadowColor="#3E3E3E"
             android:shadowDx="2"
-            android:fontFamily="@font/opensans_bold_700"
             android:shadowDy="2"
             android:shadowRadius="4"
             android:text="KT"
-            android:textSize="@dimen/_40ssp"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMinTextSize="10sp"
+            app:autoSizeMaxTextSize="40sp"
+            app:autoSizeStepGranularity="2sp" />
+
+        <ImageView
+            android:id="@+id/img_chosse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:elevation="4dp"
+            android:src="@drawable/ic_chosse" />
     </io.github.florent37.shapeofview.shapes.CircleView>
 
+    <TextView
+        android:id="@+id/tv_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_text"
+        android:elevation="5dp"
+        android:text="@string/save"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_15sdp"
+        android:paddingHorizontal="@dimen/_50sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:paddingVertical="@dimen/_15sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>
